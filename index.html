@@ -38,7 +38,8 @@ p{margin:0}
 .split .w>span{display:inline-block}
 
 /* fixed 3D layer */
-#stage3d{position:fixed;left:0;top:0;transform-origin:0 0;pointer-events:none;z-index:30;will-change:transform}
+#stage3d{position:fixed;left:0;top:0;transform-origin:0 0;pointer-events:none;z-index:30;will-change:transform;opacity:0;transition:opacity .4s ease}
+.has-3d #stage3d{opacity:1}
 #cupShadow{position:fixed;left:0;top:0;pointer-events:none;z-index:29;border-radius:50%;background:radial-gradient(closest-side,rgba(3,43,62,.32),rgba(3,43,62,0));will-change:transform}
 
 /* nav */
@@ -559,7 +560,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   (async () => {
     // coarse first (every 8th frame), then fill in, so the cup turns early and gets smoother as it loads
     const order = []; for (let step of [8, 4, 2, 1]) for (let f = 0; f < NF; f += step) if (!order.includes(f)) order.push(f);
-    for (const f of order.slice(0, 18)) await load(0, f);
+    for (const f of order.slice(0, 8)) await load(0, f);
     document.documentElement.classList.add('has-3d');
     const pool = async (si, list) => { let i = 0; await Promise.all(Array.from({ length: 6 }, async () => { while (i < list.length) await load(si, list[i++]); })); };
     await pool(0, order.slice(18));
