@@ -108,6 +108,28 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .flavors__text{flex:0 0 auto;width:100%;min-height:260px}
 }
 
+/* phone in landscape: short viewport, keep things side by side and compact */
+@media (orientation:landscape) and (max-height:500px){
+  .nav__links{display:none}
+  .nav .wrap{padding-block:8px;flex-wrap:nowrap}
+  .nav img{height:34px}
+  .hero .wrap{flex-wrap:nowrap;padding-block:8px 24px;gap:16px}
+  .hero__text{flex:1 1 0;gap:12px}
+  .hero__text h1{font-size:clamp(32px,5.6vw,48px)}
+  .hero__text p{font-size:16px}
+  .hero__visual{flex:0.9 1 0;height:calc(100vh - 70px);min-height:260px}
+  .flavors .wrap{flex-direction:row;flex-wrap:nowrap;align-items:stretch;padding-block:58px 30px;gap:16px}
+  .flavors__text{flex:1 1 0;width:auto;min-height:0}
+  .flavors__visual{order:0;flex:0.9 1 0;width:auto;height:auto}
+  .flv{gap:8px}
+  .flv h2{font-size:clamp(38px,6.4vw,60px)}
+  .flv p{font-size:15px}
+  .flv .eyebrow{font-size:12px}
+  .flv .chips span{padding:4px 10px;font-size:11px}
+  .flavors__ghost{font-size:clamp(90px,16vw,160px)}
+  .progress{bottom:12px}
+}
+
 /* drag gallery */
 .gallery{padding-block:96px;background:var(--blanc)}
 .gallery__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px}
