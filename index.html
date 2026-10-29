@@ -329,8 +329,15 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .qchips button:hover{border-color:#fff}
 .qchips button[aria-pressed="true"]{background:#FDC208;color:#032B3E;border-color:#FDC208}
 .qrow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.qrow input[type=range]{flex:1 1 220px;accent-color:#FDC208}
-.qrow output{font-weight:800;font-size:28px;min-width:70px}
+.qslide{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.qrow input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:999px;background:linear-gradient(90deg,#FDC208 var(--p,21%),rgba(255,255,255,.22) var(--p,21%));outline:none;cursor:pointer}
+.qrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#FDC208;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:transform .2s}
+.qrow input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#FDC208;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.qrow input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
+.qrow input[type=range]:focus-visible{box-shadow:0 0 0 4px rgba(253,194,8,.35)}
+.qscale{position:relative;height:16px;margin-inline:14px;font-size:12px;font-weight:700;opacity:.7}
+.qscale span{position:absolute;top:0;transform:translateX(-50%)}.qscale span:first-child{transform:translateX(-50%)}.qscale span:last-child{transform:translateX(50%)}
+.qrow output{font-weight:800;font-size:28px;min-width:96px;text-align:right}
 .qrow input[type=date]{font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.1);color:#fff;color-scheme:dark}
 .quote__sum{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .quote__sum p{flex:1 1 260px;font-size:15px;color:#E3F4F9}
@@ -584,7 +591,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <span class="eyebrow" style="color:#FDC208">Events &amp; private parties</span>
       <h2 id="party-title" class="split">Every party needs a shaved ice.</h2>
       <fieldset class="quote__step"><legend>1 · What's the occasion?</legend><div class="qchips" id="qchips"><button type="button" aria-pressed="true" data-k="birthday">Birthday</button><button type="button" aria-pressed="false" data-k="school">School &amp; camp</button><button type="button" aria-pressed="false" data-k="corporate">Corporate</button><button type="button" aria-pressed="false" data-k="festival">Festival &amp; market</button><button type="button" aria-pressed="false" data-k="community">Church &amp; community</button><button type="button" aria-pressed="false" data-k="carnival">Carnival &amp; fundraiser</button></div></fieldset>
-      <div class="quote__step"><label for="qg">2 · How many guests?</label><div class="qrow"><input type="range" id="qg" min="10" max="1000" step="10" value="50"><output id="qgo" for="qg">50</output></div></div>
+      <div class="quote__step"><label for="qg">2 · How many guests?</label><div class="qrow"><div class="qslide"><input type="range" id="qg" min="0" max="19" step="1" value="4" aria-valuetext="50 guests"><div class="qscale" aria-hidden="true"><span style="left:0">10</span><span style="left:36.8%">100</span><span style="left:73.7%">500</span><span style="right:0">1,000</span></div></div><output id="qgo" for="qg">50</output></div></div>
       <div class="quote__step"><label for="qd">3 · When?</label><div class="qrow"><input type="date" id="qd"></div></div>
       <div class="quote__sum"><p id="qsum" aria-live="polite">Birthday · 50 guests · date to choose. No water, no power needed: we park and we pour.</p><button class="btn btn--sun" type="submit">Book us now <span class="arr" aria-hidden="true">↗</span></button></div>
       <p class="quote__done" id="qdone" role="status" hidden>Thanks! Prototype only: requests will go to [À CONFIRMER : e-mail ou CRM].</p>
@@ -957,13 +964,17 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   (function(){
     const form = $('#qform'); if (!form) return;
     const chips = $$('#qchips button'), bgs = $$('#qbg img'), g = $('#qg'), go = $('#qgo'), d = $('#qd'), sum = $('#qsum');
+    const GUESTS = [10,20,30,40,50,60,75,100,125,150,200,250,300,400,500,600,700,800,900,1000];
+    const gv = () => GUESTS[+g.value], gtxt = () => gv() === 1000 ? '1,000+' : gv().toLocaleString('en-US');
+    const gpaint = () => { g.style.setProperty('--p', (g.value / g.max * 100) + '%'); go.textContent = gtxt(); g.setAttribute('aria-valuetext', gtxt() + ' guests'); };
+    gpaint();
     let kind = 'birthday';
     function write(){ const lab = chips.find(c => c.dataset.k === kind).textContent;
       const dt = d.value ? new Date(d.value + 'T12:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'date to choose';
-      sum.textContent = `${lab} · ${g.value} guests · ${dt}. No water, no power needed: we park and we pour.`; }
+      sum.textContent = `${lab} · ${gtxt()} guests · ${dt}. No water, no power needed: we park and we pour.`; }
     chips.forEach(c => c.addEventListener('click', () => { kind = c.dataset.k; chips.forEach(o => o.setAttribute('aria-pressed', String(o === c)));
       bgs.forEach(b => b.classList.toggle('on', b.dataset.k === kind)); write(); }));
-    g.addEventListener('input', () => { go.textContent = g.value; write(); }); d.addEventListener('change', write);
+    g.addEventListener('input', () => { gpaint(); write(); }); d.addEventListener('change', write);
     form.addEventListener('submit', e => { e.preventDefault(); $('#qdone').hidden = false; });
   })();
 
