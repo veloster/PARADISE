@@ -211,6 +211,44 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .smart__labels:hover .nf--hl .nf__box{transform:translateY(-4px)}
 @media (max-width:520px){.ring,.ring svg,.ring__c{width:140px;height:auto}.ring svg,.ring__c{height:140px}.ring__c strong{font-size:36px}}
 
+/* franchise inquiry form (modal) */
+.fq{position:fixed;inset:0;z-index:90;background:rgba(2,28,41,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:grid;place-items:center;padding:16px;overflow-y:auto}
+.fq[hidden]{display:none}
+.fq legend.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.fq__card{position:relative;width:min(680px,100%);max-height:calc(100dvh - 32px);overflow-y:auto;background:var(--blanc);color:var(--marine);border-radius:28px;padding:clamp(22px,4vw,40px);box-shadow:0 30px 80px -30px rgba(0,0,0,.6)}
+.fq__x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;background:var(--cyan-pale);color:var(--marine);font-size:16px;cursor:pointer}
+.fq__head{display:flex;flex-direction:column;gap:6px;margin-bottom:22px}
+.fq__head h3{font-size:clamp(30px,4vw,44px);line-height:1}
+.fq__step{margin:0;font-weight:700;font-size:14px;opacity:.7}
+.fq__bar{height:6px;border-radius:6px;background:var(--cyan-pale);overflow:hidden}
+.fq__bar i{display:block;height:100%;width:50%;background:var(--cyan);border-radius:6px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+.fq form fieldset[hidden],.fq form[hidden]{display:none}
+.fq form fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:18px;min-width:0}
+.fq__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fq__f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fq__f>span{font-weight:700;font-size:14px}
+.fq input:not([type=radio]):not([type=checkbox]),.fq select,.fq textarea{font:inherit;font-size:16px;color:var(--marine);background:#fff;border:2px solid color-mix(in srgb,var(--marine) 20%,transparent);border-radius:14px;padding:12px 14px;width:100%;min-width:0;transition:border-color .2s,box-shadow .2s}
+.fq input:focus,.fq select:focus,.fq textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px color-mix(in srgb,var(--cyan) 22%,transparent)}
+.fq .bad{border-color:#D7263D!important}
+.fq__pills{display:flex;flex-wrap:wrap;gap:8px}
+.fq__pills label{position:relative;cursor:pointer}
+.fq__pills input{position:absolute;opacity:0;pointer-events:none}
+.fq__pills span{display:inline-block;border:2px solid color-mix(in srgb,var(--marine) 20%,transparent);border-radius:999px;padding:9px 16px;font-weight:700;font-size:15px;transition:background .2s,color .2s,border-color .2s}
+.fq__pills label:hover span{border-color:var(--marine)}
+.fq__pills input:checked+span{background:var(--marine);border-color:var(--marine);color:#fff}
+.fq__pills input:focus-visible+span{box-shadow:0 0 0 4px color-mix(in srgb,var(--cyan) 30%,transparent)}
+.fq__pills.bad span{border-color:#D7263D}
+.fq__ok{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.4;cursor:pointer}
+.fq__ok input{width:20px;height:20px;margin-top:1px;accent-color:var(--marine);flex:0 0 auto}
+.fq__nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+.fq__err{margin:12px 0 0;color:#D7263D;font-weight:700;font-size:14px;min-height:1em}
+.fq__done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:20px 0}
+.fq__done[hidden]{display:none}
+.fq__done h3{font-size:clamp(28px,3.6vw,40px)}
+.fq__done p{max-width:40ch;margin:0}
+.fq__check{width:72px;height:72px;border-radius:50%;background:#2C8C4B;color:#fff;display:grid;place-items:center;font-size:34px;font-weight:800}
+@media (max-width:560px){.fq__grid{grid-template-columns:minmax(0,1fr)}.fq{padding:8px}.fq__card{max-height:calc(100dvh - 16px);border-radius:22px}}
+
 /* drag gallery */
 .gallery{padding-block:96px;background:var(--blanc)}
 .gallery__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px}
@@ -469,7 +507,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         </article>
         <article class="flv" data-i="1" aria-hidden="true">
           <span class="eyebrow">Flavor 02 · Tropical</span>
-          <h2>Passion.</h2>
+          <h2>Passion fruit.</h2>
           <p>Golden passion fruit over fresh snow. Sunshine in a cup.</p>
           <div class="chips"><span>Golden</span><span>Tangy</span><span>Tropical</span></div>
         </article>
@@ -486,7 +524,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
           <div class="chips"><span>Blue</span><span>Cool</span><span>Sugar-free option</span></div>
         </article>
       </div>
-      <div class="flavors__visual"><div class="fsets" aria-hidden="true"><div class="fset on" data-set="0"><span class="fr" data-depth="1.4" style="left:0%;top:10%;width:26%;z-index:31"><img src="assets/fruit-grenade-open.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="1.8" style="right:0%;top:56%;width:22%;z-index:31"><img src="assets/fruit-grenade.webp" alt="" style="--r:10deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:12%;top:2%;width:13%;z-index:29"><img src="assets/fruit-fraise.webp" alt="" style="--r:20deg;transition-delay:140ms"></span></div><div class="fset" data-set="1"><span class="fr" data-depth="1.6" style="left:0%;top:54%;width:28%;z-index:31"><img src="assets/fruit-passion-half.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:4%;top:6%;width:18%;z-index:29"><img src="assets/fruit-passion-whole.webp" alt="" style="--r:14deg;transition-delay:70ms"></span><span class="fr" data-depth="1.3" style="right:0%;top:62%;width:17%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-16deg;transition-delay:140ms"></span></div><div class="fset" data-set="2"><span class="fr" data-depth="1.5" style="left:0%;top:44%;width:26%;z-index:31"><img src="assets/fruit-mango.webp" alt="" style="--r:-10deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:0%;top:6%;width:24%;z-index:29"><img src="assets/fruit-mango-cut.webp" alt="" style="--r:12deg;transition-delay:70ms"></span><span class="fr" data-depth="1.9" style="right:4%;top:64%;width:14%;z-index:31"><img src="assets/fruit-mangue.webp" alt="" style="--r:-18deg;transition-delay:140ms"></span></div><div class="fset" data-set="3"><span class="fr" data-depth="1.4" style="left:2%;top:14%;width:20%;z-index:31"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:16deg;transition-delay:0ms"></span><span class="fr" data-depth="1.7" style="right:2%;top:56%;width:21%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-12deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:14%;top:4%;width:12%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:-30deg;transition-delay:140ms"></span></div></div><div class="anchor" id="anchorFlavor" aria-hidden="true" style="inset:0"></div></div>
+      <div class="flavors__visual"><div class="fsets" aria-hidden="true"><div class="fset on" data-set="0"><span class="fr" data-depth="1.4" style="left:0%;top:10%;width:26%;z-index:31"><img src="assets/fruit-grenade-open.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="1.8" style="right:0%;top:56%;width:22%;z-index:31"><img src="assets/fruit-grenade.webp" alt="" style="--r:10deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:12%;top:2%;width:13%;z-index:29"><img src="assets/fruit-fraise.webp" alt="" style="--r:20deg;transition-delay:140ms"></span></div><div class="fset" data-set="1"><span class="fr" data-depth="1.6" style="left:0%;top:54%;width:28%;z-index:31"><img src="assets/fruit-passion-half.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:4%;top:6%;width:18%;z-index:29"><img src="assets/fruit-passion-whole.webp" alt="" style="--r:14deg;transition-delay:70ms"></span><span class="fr" data-depth="1.3" style="right:0%;top:62%;width:17%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-16deg;transition-delay:140ms"></span></div><div class="fset" data-set="2"><span class="fr" data-depth="1.5" style="left:0%;top:44%;width:26%;z-index:31"><img src="assets/fruit-mango.webp" alt="" style="--r:-10deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:0%;top:6%;width:24%;z-index:29"><img src="assets/fruit-mango-cut.webp" alt="" style="--r:12deg;transition-delay:70ms"></span><span class="fr" data-depth="1.9" style="right:4%;top:64%;width:14%;z-index:31"><img src="assets/fruit-mangue.webp" alt="" style="--r:-18deg;transition-delay:140ms"></span></div><div class="fset" data-set="3"><span class="fr" data-depth="1.5" style="left:0%;top:46%;width:28%;z-index:31"><img src="assets/fruit-coco-open.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:2%;top:4%;width:20%;z-index:29"><img src="assets/fruit-coco-green.webp" alt="" style="--r:10deg;transition-delay:70ms"></span><span class="fr" data-depth="1.8" style="right:2%;top:62%;width:16%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-14deg;transition-delay:140ms"></span><span class="fr" data-depth="0.6" style="left:14%;top:8%;width:10%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:16deg;transition-delay:210ms"></span></div></div><div class="anchor" id="anchorFlavor" aria-hidden="true" style="inset:0"></div></div>
     </div>
     <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
   </div>
@@ -566,9 +604,45 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         <div class="biz__panel" role="tabpanel" id="bp1" aria-labelledby="bt1" hidden><h3>Everything to open your first season.</h3><ul><li><b>01</b>Brand identity and trailer wrap.</li><li><b>02</b>Recipes and suppliers. [À CONFIRMER]</li><li><b>03</b>Training and launch support. [À CONFIRMER]</li></ul></div>
         <div class="biz__panel" role="tabpanel" id="bp2" aria-labelledby="bt2" hidden><h3>The numbers.</h3><ul><li><b>01</b>Initial investment: [À CONFIRMER]</li><li><b>02</b>Franchise fee: [À CONFIRMER]</li><li><b>03</b>Royalties: [À CONFIRMER]</li><li><b>04</b>Territory: [À CONFIRMER]</li></ul></div>
         <div class="biz__panel" role="tabpanel" id="bp3" aria-labelledby="bt3" hidden><h3>Four steps to your trailer.</h3><ul><li><b>01</b>Inquire: tell us about you and your city.</li><li><b>02</b>Discovery call with the founders.</li><li><b>03</b>Review &amp; agreement. [À CONFIRMER]</li><li><b>04</b>Train &amp; launch your first season.</li></ul></div>
-        <div class="biz__ctas"><a class="btn btn--sun" href="#own" id="bizKit">Request the franchise kit <span class="arr" aria-hidden="true">↗</span></a><a class="btn btn--line" href="#own">Talk to our team <span class="arr" aria-hidden="true">↗</span></a></div>
+        <div class="biz__ctas"><button class="btn btn--sun" type="button" id="bizKit" data-fran>Request the franchise kit <span class="arr" aria-hidden="true">↗</span></button><button class="btn btn--line" type="button" data-fran>Talk to our team <span class="arr" aria-hidden="true">↗</span></button></div>
         <button type="button" class="biz__3d" id="biz3d"><span aria-hidden="true">⟳</span> View the trailer in 3D</button>
       </div>
+    </div>
+  </div>
+  <div class="fq" id="franModal" role="dialog" aria-modal="true" aria-labelledby="fqTitle" hidden>
+    <div class="fq__card">
+      <button class="fq__x" type="button" id="fqClose" aria-label="Close">✕</button>
+      <form id="fqForm" novalidate>
+        <div class="fq__head"><span class="eyebrow">Own a Paradice</span><h3 id="fqTitle">Let’s talk franchise.</h3><p class="fq__step" id="fqStep">Step 1 of 2 · About you</p><div class="fq__bar"><i id="fqBar"></i></div></div>
+        <fieldset class="fq__s" data-s="1">
+          <legend class="sr">About you</legend>
+          <div class="fq__grid">
+            <label class="fq__f"><span>First name *</span><input name="first" autocomplete="given-name" required></label>
+            <label class="fq__f"><span>Last name *</span><input name="last" autocomplete="family-name" required></label>
+            <label class="fq__f"><span>Email *</span><input name="email" type="email" autocomplete="email" required></label>
+            <label class="fq__f"><span>Mobile phone *</span><input name="phone" type="tel" autocomplete="tel" required></label>
+            <label class="fq__f"><span>City you’d like to open in *</span><input name="city" autocomplete="address-level2" required></label>
+            <label class="fq__f"><span>State *</span><select name="state" required><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option selected>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></label>
+          </div>
+          <div class="fq__f"><span>When would you like to start?</span><div class="fq__pills"><label><input type="radio" name="start" value="ASAP"><span>ASAP</span></label><label><input type="radio" name="start" value="3–6 months"><span>3–6 months</span></label><label><input type="radio" name="start" value="6–12 months"><span>6–12 months</span></label><label><input type="radio" name="start" value="Just exploring"><span>Just exploring</span></label></div></div>
+          <div class="fq__nav"><span></span><button class="btn btn--solid" type="button" id="fqNext">Next <span class="arr" aria-hidden="true">→</span></button></div>
+        </fieldset>
+        <fieldset class="fq__s" data-s="2" hidden>
+          <legend class="sr">Your plans</legend>
+          <div class="fq__f"><span>Liquid capital available to invest *</span><div class="fq__pills"><label><input type="radio" name="capital" value="Under $50k" required><span>Under $50k</span></label><label><input type="radio" name="capital" value="$50k–$100k"><span>$50k–$100k</span></label><label><input type="radio" name="capital" value="$100k–$150k"><span>$100k–$150k</span></label><label><input type="radio" name="capital" value="$150k+"><span>$150k+</span></label></div></div>
+          <div class="fq__f"><span>Single or multi-unit? *</span><div class="fq__pills"><label><input type="radio" name="units" value="Single unit" required><span>Single unit</span></label><label><input type="radio" name="units" value="Multi-unit"><span>Multi-unit</span></label><label><input type="radio" name="units" value="Not sure yet"><span>Not sure yet</span></label></div></div>
+          <div class="fq__f"><span>Will you have partners?</span><div class="fq__pills"><label><input type="radio" name="partners" value="No"><span>No</span></label><label><input type="radio" name="partners" value="Yes"><span>Yes</span></label><label><input type="radio" name="partners" value="Not sure"><span>Not sure</span></label></div></div>
+          <div class="fq__grid">
+            <label class="fq__f"><span>Current situation</span><select name="employment"><option value="">Select</option><option>Employed</option><option>Self-employed / business owner</option><option>Retired</option><option>Military / veteran</option><option>Other</option></select></label>
+            <label class="fq__f"><span>How did you hear about us?</span><select name="source"><option value="">Select</option><option>At the trailer</option><option>Instagram</option><option>Facebook</option><option>Google</option><option>Friend or family</option><option>Event</option><option>Other</option></select></label>
+          </div>
+          <label class="fq__f"><span>Anything you’d like us to know?</span><textarea name="msg" rows="3"></textarea></label>
+          <label class="fq__ok"><input type="checkbox" name="consent" required><span>I agree to be contacted by Paradice about franchising. Submitting this form does not grant a franchise.</span></label>
+          <div class="fq__nav"><button class="btn btn--line fq__back" type="button" id="fqBack">← Back</button><button class="btn btn--sun" type="submit">Send my request <span class="arr" aria-hidden="true">↗</span></button></div>
+        </fieldset>
+        <p class="fq__err" id="fqErr" role="alert"></p>
+      </form>
+      <div class="fq__done" id="fqDone" hidden><div class="fq__check" aria-hidden="true">✓</div><h3>Thank you, <span id="fqName"></span>!</h3><p>Your request is in. Our franchise team will reach out shortly with the franchise kit and next steps.</p><button class="btn btn--solid" type="button" id="fqDoneClose">Back to the site</button></div>
     </div>
   </div>
   <div class="biz__modal" id="bizModal" role="dialog" aria-modal="true" aria-label="Paradice trailer in 3D" hidden>
@@ -651,7 +725,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   /* ---------- flavour data ---------- */
   const FLAVORS = [
     { name:'Grenadine', bg:'#D7263D', fg:'#FFFFFF', syrup:'#D7263D' },
-    { name:'Passion',   bg:'#FDC208', fg:'#054664', syrup:'#FDC208' },
+    { name:'Passion fruit', bg:'#FDC208', fg:'#054664', syrup:'#FDC208' },
     { name:'Mango',     bg:'#2C8C4B', fg:'#FFFFFF', syrup:'#F7A11B' },
     { name:'Island blue', bg:'#00BADD', fg:'#054664', syrup:'#00BADD' }
   ];
@@ -844,6 +918,36 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     rows.forEach(el => { el.addEventListener('mouseenter', () => rows.forEach(x => x.classList.toggle('hot', x.dataset.r === el.dataset.r)));
       el.addEventListener('mouseleave', () => rows.forEach(x => x.classList.remove('hot'))); });
     $$('.selfserve__list li').forEach(li => { li.tabIndex = 0; li.addEventListener('click', () => { $$('.selfserve__list li').forEach(x => x !== li && x.classList.remove('tap')); li.classList.toggle('tap'); }); });
+  })();
+
+  /* ---------- franchise inquiry form ---------- */
+  (() => {
+    const m = $('#franModal'); if (!m) return;
+    const f = $('#fqForm'), s1 = f.querySelector('[data-s="1"]'), s2 = f.querySelector('[data-s="2"]'), err = $('#fqErr');
+    const ENDPOINT = ''; // [À CONFIRMER] CRM / e-mail endpoint (Supabase, Formspree, LOYTI…)
+    let last = null;
+    const open = v => { m.hidden = !v; document.documentElement.style.overflow = v ? 'hidden' : '';
+      if (v){ m.querySelector('input,select').focus(); } else if (last) last.focus(); };
+    $$('[data-fran]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); last = b; open(true); }));
+    $('#fqClose').addEventListener('click', () => open(false));
+    $('#fqDoneClose').addEventListener('click', () => open(false));
+    m.addEventListener('click', e => { if (e.target === m) open(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) open(false); });
+    const check = box => { let ok = true; err.textContent = '';
+      box.querySelectorAll('input[required]:not([type=radio]):not([type=checkbox]),select[required]').forEach(el => { const good = el.checkValidity() && el.value.trim() !== ''; el.classList.toggle('bad', !good); if (!good) ok = false; });
+      box.querySelectorAll('.fq__pills').forEach(g => { if (!g.querySelector('[required]')) return; const good = !!g.querySelector('input:checked'); g.classList.toggle('bad', !good); if (!good) ok = false; });
+      const c = box.querySelector('[name=consent]'); if (c && !c.checked){ ok = false; err.textContent = 'Please accept to be contacted.'; }
+      if (!ok && !err.textContent) err.textContent = 'Please fill in the highlighted fields.';
+      return ok; };
+    const step = n => { s1.hidden = n !== 1; s2.hidden = n !== 2; $('#fqStep').textContent = n === 1 ? 'Step 1 of 2 · About you' : 'Step 2 of 2 · Your plans'; $('#fqBar').style.width = n === 1 ? '50%' : '100%'; err.textContent = ''; (n === 1 ? s1 : s2).querySelector('input,select').focus(); };
+    $('#fqNext').addEventListener('click', () => { if (check(s1)) step(2); });
+    $('#fqBack').addEventListener('click', () => step(1));
+    f.addEventListener('input', e => e.target.classList.remove('bad'));
+    f.addEventListener('change', e => { const g = e.target.closest('.fq__pills'); if (g) g.classList.remove('bad'); });
+    f.addEventListener('submit', async e => { e.preventDefault(); if (!check(s2)) return;
+      const data = Object.fromEntries(new FormData(f).entries());
+      if (ENDPOINT){ try { await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); } catch (_) {} }
+      $('#fqName').textContent = data.first || 'friend'; f.hidden = true; $('#fqDone').hidden = false; $('#fqDone button').focus(); });
   })();
   /* ---------- events quote builder ---------- */
   (function(){
