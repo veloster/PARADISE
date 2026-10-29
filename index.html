@@ -180,6 +180,37 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .nf li b{font-weight:900}
 @media (max-width:520px){.smart{padding-block:60px}.smart__labels{gap:10px}.nf__box{font-size:11px;padding:8px}.nf li.sub{padding-left:8px}.smart__pts li{font-size:13px;padding:10px}.smart__pts b{font-size:18px}.nf figcaption{font-size:12px}}
 
+/* self-serve pills: syrup floods the pill on hover */
+.selfserve__list li{position:relative;overflow:hidden;isolation:isolate;cursor:default;transition:transform .35s cubic-bezier(.2,.8,.2,1),color .3s,border-color .3s,box-shadow .35s}
+.selfserve__list li::before{content:"";position:absolute;left:20px;top:50%;width:16px;height:16px;border-radius:50%;background:var(--d);transform:translate(-50%,-50%) scale(1);transition:transform .5s cubic-bezier(.2,.8,.2,1);z-index:-1}
+.selfserve__list li:hover,.selfserve__list li:focus-visible,.selfserve__list li.tap{color:var(--t,#fff);border-color:var(--d);transform:translateY(-4px) rotate(-1.5deg);box-shadow:0 12px 22px -12px var(--d);outline:none}
+.selfserve__list li:hover::before,.selfserve__list li:focus-visible::before,.selfserve__list li.tap::before{transform:translate(-50%,-50%) scale(26)}
+.selfserve__list li:hover i,.selfserve__list li.tap i{box-shadow:0 0 0 3px rgba(255,255,255,.85)}
+.selfserve__list:hover li:not(:hover){opacity:.55}
+.selfserve__list li{transition:transform .35s cubic-bezier(.2,.8,.2,1),color .3s,border-color .3s,box-shadow .35s,opacity .3s}
+/* rings */
+.rings{display:flex;flex-wrap:wrap;gap:22px 34px;margin-top:6px}
+.ring{position:relative;width:170px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ring svg{width:170px;height:170px;display:block}
+.ring__bg{fill:none;stroke:color-mix(in srgb,var(--marine) 14%,transparent);stroke-width:18}
+.ring__fg{fill:none;stroke:#2C8C4B;stroke-width:18;stroke-linecap:round;stroke-dasharray:502.65;stroke-dashoffset:502.65;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)}
+.ring__c{position:absolute;top:0;left:0;width:170px;height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ring__c strong{font-size:44px;font-weight:800;letter-spacing:-.04em}
+.ring__c small{font-weight:700;font-size:14px;opacity:.55;margin-top:6px}
+.ring__l{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.ring:hover .ring__fg{stroke:#24763E}
+.smart__more{font-weight:600;font-size:15px;opacity:.75}
+/* nutrition rows react */
+.nf li,.nf__cal{position:relative;transition:background .25s}
+.nf .hot{background:color-mix(in srgb,var(--jaune) 45%,#fff)}
+.nf--hl .hot{background:color-mix(in srgb,#2C8C4B 18%,#fff)}
+.nf__d{font-style:normal;font-weight:900;color:#2C8C4B;margin-right:8px;opacity:0;transition:opacity .25s}
+.nf__cal .nf__d{position:absolute;right:56px;top:50%;transform:translateY(-50%);font-size:16px}
+.nf .hot .nf__d,.nf .hot.nf__cal .nf__d{opacity:1}
+.nf__box{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.smart__labels:hover .nf--hl .nf__box{transform:translateY(-4px)}
+@media (max-width:520px){.ring,.ring svg,.ring__c{width:140px;height:auto}.ring svg,.ring__c{height:140px}.ring__c strong{font-size:36px}}
+
 /* drag gallery */
 .gallery{padding-block:96px;background:var(--blanc)}
 .gallery__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px}
@@ -465,9 +496,9 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     <div class="selfserve__head">
       <span class="eyebrow">Self-serve bar</span>
       <h3 id="ssTitle">Ten more to pour yourself.</h3>
-      <p>Pick your flavors at the trailer and top your cup the way you like it.</p>
+      <p>We shave the ice, you pour the syrup. Ten flavors wait at our self-serve bar: mix as many as you like.</p>
     </div>
-    <ul class="selfserve__list"><li><i style="--d:#E63946"></i>Watermelon</li><li><i style="--d:#B5121B"></i>Tiger’s Blood</li><li><i style="--d:#D62839"></i>Strawberry</li><li><i style="--d:#F3E2B3"></i>Piña Colada</li><li><i style="--d:#FFE135"></i>Lemon</li><li><i style="--d:#6A3FA0"></i>Grape</li><li><i style="--d:#8FD3F4"></i>Cotton Candy</li><li><i style="--d:#8E0E1C"></i>Cherry</li><li><i style="--d:#1E78E6"></i>Blue Raspberry</li><li><i style="--d:#FFD84D"></i>Banana</li></ul>
+    <ul class="selfserve__list"><li style="--d:#E63946"><i style="--d:#E63946"></i>Watermelon</li><li style="--d:#B5121B"><i style="--d:#B5121B"></i>Tiger’s Blood</li><li style="--d:#D62839"><i style="--d:#D62839"></i>Strawberry</li><li style="--d:#F3E2B3;--t:#054664"><i style="--d:#F3E2B3"></i>Piña Colada</li><li style="--d:#FFE135;--t:#054664"><i style="--d:#FFE135"></i>Lemon</li><li style="--d:#6A3FA0"><i style="--d:#6A3FA0"></i>Grape</li><li style="--d:#8FD3F4;--t:#054664"><i style="--d:#8FD3F4"></i>Cotton Candy</li><li style="--d:#8E0E1C"><i style="--d:#8E0E1C"></i>Cherry</li><li style="--d:#1E78E6"><i style="--d:#1E78E6"></i>Blue Raspberry</li><li style="--d:#FFD84D;--t:#054664"><i style="--d:#FFD84D"></i>Banana</li></ul>
   </div>
 </section>
 <section class="smart" id="smart-syrup" aria-labelledby="smartTitle">
@@ -476,9 +507,9 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <span class="eyebrow">Smart Syrup</span>
       <h3 id="smartTitle">Fruit first. Way less sugar.</h3>
       <p>Our Smart Syrup is an all-natural stevia blend added to 100% white grape juice. So the first ingredient is fruit, not cane sugar like the simple syrup most shaved ice is made with.</p>
-      <ul class="smart__pts"><li><b>4 g</b> sugar per serving, vs 14 g</li><li><b>20</b> calories, vs 50</li><li><b>0</b> fat · <b>0</b> sodium</li><li>Smart Snacks in Schools compliant</li></ul>
+      <div class="rings" aria-label="Smart Syrup vs regular syrup: 4 g of sugar instead of 14 g, 20 calories instead of 50"><div class="ring" data-v="4" data-max="14"><svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="80" class="ring__bg"/><circle cx="100" cy="100" r="80" class="ring__fg" transform="rotate(-90 100 100)"/></svg><div class="ring__c"><strong><span class="ring__n">4</span> g</strong><small>of 14 g</small></div><span class="ring__l">Sugar</span></div><div class="ring" data-v="20" data-max="50"><svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="80" class="ring__bg"/><circle cx="100" cy="100" r="80" class="ring__fg" transform="rotate(-90 100 100)"/></svg><div class="ring__c"><strong><span class="ring__n">20</span></strong><small>of 50 cal</small></div><span class="ring__l">Calories</span></div></div><p class="smart__more">0 fat · 0 sodium · Smart Snacks in Schools compliant</p>
     </div>
-    <div class="smart__labels"><figure class="nf nf--hl"><figcaption>Smart Syrup</figcaption><div class="nf__box"><h4>Nutrition Facts</h4><p class="nf__s">Serving size 1 fl oz<br>Cup size: 8 oz shaved ice</p><div class="nf__cal"><span>Calories</span><strong>20</strong></div><p class="nf__dv">% Daily Value</p><ul><li class=""><span><b>Total Fat</b> 0g</span><span>0%</span></li><li class="sub"><span>Saturated Fat 0g</span><span>0%</span></li><li class="sub"><span>Trans Fat 0g</span><span></span></li><li class=""><span><b>Cholesterol</b> 0mg</span><span>0%</span></li><li class=""><span><b>Sodium</b> 0.3mg</span><span>0%</span></li><li class=""><span><b>Total Carbohydrate</b> 4g</span><span></span></li><li class="sub"><span>Dietary Fiber 0g</span><span></span></li><li class="sub"><span>Total Sugars 4g</span><span></span></li><li class=""><span><b>Protein</b> 0g</span><span></span></li></ul></div></figure><figure class="nf"><figcaption>Simple syrup</figcaption><div class="nf__box"><h4>Nutrition Facts</h4><p class="nf__s">Serving size 1 fl oz<br>Cup size: 8 oz shaved ice</p><div class="nf__cal"><span>Calories</span><strong>50</strong></div><p class="nf__dv">% Daily Value</p><ul><li class=""><span><b>Total Fat</b> 0g</span><span>0%</span></li><li class="sub"><span>Saturated Fat 0g</span><span>0%</span></li><li class="sub"><span>Trans Fat 0g</span><span></span></li><li class=""><span><b>Cholesterol</b> 0mg</span><span>0%</span></li><li class=""><span><b>Sodium</b> 0.3mg</span><span>0%</span></li><li class=""><span><b>Total Carbohydrate</b> 14g</span><span></span></li><li class="sub"><span>Dietary Fiber 0g</span><span></span></li><li class="sub"><span>Total Sugars 14g</span><span></span></li><li class=""><span><b>Protein</b> 0g</span><span></span></li></ul></div></figure></div>
+    <div class="smart__labels"><figure class="nf nf--hl"><figcaption>Smart Syrup</figcaption><div class="nf__box"><h4>Nutrition Facts</h4><p class="nf__s">Serving size 1 fl oz<br>Cup size: 8 oz shaved ice</p><div class="nf__cal" data-r="cal"><span>Calories</span><em class="nf__d">−30</em><strong>20</strong></div><p class="nf__dv">% Daily Value</p><ul><li data-r="0" class=""><span><b>Total Fat</b> 0g</span><span>0%</span></li><li data-r="1" class="sub"><span>Saturated Fat 0g</span><span>0%</span></li><li data-r="2" class="sub"><span>Trans Fat 0g</span><span></span></li><li data-r="3" class=""><span><b>Cholesterol</b> 0mg</span><span>0%</span></li><li data-r="4" class=""><span><b>Sodium</b> 0.3mg</span><span>0%</span></li><li data-r="5" class=""><span><b>Total Carbohydrate</b> 4g</span><span><em class="nf__d">−10 g</em></span></li><li data-r="6" class="sub"><span>Dietary Fiber 0g</span><span></span></li><li data-r="7" class="sub"><span>Total Sugars 4g</span><span><em class="nf__d">−10 g</em></span></li><li data-r="8" class=""><span><b>Protein</b> 0g</span><span></span></li></ul></div></figure><figure class="nf"><figcaption>Simple syrup</figcaption><div class="nf__box"><h4>Nutrition Facts</h4><p class="nf__s">Serving size 1 fl oz<br>Cup size: 8 oz shaved ice</p><div class="nf__cal" data-r="cal"><span>Calories</span><strong>50</strong></div><p class="nf__dv">% Daily Value</p><ul><li data-r="0" class=""><span><b>Total Fat</b> 0g</span><span>0%</span></li><li data-r="1" class="sub"><span>Saturated Fat 0g</span><span>0%</span></li><li data-r="2" class="sub"><span>Trans Fat 0g</span><span></span></li><li data-r="3" class=""><span><b>Cholesterol</b> 0mg</span><span>0%</span></li><li data-r="4" class=""><span><b>Sodium</b> 0.3mg</span><span>0%</span></li><li data-r="5" class=""><span><b>Total Carbohydrate</b> 14g</span><span></span></li><li data-r="6" class="sub"><span>Dietary Fiber 0g</span><span></span></li><li data-r="7" class="sub"><span>Total Sugars 14g</span><span></span></li><li data-r="8" class=""><span><b>Protein</b> 0g</span><span></span></li></ul></div></figure></div>
   </div>
 </section>
 
@@ -797,6 +828,23 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       ul.style.transform = `translate3d(${x}px,0,0)`; requestAnimationFrame(loop); })();
   })();
 
+
+  /* ---------- smart syrup: rings fill + count up when seen, nutrition rows react ---------- */
+  (() => {
+    const rings = $$('.ring'); if (!rings.length) return;
+    const run = r => { const v = +r.dataset.v, mx = +r.dataset.max, fg = r.querySelector('.ring__fg'), n = r.querySelector('.ring__n');
+      fg.style.strokeDashoffset = (502.65 * (1 - v / mx)).toFixed(1);
+      const t0 = performance.now(), d = 1400; n.textContent = '0';
+      const step = now => { const k = Math.min(1, (now - t0) / d), e = 1 - Math.pow(1 - k, 3); n.textContent = Math.round(v * e); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step); };
+    if (reduce || !('IntersectionObserver' in window)) rings.forEach(r => { r.querySelector('.ring__fg').style.transition = 'none'; run(r); });
+    else { const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ run(e.target); io.unobserve(e.target); } }), { threshold: 0.5 }); rings.forEach(r => io.observe(r)); }
+    rings.forEach(r => r.addEventListener('mouseenter', () => { const fg = r.querySelector('.ring__fg'); fg.style.transition = 'none'; fg.style.strokeDashoffset = 502.65; fg.getBoundingClientRect(); fg.style.transition = ''; run(r); }));
+    const rows = $$('.smart__labels [data-r]');
+    rows.forEach(el => { el.addEventListener('mouseenter', () => rows.forEach(x => x.classList.toggle('hot', x.dataset.r === el.dataset.r)));
+      el.addEventListener('mouseleave', () => rows.forEach(x => x.classList.remove('hot'))); });
+    $$('.selfserve__list li').forEach(li => { li.tabIndex = 0; li.addEventListener('click', () => { $$('.selfserve__list li').forEach(x => x !== li && x.classList.remove('tap')); li.classList.toggle('tap'); }); });
+  })();
   /* ---------- events quote builder ---------- */
   (function(){
     const form = $('#qform'); if (!form) return;
