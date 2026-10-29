@@ -1,0 +1,772 @@
+<title>Paradice Island Experience</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,800&display=swap">
+<style>
+/* Layout: one fixed WebGL cup that travels between DOM anchors; colour bands stacked like Mercely's; a sticky flavour stage drives syrup colour. */
+:root{
+  --marine:#054664; --marine-deep:#032B3E; --jaune:#FDC208; --cyan:#00BADD; --grenadine:#D7263D;
+  --cyan-pale:#D9F4FA; --jaune-pale:#FFF1BF; --blanc:#FFFFFF;
+  --font:"Bricolage Grotesque", ui-rounded, "Avenir Next", system-ui, sans-serif;
+  --gutter-l:max(16px, env(safe-area-inset-left, 0px)); --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+  --wrap:1280px; --pill:999px;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--blanc);color:var(--marine);font-family:var(--font);font-size:17px;line-height:1.5;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--marine);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.eyebrow{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.03em;text-wrap:balance}
+h1{font-size:clamp(52px,7.4vw,108px);line-height:.92}
+h2{font-size:clamp(40px,5vw,72px);line-height:.96}
+p{margin:0}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:15px;letter-spacing:.01em;text-decoration:none;border-radius:var(--pill);padding:12px 20px;min-height:44px;border:1.5px solid transparent;transition:background-color .35s ease,color .35s ease,border-color .35s ease,box-shadow .35s ease}
+.btn .arr{display:inline-block;transition:transform .35s ease}
+.btn--solid{background:var(--marine);color:var(--blanc)}
+.btn--solid:hover{background:var(--marine-deep)}
+.btn--ghost{border-color:color-mix(in srgb,var(--marine) 45%,transparent);color:var(--marine)}
+.btn--ghost:hover{border-color:var(--marine);background:color-mix(in srgb,var(--marine) 6%,transparent)}
+.btn--sun{background:var(--jaune);color:var(--marine)}
+.btn--sun:hover{background:#FFD23F}
+@media (hover:hover){.btn:hover .arr{transform:translate(2px,-2px)}}
+.split .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em}
+.split .w>span{display:inline-block}
+
+/* fixed 3D layer */
+#stage3d{position:fixed;left:0;top:0;transform-origin:0 0;pointer-events:none;z-index:30;will-change:transform}
+#cupShadow{position:fixed;left:0;top:0;pointer-events:none;z-index:29;border-radius:50%;background:radial-gradient(closest-side,rgba(3,43,62,.32),rgba(3,43,62,0));will-change:transform}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb, var(--cyan-pale) 88%, transparent);backdrop-filter:blur(10px)}
+.no-blur .nav{backdrop-filter:none;background:color-mix(in srgb, var(--cyan-pale) 96%, transparent)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--cyan-pale)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+.nav img{height:46px;width:auto}
+.nav__links{display:flex;gap:26px;flex-wrap:wrap}
+.nav__links a{text-decoration:none;font-weight:500;font-size:16px}
+@media (max-width:720px){.nav__links{display:none}}
+
+/* hero */
+.hero{background:var(--cyan-pale);position:relative;overflow:hidden}
+.hero .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:24px;padding-block:24px 64px}
+.hero__text{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:22px;position:relative;z-index:2}
+.hero__text p{font-size:20px;max-width:30ch}
+.hero__ctas{display:flex;flex-wrap:wrap;gap:12px}
+.hero__visual{flex:1 1 420px;min-width:0;position:relative;height:clamp(380px,46vw,600px);display:flex;align-items:center;justify-content:center}
+.sun{position:absolute;width:min(500px,92%);aspect-ratio:1;border-radius:50%;background:var(--jaune);will-change:transform}
+.anchor{position:absolute;inset:2% 18% 4%;}
+.sticker{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:50%;font-weight:800;text-transform:uppercase;line-height:1;z-index:31;pointer-events:none}
+.sticker--hero{top:4%;right:2%;width:128px;height:128px;background:var(--marine);color:var(--blanc);font-size:18px;transform:rotate(12deg)}
+.fruits,.fsets,.fset{position:absolute;inset:0;pointer-events:none}
+.fr{position:absolute;display:block;will-change:transform}
+.fr img{width:100%;display:block;transform:rotate(var(--r,0deg));filter:drop-shadow(0 14px 18px rgba(3,43,62,.22))}
+.fset .fr img{transform:scale(0) rotate(calc(var(--r,0deg) - 40deg));opacity:0;transition:transform .7s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+.fset.on .fr img{transform:scale(1) rotate(var(--r,0deg));opacity:1}
+.hint{display:flex;align-items:center;gap:8px;font-size:14px}
+.hint svg{flex:none}
+@media (hover:none){.hint{display:none}}
+.fallback-cup{position:absolute;inset:4% 10%;object-fit:contain;width:80%;height:92%;margin:auto;z-index:30}
+.has-3d .fallback-cup{display:none}
+
+/* marquee */
+.wave{display:block;width:100%;height:42px}
+.band{background:var(--marine);color:var(--blanc);overflow:hidden}
+.marquee{display:flex;width:max-content;gap:48px;padding-block:14px 18px;font-weight:800;font-size:clamp(24px,3vw,40px);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;will-change:transform}
+.marquee span b{color:var(--cyan);font-weight:800;margin-left:48px}
+
+/* flavour stage */
+.flavors{position:relative;height:440vh}
+.flavors__sticky{position:sticky;top:0;height:100vh;overflow:hidden;will-change:background-color;contain:paint;background:var(--stage-bg,var(--blanc));color:var(--stage-fg,var(--marine));transition:color .4s}
+.flavors__ghost{position:absolute;left:-2vw;bottom:-4vh;font-weight:800;font-size:clamp(120px,22vw,340px);line-height:.8;letter-spacing:-.05em;text-transform:uppercase;opacity:.14;white-space:nowrap;pointer-events:none;will-change:transform}
+.flavors .wrap{height:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:72px 24px}
+.flavors__text{flex:1 1 380px;min-width:0;position:relative;min-height:340px}
+.flv{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:18px;transition:opacity .45s, transform .6s cubic-bezier(.2,.8,.2,1)}
+.flv[aria-hidden="true"]{opacity:0;transform:translateY(40px);pointer-events:none}
+.flv p{font-size:clamp(20px,1.8vw,26px);max-width:28ch}
+.flv h2{font-size:clamp(64px,8.4vw,140px);line-height:.9}
+.flv .eyebrow{font-size:15px}
+.flv .chips{display:flex;gap:8px;flex-wrap:wrap}
+.flv .chips span{border:2px solid currentColor;border-radius:var(--pill);padding:7px 14px;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+.flavors__visual{flex:1.3 1 480px;min-width:0;position:relative;height:min(84vh,860px)}
+.progress{display:flex;gap:10px;position:absolute;left:var(--gutter-l);bottom:28px}
+.progress i{width:44px;height:6px;border-radius:6px;background:currentColor;opacity:.25;transition:opacity .3s, width .3s}
+.progress i.on{opacity:1;width:72px}
+@media (max-width:860px){
+  .flavors .wrap{flex-direction:column;flex-wrap:nowrap;justify-content:center;padding-block:80px 64px}
+  .flavors__visual{order:-1;flex:0 0 38vh;width:100%}
+  .flavors__text{flex:0 0 auto;width:100%;min-height:260px}
+}
+
+/* drag gallery */
+.gallery{padding-block:96px;background:var(--blanc)}
+.gallery__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px}
+.track-wrap{overflow:hidden;cursor:grab;touch-action:pan-y}
+.track-wrap.dragging{cursor:grabbing}
+.track{display:flex;gap:20px;width:max-content;padding-left:max(var(--gutter-l), calc((100vw - var(--wrap)) / 2 + 16px));padding-right:var(--gutter-r);will-change:transform}
+.card{flex:0 0 clamp(250px,26vw,340px);border-radius:28px;overflow:hidden;background:var(--c);color:var(--fc);user-select:none;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.card img{width:100%;aspect-ratio:4/3.4;object-fit:cover;pointer-events:none}
+.card div{padding:18px 20px 22px;display:flex;justify-content:space-between;gap:12px}
+.card strong{font-size:24px;line-height:1.1}
+.card small{display:block;font-size:14px;margin-top:4px}
+@media (hover:hover){.card:hover{transform:translateY(-4px)}}
+.drag-hint{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:14px}
+
+/* features */
+.features{background:var(--cyan-pale);padding-block:96px}
+.features h2{text-align:center}
+.features__lead{text-align:center;margin:12px auto 40px;max-width:44ch}
+.feat-row{display:flex;flex-wrap:wrap;gap:24px}
+.feat{flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.feat__img{border-radius:24px;overflow:hidden;aspect-ratio:4/3}
+.feat__img img{width:100%;height:118%;object-fit:cover;will-change:transform}
+.feat__title{display:flex;justify-content:space-between;border-top:2px solid var(--marine);padding-top:12px;font-weight:800;font-size:22px}
+
+/* party */
+.party{background:var(--jaune-pale);padding-block:96px}
+.party__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px}
+.party__head p{max-width:300px;font-size:16px}
+.party__row{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end}
+.party figure{margin:0;display:flex;flex-direction:column;gap:12px;min-width:0}
+.party figure .ph{border-radius:24px;overflow:hidden}
+.party figure img{width:100%;height:116%;object-fit:cover;will-change:transform}
+.party figcaption{font-weight:800;font-size:20px}
+
+/* franchise */
+.own{background:var(--marine);color:var(--blanc);padding-block:96px;overflow:hidden}
+.own .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:56px}
+.own__text{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:20px}
+.own__text h2 span{color:var(--jaune)}
+.own__text p{font-size:19px;max-width:36ch}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.tags li{border:2px solid var(--blanc);border-radius:var(--pill);padding:8px 14px;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.own__visual{flex:1 1 400px;min-width:0;position:relative;display:flex;justify-content:center}
+.arch{width:min(440px,100%);aspect-ratio:4/5;border-radius:220px 220px 28px 28px;overflow:hidden}
+.arch img{width:100%;height:100%;object-fit:cover}
+.sticker--own{left:0;top:30px;width:128px;height:128px;background:var(--jaune);color:var(--marine);font-size:18px;z-index:2}
+
+/* offer: giant typographic menu, rows flood with a brand colour on hover */
+.offer{background:var(--cyan-pale);padding-block:96px 112px}
+.bigmenu{list-style:none;margin:28px 0 0;padding:0;border-top:2px solid var(--marine)}
+.bigmenu li{position:relative;display:flex;align-items:baseline;gap:20px;border-bottom:2px solid var(--marine);padding:10px 12px;margin-inline:-12px;overflow:hidden;cursor:default;outline:none;isolation:isolate}
+.bigmenu li::before{content:"";position:absolute;inset:0;background:var(--c);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.8,.2,1);z-index:-1}
+.bigmenu em{font-style:normal;font-weight:800;font-size:14px;letter-spacing:.14em;min-width:34px;align-self:center}
+.bigmenu strong{font-size:clamp(40px,7.2vw,112px);line-height:1;letter-spacing:-.04em;display:inline-block;transition:transform .45s cubic-bezier(.2,.8,.2,1),color .3s}
+.bigmenu span{margin-left:auto;align-self:center;font-size:17px;font-weight:500;line-height:1.3;white-space:nowrap;text-align:left;transition:color .3s,opacity .35s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+@media (hover:hover) and (min-width:701px){.bigmenu span{opacity:0;transform:translateX(24px)}.bigmenu li:hover span,.bigmenu li:focus-visible span{opacity:1;transform:none}}
+@media (max-width:1100px) and (min-width:701px){.bigmenu span{white-space:normal;max-width:24ch}}
+.bigmenu li:hover::before,.bigmenu li:focus-visible::before{transform:scaleX(1)}
+.bigmenu li:hover strong,.bigmenu li:focus-visible strong{transform:translateX(18px);color:var(--fc)}
+.bigmenu li:hover em,.bigmenu li:hover span,.bigmenu li:focus-visible em,.bigmenu li:focus-visible span{color:var(--fc);opacity:1}
+@media (max-width:700px){.bigmenu li{flex-wrap:wrap;gap:4px 14px}.bigmenu span{margin-left:48px;text-align:left;flex-basis:100%;white-space:normal;opacity:.8}}
+/* events: quote builder, the background photo follows the chosen occasion */
+.quote{position:relative;min-height:100vh;color:#fff;overflow:hidden;display:flex;align-items:center;padding-block:96px;background:#032B3E}
+.quote__bg{position:absolute;inset:0}
+.quote__bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity .8s,transform 1.6s cubic-bezier(.2,.8,.2,1)}
+.quote__bg img.on{opacity:1;transform:scale(1)}
+.quote__shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,43,62,.93) 0%,rgba(3,43,62,.72) 45%,rgba(3,43,62,.12) 100%)}
+.quote .wrap{position:relative;width:100%}
+.quote__box{max-width:640px;display:flex;flex-direction:column;gap:22px}
+.quote h2{font-size:clamp(44px,5.6vw,88px);line-height:.95}
+.quote__step{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+.quote__step legend,.quote__step>label{padding:0;margin-bottom:10px;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#FDC208}
+.quote__step>label{margin-bottom:0}
+.qchips{display:flex;flex-wrap:wrap;gap:8px}
+.qchips button{font:inherit;font-size:15px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.38);border-radius:999px;padding:9px 16px;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.qchips button:hover{border-color:#fff}
+.qchips button[aria-pressed="true"]{background:#FDC208;color:#032B3E;border-color:#FDC208}
+.qrow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.qrow input[type=range]{flex:1 1 220px;accent-color:#FDC208}
+.qrow output{font-weight:800;font-size:28px;min-width:70px}
+.qrow input[type=date]{font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.1);color:#fff;color-scheme:dark}
+.quote__sum{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.quote__sum p{flex:1 1 260px;font-size:15px;color:#E3F4F9}
+.quote__done{font-weight:800;color:#FDC208}
+.quote__call{font-size:15px;color:#BFE6F2}
+@media (max-width:820px){.quote__shade{background:linear-gradient(180deg,rgba(3,43,62,.88),rgba(3,43,62,.78))}}
+/* franchise: personalised city hero (5F) + 3D trailer with tabs (5B) */
+.biz{background:#054664;color:#F4F9FB;overflow:hidden}
+.biz__hero{position:relative;min-height:92vh;display:flex;align-items:center;padding-block:96px}
+.biz__bg{position:absolute;inset:0}
+.biz__bg img{width:100%;height:100%;object-fit:cover;object-position:72% 60%;animation:bizkb 24s ease-in-out infinite alternate}
+@keyframes bizkb{to{transform:scale(1.08) translateX(-2%)}}
+.biz__shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,70,100,.94) 0%,rgba(5,70,100,.72) 42%,rgba(5,70,100,0) 70%),linear-gradient(0deg,#054664 0%,rgba(5,70,100,0) 22%)}
+.biz__hero .wrap{position:relative;width:100%}
+.biz__form{max-width:640px;display:flex;flex-direction:column;gap:22px}
+.biz__eyebrow{font-weight:500;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#FDC208}
+.biz h2{font-size:clamp(48px,6.4vw,104px);line-height:.92;letter-spacing:-.035em}
+.biz h2 em{font-style:normal;color:#FDC208;display:inline-block;min-width:2ch;border-bottom:4px solid #FDC208}
+.biz__form>p{font-size:18px;color:#D3E8F0;max-width:44ch}
+.biz__in{display:flex;gap:8px;flex-wrap:wrap;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px;max-width:520px}
+.biz__in input{flex:1 1 200px;min-width:0;font:inherit;font-size:17px;background:transparent;border:0;color:#fff;padding:10px 16px;outline:none}
+.biz__in input::placeholder{color:#BFE6F2}
+.biz__in:focus-within{border-color:#fff}
+.biz__pins{display:flex;flex-wrap:wrap;gap:8px}
+.biz__pins button{font:inherit;font-size:14px;color:#fff;background:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:7px 12px;cursor:pointer}
+.biz__pins button:hover{border-color:#fff}
+.biz__done{font-weight:800;color:#FDC208}
+.biz__sign{position:absolute;right:max(16px,6vw);top:16%;z-index:1;background:#FDC208;color:#032B3E;font-weight:800;border-radius:16px;padding:14px 18px;transform:rotate(4deg);box-shadow:0 20px 40px -10px rgba(0,0,0,.4);max-width:280px}
+.biz__sign small{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+.biz__sign span{font-size:26px;line-height:1.05}
+.biz__box{max-width:640px;display:flex;flex-direction:column;gap:18px}
+.biz .biz__bg img{object-position:82% 55%}
+.biz__3d{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;font:inherit;font-size:15px;font-weight:500;color:#fff;background:rgba(3,43,62,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:10px 18px;min-height:44px;cursor:pointer;transition:border-color .2s,background .2s}
+.biz__3d span{color:#FDC208;font-size:18px;line-height:1}
+.biz__3d:hover{border-color:#fff;background:rgba(3,43,62,.75)}
+.biz__modal{position:fixed;inset:0;z-index:80;background:rgba(2,28,41,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:grid;place-items:center;padding:16px}
+.biz__modal[hidden]{display:none}
+.biz__modalIn{position:relative;width:min(1100px,100%);background:radial-gradient(80% 70% at 50% 55%,#0A6A93 0%,#054664 60%,#043A55 100%);border-radius:28px;padding:28px 24px 24px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 50px 100px -30px rgba(0,0,0,.7)}
+.biz__close{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:none;color:#fff;font-size:16px;cursor:pointer;z-index:2}
+.biz__close:hover{border-color:#fff}
+.biz__split{display:flex;flex-wrap:wrap;gap:40px;align-items:center;padding-block:40px 112px}
+.biz__left{flex:1.25 1 520px;min-width:0;display:flex;flex-direction:column;gap:8px;align-items:center}
+.biz__right{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:20px}
+.biz__trailer{cursor:grab;touch-action:pan-y;user-select:none;position:relative;width:100%;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;background:radial-gradient(60% 55% at 50% 60%,rgba(0,186,221,.28),rgba(0,186,221,0) 70%)}
+.biz__trailer.dragging{cursor:grabbing}
+.biz__trailer canvas{pointer-events:none;position:relative;z-index:1;width:100%;height:100%;object-fit:contain}
+.biz__trailer::after{content:"";position:absolute;left:18%;right:18%;bottom:13%;height:9%;border-radius:50%;background:radial-gradient(closest-side,rgba(1,20,30,.55),rgba(1,20,30,0));z-index:0}
+.biz__hint{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FD6E8}
+.biz__tabs{display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:12px}
+.biz__tabs button{font:inherit;font-size:15px;color:#BFDCE7;background:none;border:0;padding:8px 12px;border-radius:999px;cursor:pointer}
+.biz__tabs button:hover{color:#fff}
+.biz__tabs button[aria-selected="true"]{background:#fff;color:#032B3E;font-weight:500}
+.biz__panel{display:flex;flex-direction:column;gap:14px;min-height:250px}
+.biz__panel[hidden]{display:none}
+.biz__panel h3{font-size:clamp(26px,2.4vw,34px)}
+.biz__panel ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.biz__panel li{display:grid;grid-template-columns:30px 1fr;gap:10px;font-size:16px;color:#E3F4F9}
+.biz__panel li b{color:#FDC208;font-size:13px;letter-spacing:.1em;padding-top:2px}
+.biz__ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn--line{border-color:rgba(255,255,255,.45);color:#fff}
+.btn--line:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+@media (max-width:820px){.biz__sign{display:none}.biz__shade{background:rgba(5,70,100,.8)}.biz__hero{min-height:0}}
+@media (prefers-reduced-motion:reduce){.biz__bg img{animation:none}}
+/* find */
+/* birthday club: full-bleed photo, kids left, form right */
+.club{position:relative;min-height:100vh;display:flex;align-items:center;padding-block:96px;overflow:hidden;color:#fff;background:var(--marine-deep)}
+.club__bg{position:absolute;inset:-8% 0}
+.club__bg img{width:100%;height:100%;object-fit:cover;object-position:0% 55%}
+.club__shade{position:absolute;inset:0;background:linear-gradient(270deg,rgba(3,43,62,.9) 0%,rgba(3,43,62,.8) 40%,rgba(3,43,62,.35) 58%,rgba(3,43,62,0) 72%),linear-gradient(0deg,rgba(3,43,62,.6) 0%,rgba(3,43,62,0) 30%)}
+.club__wrap{position:relative;width:100%;display:flex;justify-content:flex-end}
+.club__box{width:min(620px,100%);display:flex;flex-direction:column;gap:22px}
+.club h2{font-size:clamp(46px,6.2vw,96px);line-height:.92}
+.club h2 em{font-style:normal;color:var(--jaune)}
+.club__lead{font-size:18px;color:#D3E8F0;max-width:44ch}
+.club__form{display:flex;flex-direction:column;gap:12px}
+.cstep{display:none;flex-direction:column;gap:12px}.cstep.on{display:flex}
+.club__in{display:flex;gap:6px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px;max-width:560px}
+.club__in:focus-within{border-color:#fff}
+.club__in input{flex:1;min-width:0;font:inherit;font-size:17px;color:#fff;background:transparent;border:0;outline:none;padding:10px 18px}
+.club__in input::placeholder{color:#BFE6F2}
+.club__fine{font-size:13px;color:#9FD6E8}
+.club__sms{align-self:flex-start;background:#fff;color:var(--marine);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:14px;max-width:48ch}
+.club__sms small{display:block;font-size:11px;color:#6A8B9B}.club__sms em{color:#6A8B9B;font-style:normal}
+.club__grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:560px}
+.club__grid label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#9FD6E8}
+.club__grid input{font:inherit;font-size:16px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:12px 14px;outline:none;min-width:0;width:100%}
+.club__grid input:focus{border-color:#fff}.club__grid input::placeholder{color:#8FC6DB}
+.club__form .btn{align-self:flex-start}
+.club__done{background:#fff;color:var(--marine);border-radius:22px;padding:22px 24px;display:flex;flex-direction:column;gap:6px;max-width:560px;animation:cpop .5s cubic-bezier(.2,.8,.2,1) both}
+.club__done b{font-size:28px;line-height:1.05;letter-spacing:-.02em}.club__done small{color:#6A8B9B;font-size:12px;margin-top:6px}
+@keyframes cpop{from{opacity:0;transform:translateY(12px)}}
+.club__steps{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:#D3E8F0}
+.club__steps li{display:flex;gap:8px;align-items:center}
+.club__steps i{font-style:normal;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:12px;font-weight:800;display:grid;place-items:center}
+@media (max-width:860px){.club{align-items:flex-end;min-height:0}.club__bg{inset:0}.club__bg img{object-position:15% 30%}.club__shade{background:linear-gradient(0deg,rgba(3,43,62,.95) 0%,rgba(3,43,62,.85) 55%,rgba(3,43,62,.2) 100%)}.club__wrap{padding-top:52vh}.club__grid{grid-template-columns:minmax(0,1fr)}}
+.status{font-weight:800}
+
+/* footer */
+footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
+.foot img{height:60px;width:auto}
+.foot__cols{display:flex;flex-wrap:wrap;gap:56px}
+.foot__cols div{display:flex;flex-direction:column;gap:8px;font-size:15px}
+.foot__cols a{text-decoration:none}
+.slogan{font-weight:800;font-size:clamp(46px,8.4vw,132px);line-height:.9;letter-spacing:-.04em;text-transform:uppercase;text-align:center;margin:48px 0 32px;text-wrap:balance}
+.slogan span{display:inline-block}
+.legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;border-top:1px solid var(--marine);padding-top:16px}
+.note{font-size:13px}
+@media (prefers-reduced-motion: reduce){ .flv,.card,.btn{transition:none} }
+</style>
+
+<div id="cupShadow" aria-hidden="true"></div>
+<canvas id="stage3d" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#top" aria-label="Paradice home"><img src="assets/lettrage.svg" alt="Paradice Caribbean Shaved Ice"></a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#flavors">Our flavors</a><a href="#offer">What we offer</a><a href="#events">Events</a><a href="#own">Franchise</a><a href="#club">Birthday Club</a>
+    </nav>
+    <a class="btn btn--solid" href="#own" style="padding:10px 18px;font-size:14px;min-height:40px">Own a Paradice <span class="arr" aria-hidden="true">↗</span></a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero__text">
+      <span class="eyebrow">A scoop of the islands · Henderson, NV</span>
+      <h1 class="split">A little cup. A lot of island.</h1>
+      <p>Caribbean syrups over ice shaved on the spot. Find your happy place at the Paradice trailer.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--solid" href="#flavors">See the flavors <span class="arr" aria-hidden="true">↗</span></a>
+        <a class="btn btn--ghost" href="#events">Book the trailer <span class="arr" aria-hidden="true">↗</span></a>
+      </div>
+      <span class="hint"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 4l10 7-5 1 3 6-2 1-3-6-3 4z"/></svg>Move your mouse. The cup follows.</span>
+    </div>
+    <div class="hero__visual">
+      <div class="sun" id="sun" aria-hidden="true"></div>
+      <img class="fallback-cup" src="assets/seq/tri/000.webp" alt="" aria-hidden="true">
+      <div class="fruits" aria-hidden="true">
+        <span class="fr" data-depth="1.3" style="left:2%;top:8%;width:19%;z-index:31"><img src="assets/fruit-fraise.webp" alt="" style="--r:-14deg"></span>
+        <span class="fr" data-depth="0.6" style="right:6%;top:44%;width:13%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:18deg"></span>
+        <span class="fr" data-depth="1.6" style="right:-2%;top:60%;width:21%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-8deg"></span>
+        <span class="fr" data-depth="0.8" style="left:0%;top:52%;width:16%;z-index:29"><img src="assets/fruit-mangue.webp" alt="" style="--r:10deg"></span>
+        <span class="fr" data-depth="1.9" style="left:16%;bottom:-2%;width:17%;z-index:31"><img src="assets/fruit-cerises.webp" alt="" style="--r:-6deg"></span>
+        <span class="fr" data-depth="0.5" style="right:20%;top:0%;width:12%;z-index:29"><img src="assets/fruit-coco.webp" alt="" style="--r:24deg"></span>
+        <span class="fr" data-depth="2.2" style="right:16%;bottom:2%;width:7%;z-index:31"><img src="assets/fruit-amande-2.webp?v=3" alt="" style="--r:30deg"></span>
+      </div>
+      <div class="anchor" id="anchorHero" aria-hidden="true"></div>
+      <div class="sticker sticker--hero" id="stickerHero" aria-hidden="true">Island<br>syrups<br>only</div>
+    </div>
+  </div>
+</section>
+
+<div aria-hidden="true" style="background:var(--cyan-pale);line-height:0"><svg class="wave" viewBox="0 0 1440 42" preserveAspectRatio="none"><path d="M0 42C240 0 480 0 720 21S1200 42 1440 10V42Z" fill="#054664"/></svg></div>
+<div class="band" aria-label="Shave, pour, smile, repeat"><div class="marquee" id="marquee" aria-hidden="true">
+  <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
+  <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
+  <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
+</div></div>
+<div aria-hidden="true" style="line-height:0"><svg class="wave" viewBox="0 0 1440 42" preserveAspectRatio="none"><path d="M0 0H1440V20C1200 42 960 10 720 24S240 42 0 14Z" fill="#054664"/></svg></div>
+
+<section class="flavors" id="flavors" aria-label="Our flavors">
+  <div class="flavors__sticky" id="flavorStage">
+    <div class="flavors__ghost" id="ghost" aria-hidden="true">Grenadine</div>
+    <div class="wrap">
+      <div class="flavors__text">
+        <article class="flv" data-i="0" aria-hidden="false">
+          <span class="eyebrow">Flavor 01 · Fruity</span>
+          <h2>Grenadine.</h2>
+          <p>Bright red, a little tangy. The one every kid asks for first.</p>
+          <div class="chips"><span>Red</span><span>Fruity</span><span>Classic</span></div>
+        </article>
+        <article class="flv" data-i="1" aria-hidden="true">
+          <span class="eyebrow">Flavor 02 · Tropical</span>
+          <h2>Passion.</h2>
+          <p>Golden passion fruit over fresh snow. Sunshine in a cup.</p>
+          <div class="chips"><span>Golden</span><span>Tangy</span><span>Tropical</span></div>
+        </article>
+        <article class="flv" data-i="2" aria-hidden="true">
+          <span class="eyebrow">Flavor 03 · Creamy</span>
+          <h2>Orgeat.</h2>
+          <p>Smooth almond syrup, milky and mellow. A Caribbean favorite.</p>
+          <div class="chips"><span>Almond</span><span>Smooth</span><span>Island classic</span></div>
+        </article>
+        <article class="flv" data-i="3" aria-hidden="true">
+          <span class="eyebrow">Flavor 04 · Ice-blue</span>
+          <h2>Island blue.</h2>
+          <p>Cool, bright and very blue. [À CONFIRMER : nom exact du sirop.]</p>
+          <div class="chips"><span>Blue</span><span>Cool</span><span>Sugar-free option</span></div>
+        </article>
+      </div>
+      <div class="flavors__visual"><div class="fsets" aria-hidden="true"><div class="fset on" data-set="0"><span class="fr" data-depth="1.4" style="left:4%;top:12%;width:20%;z-index:31"><img src="assets/fruit-fraise-coupe.webp" alt="" style="--r:-12deg;transition-delay:0ms"></span><span class="fr" data-depth="1.8" style="right:2%;top:58%;width:22%;z-index:31"><img src="assets/fruit-cerises.webp" alt="" style="--r:8deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:12%;top:2%;width:14%;z-index:29"><img src="assets/fruit-fraise.webp" alt="" style="--r:20deg;transition-delay:140ms"></span></div><div class="fset" data-set="1"><span class="fr" data-depth="1.6" style="left:2%;top:54%;width:24%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-10deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:4%;top:10%;width:18%;z-index:29"><img src="assets/fruit-mangue.webp" alt="" style="--r:14deg;transition-delay:70ms"></span><span class="fr" data-depth="1.3" style="right:0%;top:62%;width:17%;z-index:31"><img src="assets/fruit-citron.webp" alt="" style="--r:-20deg;transition-delay:140ms"></span></div><div class="fset" data-set="2"><span class="fr" data-depth="1.5" style="left:0%;top:50%;width:22%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:10%;top:14%;width:9%;z-index:29"><img src="assets/fruit-amande-1.webp?v=3" alt="" style="--r:30deg;transition-delay:70ms"></span><span class="fr" data-depth="1.9" style="right:4%;top:66%;width:10%;z-index:31"><img src="assets/fruit-amande-3.webp?v=3" alt="" style="--r:-24deg;transition-delay:140ms"></span><span class="fr" data-depth="0.8" style="left:12%;top:10%;width:8%;z-index:29"><img src="assets/fruit-amande-2.webp?v=3" alt="" style="--r:12deg;transition-delay:210ms"></span></div><div class="fset" data-set="3"><span class="fr" data-depth="1.4" style="left:2%;top:14%;width:20%;z-index:31"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:16deg;transition-delay:0ms"></span><span class="fr" data-depth="1.7" style="right:2%;top:56%;width:21%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-12deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:14%;top:4%;width:12%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:-30deg;transition-delay:140ms"></span></div></div><div class="anchor" id="anchorFlavor" aria-hidden="true" style="inset:0"></div></div>
+    </div>
+    <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+
+
+
+
+<section class="offer" id="offer" aria-labelledby="offer-title">
+  <div class="wrap">
+    <span class="eyebrow">More than shaved ice</span>
+    <h2 id="offer-title" class="sr">What we offer</h2>
+    <ul class="bigmenu" aria-label="What we offer"><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>01</em><strong>Shaved ice</strong><span>Grenadine, mint, orgeat, passion, groseille.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>02</em><strong>Ice cream</strong><span>Creamy scoops for the ones who want it rich.</span></li><li style="--c:#054664;--fc:#fff" tabindex="0"><em>03</em><strong>French coffee</strong><span>Proper French-style coffee for the grown-ups.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>04</em><strong>Island treats</strong><span>Doucelette, nougat péyi and more island sweets.</span></li><li style="--c:#00BADD;--fc:#032B3E" tabindex="0"><em>05</em><strong>Caribbean music</strong><span>The soundtrack comes with the trailer.</span></li><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>06</em><strong>20% cash back</strong><span>On every purchase. [À CONFIRMER : offre réelle ?]</span></li></ul>
+  </div>
+</section>
+
+<section class="quote" id="events" aria-labelledby="party-title">
+  <div class="quote__bg" id="qbg" aria-hidden="true"><img class="on" data-k="birthday" src="assets/enfants.jpg" alt="" loading="eager"><img data-k="school" src="assets/events-bg.jpg?v=2" alt="" loading="lazy"><img data-k="corporate" src="assets/merch.jpg" alt="" loading="lazy"><img data-k="festival" src="assets/remorque-guichet.jpg" alt="" loading="lazy"><img data-k="community" src="assets/remorque-arriere.jpg" alt="" loading="lazy"><img data-k="carnival" src="assets/offer-musique.webp" alt="" loading="lazy"></div>
+  <div class="quote__shade" aria-hidden="true"></div>
+  <div class="wrap">
+    <form class="quote__box" id="qform">
+      <span class="eyebrow" style="color:#FDC208">Events &amp; private parties</span>
+      <h2 id="party-title" class="split">Every party needs a shaved ice.</h2>
+      <fieldset class="quote__step"><legend>1 · What's the occasion?</legend><div class="qchips" id="qchips"><button type="button" aria-pressed="true" data-k="birthday">Birthday</button><button type="button" aria-pressed="false" data-k="school">School &amp; camp</button><button type="button" aria-pressed="false" data-k="corporate">Corporate</button><button type="button" aria-pressed="false" data-k="festival">Festival &amp; market</button><button type="button" aria-pressed="false" data-k="community">Church &amp; community</button><button type="button" aria-pressed="false" data-k="carnival">Carnival &amp; fundraiser</button></div></fieldset>
+      <div class="quote__step"><label for="qg">2 · How many guests?</label><div class="qrow"><input type="range" id="qg" min="10" max="500" step="10" value="50"><output id="qgo" for="qg">50</output></div></div>
+      <div class="quote__step"><label for="qd">3 · When?</label><div class="qrow"><input type="date" id="qd"></div></div>
+      <div class="quote__sum"><p id="qsum" aria-live="polite">Birthday · 50 guests · date to choose. No water, no power needed: we park and we pour.</p><button class="btn btn--sun" type="submit">Get my quote <span class="arr" aria-hidden="true">↗</span></button></div>
+      <p class="quote__done" id="qdone" role="status" hidden>Thanks! Prototype only: requests will go to [À CONFIRMER : e-mail ou CRM].</p>
+      <p class="quote__call">Prefer to talk? Call <strong>(702) 336-5208</strong></p>
+    </form>
+  </div>
+</section>
+
+<section class="biz" id="own" aria-labelledby="own-title">
+  <div class="biz__hero">
+    <div class="biz__bg" aria-hidden="true"><img src="assets/tivoli-wide2.jpg?v=1" alt=""></div>
+    <div class="biz__shade" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="biz__box">
+        <span class="biz__eyebrow">Franchise opportunity</span>
+        <h2 id="own-title">Bring Paradice to your city.</h2>
+        <div class="biz__tabs" role="tablist" aria-label="The Paradice franchise">
+          <button role="tab" id="bt0" aria-controls="bp0" aria-selected="true" data-t="0">Why Paradice</button><button role="tab" id="bt1" aria-controls="bp1" aria-selected="false" tabindex="-1" data-t="1">What you get</button><button role="tab" id="bt2" aria-controls="bp2" aria-selected="false" tabindex="-1" data-t="2">Investment</button><button role="tab" id="bt3" aria-controls="bp3" aria-selected="false" tabindex="-1" data-t="3">How it works</button>
+        </div>
+        <div class="biz__panel" role="tabpanel" id="bp0" aria-labelledby="bt0"><h3>A mobile model with a distinctive product.</h3><ul><li><b>01</b>One self-contained trailer: no electricity or water needed, you go where the crowds are.</li><li><b>02</b>Caribbean flavors in a market led by Hawaiian-style shaved ice.</li><li><b>03</b>Kids, families, schools, companies: one product for all of them.</li></ul></div>
+        <div class="biz__panel" role="tabpanel" id="bp1" aria-labelledby="bt1" hidden><h3>Everything to open your first season.</h3><ul><li><b>01</b>Brand identity and trailer wrap.</li><li><b>02</b>Recipes and suppliers. [À CONFIRMER]</li><li><b>03</b>Training and launch support. [À CONFIRMER]</li></ul></div>
+        <div class="biz__panel" role="tabpanel" id="bp2" aria-labelledby="bt2" hidden><h3>The numbers.</h3><ul><li><b>01</b>Initial investment: [À CONFIRMER]</li><li><b>02</b>Franchise fee: [À CONFIRMER]</li><li><b>03</b>Royalties: [À CONFIRMER]</li><li><b>04</b>Territory: [À CONFIRMER]</li></ul></div>
+        <div class="biz__panel" role="tabpanel" id="bp3" aria-labelledby="bt3" hidden><h3>Four steps to your trailer.</h3><ul><li><b>01</b>Inquire: tell us about you and your city.</li><li><b>02</b>Discovery call with the founders.</li><li><b>03</b>Review &amp; agreement. [À CONFIRMER]</li><li><b>04</b>Train &amp; launch your first season.</li></ul></div>
+        <div class="biz__ctas"><a class="btn btn--sun" href="#own" id="bizKit">Request the franchise kit <span class="arr" aria-hidden="true">↗</span></a><a class="btn btn--line" href="#own">Talk to our team <span class="arr" aria-hidden="true">↗</span></a></div>
+        <button type="button" class="biz__3d" id="biz3d"><span aria-hidden="true">⟳</span> View the trailer in 3D</button>
+      </div>
+    </div>
+  </div>
+  <div class="biz__modal" id="bizModal" role="dialog" aria-modal="true" aria-label="Paradice trailer in 3D" hidden>
+    <div class="biz__modalIn">
+      <button type="button" class="biz__close" id="bizClose" aria-label="Close">✕</button>
+      <span class="biz__eyebrow">The Paradice trailer</span>
+      <div class="biz__trailer"><canvas id="trailerCanvas" role="img" aria-label="3D model of the Paradice trailer, drag to turn it"></canvas></div>
+      <span class="biz__hint">⟷ Drag to turn the trailer</span>
+    </div>
+  </div>
+</section>
+
+<section class="club" id="club" aria-labelledby="club-title">
+  <div class="club__bg" aria-hidden="true"><img class="para" src="assets/club-bg.jpg?v=7" alt=""></div>
+  <div class="club__shade" aria-hidden="true"></div>
+  <div class="wrap club__wrap">
+    <div class="club__box">
+      <span class="eyebrow" style="color:var(--jaune)">Paradice Birthday Club</span>
+      <h2 id="club-title">Every birthday deserves a <em>free cup.</em></h2>
+      <p class="club__lead">Join once. Every year we text you: your free cup is waiting at the trailer.</p>
+      <form class="club__form" id="clubForm" novalidate>
+        <div class="cstep on" data-s="1">
+          <label class="club__in"><input id="cPhone" aria-label="Mobile number" placeholder="Your mobile number" inputmode="tel" autocomplete="tel"><button class="btn btn--sun" type="button" data-next="2">Text me a code <span class="arr" aria-hidden="true">↗</span></button></label>
+          <p class="club__fine">One account per phone number · we never spam · the free cup is redeemed at the trailer</p>
+        </div>
+        <div class="cstep" data-s="2">
+          <div class="club__sms"><small>SMS · Paradice</small>Your Paradice code is <b>482 913</b> · expires in 10 min <em>(prototype)</em></div>
+          <label class="club__in"><input aria-label="6-digit code" placeholder="6-digit code" inputmode="numeric" maxlength="7"><button class="btn btn--sun" type="button" data-next="3">Verify <span class="arr" aria-hidden="true">↗</span></button></label>
+        </div>
+        <div class="cstep" data-s="3">
+          <div class="club__grid">
+            <label><span>First name</span><input placeholder="Maya" autocomplete="given-name"></label>
+            <label><span>Birthday · locked after sign-up</span><input placeholder="MM / DD" inputmode="numeric"></label>
+            <label><span>ZIP code</span><input placeholder="89052" inputmode="numeric" autocomplete="postal-code"></label>
+            <label><span>E-mail · optional</span><input placeholder="you@email.com" type="email" autocomplete="email"></label>
+          </div>
+          <button class="btn btn--sun" type="submit">Join the club <span class="arr" aria-hidden="true">↗</span></button>
+        </div>
+        <div class="cstep" data-s="4">
+          <div class="club__done" role="status"><span class="eyebrow" style="color:var(--jaune)">You're in</span><b>See you on your birthday.</b><span>We'll text your one-time code a few days before. Show it at the counter, we hand you the cup.</span><small>Prototype: sign-ups will go to [À CONFIRMER : base Supabase / LOYTI + SMS Twilio]</small></div>
+        </div>
+      </form>
+      <ol class="club__steps" aria-label="How it works"><li><i>1</i>Your phone</li><li><i>2</i>Code by text</li><li><i>3</i>Your birthday</li><li><i>🎂</i>Free cup, every year</li></ol>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="display:flex;align-items:center;gap:18px"><img src="assets/lettrage.svg" alt="Paradice Caribbean Shaved Ice"><span style="font-size:15px;line-height:1.4">A little cup of island.<br>Whenever you need one.</span></div>
+      <div class="foot__cols">
+        <div><span class="eyebrow">Explore</span><a href="#flavors">(Shave) Our flavors</a><a href="#events">(Pour) Events</a><a href="#own">(Own) Franchise</a><a href="#club">(Smile) Birthday Club</a></div>
+        <div><span class="eyebrow">Say hello</span><span>(702) 336-5208</span><span>[À CONFIRMER : e-mail]</span><a href="https://www.instagram.com/paradicelv/">Instagram ↗</a></div>
+      </div>
+    </div>
+    <p class="slogan" id="slogan" aria-label="Sweets to the streets.">Sweets to the streets.</p>
+    <div class="legal"><span>© 2026 Paradice Caribbean Shaved Ice · Henderson, Nevada</span><span>Prototype · images marked for replacement</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (window.gsap && !reduce) document.documentElement.classList.add('js');
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+  /* ---------- birthday club: inline steps ---------- */
+  (function(){
+    const steps = $$('.cstep');
+    const go = n => { steps.forEach(x => x.classList.toggle('on', x.dataset.s === String(n))); const inp = $(`.cstep[data-s="${n}"] input`); if (inp) inp.focus({ preventScroll: true }); };
+    $$('#clubForm [data-next]').forEach(b => b.addEventListener('click', () => go(+b.dataset.next)));
+    $('#clubForm').addEventListener('submit', e => { e.preventDefault(); go(4); });
+  })();
+
+  /* ---------- flavour data ---------- */
+  const FLAVORS = [
+    { name:'Grenadine', bg:'#D7263D', fg:'#FFFFFF', syrup:'#D7263D' },
+    { name:'Passion',   bg:'#FDC208', fg:'#054664', syrup:'#FDC208' },
+    { name:'Orgeat',    bg:'#FFF1BF', fg:'#054664', syrup:'#FBF4E6' },
+    { name:'Island blue', bg:'#00BADD', fg:'#054664', syrup:'#00BADD' }
+  ];
+  const stage = $('#flavorStage'), ghost = $('#ghost'), flvs = $$('.flv'), bars = $$('.progress i');
+  let flavorIdx = 0;
+  function setFlavor(i){
+    if (i === flavorIdx) return;
+    flavorIdx = i;
+    flvs.forEach((el,k) => el.setAttribute('aria-hidden', k===i ? 'false' : 'true'));
+    bars.forEach((b,k) => b.classList.toggle('on', k===i));
+    $$('.fset').forEach((el,k) => el.classList.toggle('on', k===i));
+    ghost.textContent = FLAVORS[i].name;
+    stage.style.setProperty('--stage-fg', FLAVORS[i].fg);
+  }
+  // background follows the same progress as the syrup running down the cup
+  const hex = h => [1,3,5].map(o => parseInt(h.slice(o, o+2), 16));
+  function mixHex(a, b, t){ const A = hex(a), B = hex(b); return 'rgb(' + A.map((v,i) => Math.round(v + (B[i]-v)*t)).join(',') + ')'; }
+  stage.style.setProperty('--stage-bg', FLAVORS[0].bg);
+  stage.style.setProperty('--stage-fg', FLAVORS[0].fg);
+  const flavorsSec = $('#flavors');
+  function flavorProgress(){
+    const r = flavorsSec.getBoundingClientRect();
+    const total = flavorsSec.offsetHeight - innerHeight;
+    return Math.min(1, Math.max(0, -r.top / total));
+  }
+
+  function tickGallery(){}
+
+  /* ---------- 3D cup: Blender turntable renders (72 angles x 5 flavours) driven by mouse + scroll ---------- */
+  // The canvas is only as big as one render; it is moved and scaled with a GPU transform and
+  // redrawn only when the angle or the flavour actually changes.
+  const canvas = $('#stage3d'), ctx = canvas.getContext('2d'), shadowEl = $('#cupShadow');
+  const SEQ = ['tri','grenadine','passion','orgeat','bleu'], NF = 144;
+  const CROP = { w: 900, h: 1428, foot: 0.980, cx: 0.5 };          // per-frame webp, already at display size
+  const DPR = Math.min(2, devicePixelRatio || 1);
+  let CW = CROP.w, CH = CROP.h; canvas.width = CW; canvas.height = CH;
+  const BASE_W = 400; canvas.style.width = BASE_W + 'px'; canvas.style.height = Math.round(BASE_W * CROP.h / CROP.w) + 'px';
+  const frames = SEQ.map(() => new Array(NF)), ready = SEQ.map(() => new Uint8Array(NF));
+  // frames are packed 2 per file (p00..p71): frame f lives in file f>>1 at x = (f&1)*CROP.w
+  const pending = SEQ.map(() => new Map());
+  function load(si, f){ const pk = f >> 1; if (pending[si].has(pk)) return pending[si].get(pk);
+    const pr = new Promise(res => { const im = new Image();
+      im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).catch(() => {}).then(() => { for (let k = 0; k < 2; k++){ frames[si][pk * 2 + k] = { im, x: k * CROP.w }; ready[si][pk * 2 + k] = 1; } dirty = true; res(); }); };
+      im.onerror = res; im.src = `assets/seq7/${SEQ[si]}/p${String(pk).padStart(2,'0')}.webp?v=7`; });
+    pending[si].set(pk, pr); return pr; }
+  (async () => {
+    // coarse first (every 8th frame), then fill in, so the cup turns early and gets smoother as it loads
+    const order = []; for (let step of [8, 4, 2, 1]) for (let f = 0; f < NF; f += step) if (!order.includes(f)) order.push(f);
+    for (const f of order.slice(0, 18)) await load(0, f);
+    document.documentElement.classList.add('has-3d');
+    const pool = async (si, list) => { let i = 0; await Promise.all(Array.from({ length: 6 }, async () => { while (i < list.length) await load(si, list[i++]); })); };
+    await pool(0, order.slice(18));
+    for (let si = 1; si < SEQ.length; si++) await pool(si, order);
+  })();
+  function pick(si, f){ if (ready[si][f]) return frames[si][f];
+    for (let d = 1; d < NF/2; d++){ const a = (f + d) % NF, b = (f - d + NF) % NF; if (ready[si][a]) return frames[si][a]; if (ready[si][b]) return frames[si][b]; } return null; }
+
+  let mx = 0, my = 0, tmx = 0, tmy = 0;
+  addEventListener('pointermove', e => { tmx = (e.clientX / innerWidth) * 2 - 1; tmy = (e.clientY / innerHeight) * 2 - 1; }, { passive:true });
+  const anchorHero = $('#anchorHero'), anchorFlavor = $('#anchorFlavor');
+  const drifters = $$('[data-depth]');
+  const ss = (a,b,t) => { t = Math.min(1, Math.max(0, (t-a)/(b-a))); return t*t*(3-2*t); };
+  const lerp = (a,b,t) => a + (b-a)*t;
+  
+
+  let dirty = true, last = '', turnsShown = 0, lastBg = '', lastGx = '', lastOnStage = null;
+  function paint(siA, siB, mix, f){
+    const key = siA + '|' + siB + '|' + f + '|' + Math.round(mix * 40);
+    if (!dirty && key === last) return;
+    const a = pick(siA, f); if (!a) return;
+    last = key; dirty = false;
+    ctx.clearRect(0, 0, CW, CH);
+    const blit = fr => ctx.drawImage(fr.im, fr.x, 0, CROP.w, CROP.h, 0, 0, CW, CH);
+    if (mix >= 0.999) { const b = pick(siB, f); blit(b || a); return; }
+    blit(a);
+    if (mix <= 0.001) return;
+    const b = pick(siB, f); if (!b) return;
+    // the new syrup runs down from the top of the dome: B is drawn clipped to a wavy front
+    const front = lerp(-0.06, 0.62, mix) * CH;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(CW, 0);
+    for (let i = 0; i <= 28; i++){ const px = CW * (1 - i/28); ctx.lineTo(px, front + (Math.sin(i * 1.9) * 0.018 + Math.sin(i * 0.7 + 1) * 0.014) * CH); }
+    ctx.closePath(); ctx.clip(); blit(b); ctx.restore();
+  }
+
+  let t0 = performance.now();
+  function frame(now){
+    const t = (now - t0) / 1000;
+    mx += (tmx - mx) * 0.2; my += (tmy - my) * 0.2;
+    tickGallery();
+    const fp = flavorProgress();
+    { const spF = fp * 4, kF = Math.min(3, Math.floor(spF)), eF = kF < 3 ? ss(0.7, 0.98, spF - kF) : 0;
+      setFlavor(Math.min(3, kF + ((-0.06 + 0.68 * eF - 0.06) / 0.30 > 0.5 ? 1 : 0)));
+      const frontF = -0.06 + 0.68 * eF, covF = Math.min(1, Math.max(0, (frontF - 0.06) / 0.30));   // share of the dome already recoloured
+      const bgv = mixHex(FLAVORS[kF].bg, FLAVORS[Math.min(3, kF + 1)].bg, Math.round(covF * 50) / 50); if (bgv !== lastBg){ lastBg = bgv; stage.style.setProperty('--stage-bg', bgv); } }
+    const gx = (-fp * 30).toFixed(2); if (gx !== lastGx){ lastGx = gx; ghost.style.transform = `translate3d(${gx}vw,0,0)`; }
+    if (!reduce) drifters.forEach(el => { const d = +el.dataset.depth; el.style.transform = `translate3d(${mx * d * 22}px, ${my * d * 16 + Math.sin(t * 0.9 + d * 3) * 6}px, 0)`; });
+
+    const fr = flavorsSec.getBoundingClientRect();
+    const onStage = fr.top < 80 && fr.bottom > 0; if (onStage !== lastOnStage){ lastOnStage = onStage; document.documentElement.classList.toggle('no-blur', onStage); }
+    const p = 1 - Math.min(1, Math.max(0, fr.top / innerHeight)), pe = p * p * (3 - 2 * p);
+    const h = anchorHero.getBoundingClientRect(), f = anchorFlavor.getBoundingClientRect();
+    const visible = !(h.bottom < -50 && f.bottom < -50) && !(fr.top > innerHeight * 1.2 && h.top > innerHeight);
+    canvas.style.visibility = shadowEl.style.visibility = visible ? 'visible' : 'hidden';
+    if (visible){
+      const bx = lerp(h.left, f.left, pe), by = lerp(h.top, f.top, pe), bw = lerp(h.width, f.width, pe), bh = lerp(h.height, f.height, pe);
+      const s = Math.min(bw / CROP.w, bh / CROP.h), w = CROP.w * s, hh = CROP.h * s;
+      const x = bx + (bw - w) / 2, y = by + (bh - hh) / 2 + (reduce ? 0 : Math.sin(t * 1.1) * 3);
+      const tiltOn = fp <= 0 ? 1 - pe : 0;
+      canvas.style.transform = `translate3d(${x + mx * 14 * tiltOn}px,${y + my * 8 * tiltOn}px,0) scale(${w / BASE_W}) translate(${BASE_W/2}px,${CROP.h/5}px) rotate(${mx * -2.2 * tiltOn}deg) translate(${-BASE_W/2}px,${-CROP.h/5}px)`;
+      shadowEl.style.transform = `translate3d(${x + w * CROP.cx - w * 0.36}px,${y + hh * CROP.foot - w * 0.05}px,0)`;
+      shadowEl.style.width = (w * 0.72) + 'px'; shadowEl.style.height = (w * 0.1) + 'px';
+      // rotation follows the scroll continuously: one turn on the way down, one turn per flavour
+      let target, siA, siB, mix;
+      if (fp <= 0) { siA = 0; siB = 1; mix = ss(0.2, 0.9, p); target = p; }
+      else { const sp = fp * 4, k = Math.min(3, Math.floor(sp)); siA = k + 1; siB = Math.min(4, k + 2); mix = k < 3 ? ss(0.7, 0.98, sp - k) : 0; target = 1 + sp; }
+      target += mx * 0.2;
+      turnsShown += (target - turnsShown) * 0.25;
+      const fi = ((Math.round(turnsShown * NF) % NF) + NF) % NF;
+      paint(siA, siB, mix, fi);
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- 3D trailer: 72 Blender renders, turns with the scroll through the franchise section ---------- */
+  (function(){
+    const cv = $('#trailerCanvas'); if (!cv) return;
+    const cx = cv.getContext('2d'), N = 72, imgs = new Array(N), ok = new Uint8Array(N);
+    const TW = 1400, TH = 875; cv.width = TW; cv.height = TH;
+    let started = false, last = -1, shown = 0, angT = 0, velT = 0, dragT = false, lxT = 0;
+    const box = cv.parentElement;
+    box.addEventListener('pointerdown', e => { dragT = true; lxT = e.clientX; velT = 0; box.classList.add('dragging'); box.setPointerCapture(e.pointerId); });
+    box.addEventListener('pointermove', e => { if (!dragT) return; const d = -(e.clientX - lxT) / box.clientWidth * 1.1; lxT = e.clientX; angT += d; velT = d; });
+    const endT = () => { dragT = false; box.classList.remove('dragging'); };
+    box.addEventListener('pointerup', endT); box.addEventListener('pointercancel', endT);
+    box.tabIndex = 0;
+    box.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { velT = 0.02; e.preventDefault(); } if (e.key === 'ArrowRight') { velT = -0.02; e.preventDefault(); } });
+    const sec = $('#own');
+    function start(){ if (started) return; started = true;
+      for (let f = 0; f < N; f++){ const im = new Image(); im.onload = () => (im.decode ? im.decode() : Promise.resolve()).catch(()=>{}).then(() => { imgs[f] = im; ok[f] = 1; last = -1; });
+        im.src = `assets/trailer/${String(f).padStart(3,'0')}.webp?v=4`; } }
+    new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) start(); }), { rootMargin: '800px 0px' }).observe(sec);
+    function pick(f){ if (ok[f]) return imgs[f]; for (let d = 1; d < N/2; d++){ if (ok[(f+d)%N]) return imgs[(f+d)%N]; if (ok[(f-d+N)%N]) return imgs[(f-d+N)%N]; } return null; }
+    function tick(){
+      const r = cv.getBoundingClientRect();
+      if (r.bottom > -100 && r.top < innerHeight + 100){
+        if (!dragT){ angT += velT; velT *= 0.94; if (Math.abs(velT) < 0.0004 && !reduce) angT += 0.0006; }
+        shown += (angT - shown) * 0.35;
+        const f = ((Math.round(shown * N) % N) + N) % N;
+        if (f !== last){ const im = pick(f); if (im){ cx.clearRect(0, 0, TW, TH); cx.drawImage(im, 0, 0, TW, TH); last = f; } }
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  /* ---------- event types: drag the strip ---------- */
+  (function(){
+    const strip = $('#evTypes'); if (!strip) return; const ul = strip.querySelector('ul');
+    let x = 0, vx = 0, drag = false, lx = 0;
+    strip.addEventListener('pointerdown', e => { drag = true; lx = e.clientX; strip.classList.add('dragging'); strip.setPointerCapture(e.pointerId); });
+    strip.addEventListener('pointermove', e => { if (!drag) return; vx = e.clientX - lx; lx = e.clientX; x += vx; });
+    const end = () => { drag = false; strip.classList.remove('dragging'); };
+    strip.addEventListener('pointerup', end); strip.addEventListener('pointercancel', end);
+    (function loop(){ if (!drag){ x += vx; vx *= 0.93; if (!reduce && Math.abs(vx) < 0.2) x -= 0.25; }
+      const half = ul.scrollWidth / 2; if (x < -half) x += half; if (x > 0) x -= half;
+      ul.style.transform = `translate3d(${x}px,0,0)`; requestAnimationFrame(loop); })();
+  })();
+
+  /* ---------- events quote builder ---------- */
+  (function(){
+    const form = $('#qform'); if (!form) return;
+    const chips = $$('#qchips button'), bgs = $$('#qbg img'), g = $('#qg'), go = $('#qgo'), d = $('#qd'), sum = $('#qsum');
+    let kind = 'birthday';
+    function write(){ const lab = chips.find(c => c.dataset.k === kind).textContent;
+      const dt = d.value ? new Date(d.value + 'T12:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'date to choose';
+      sum.textContent = `${lab} · ${g.value} guests · ${dt}. No water, no power needed: we park and we pour.`; }
+    chips.forEach(c => c.addEventListener('click', () => { kind = c.dataset.k; chips.forEach(o => o.setAttribute('aria-pressed', String(o === c)));
+      bgs.forEach(b => b.classList.toggle('on', b.dataset.k === kind)); write(); }));
+    g.addEventListener('input', () => { go.textContent = g.value; write(); }); d.addEventListener('change', write);
+    form.addEventListener('submit', e => { e.preventDefault(); $('#qdone').hidden = false; });
+  })();
+
+  /* ---------- franchise: tabs + 3D viewer ---------- */
+  (function(){
+    const tabs = $$('.biz__tabs [role=tab]'), panels = $$('.biz__panel'); if (!tabs.length) return;
+    function show(t){ tabs.forEach(o => { const on = o === t; o.setAttribute('aria-selected', String(on)); o.tabIndex = on ? 0 : -1; });
+      panels.forEach(p => p.hidden = p.id !== t.getAttribute('aria-controls')); }
+    tabs.forEach((t, k) => { t.addEventListener('click', () => show(t));
+      t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){ e.preventDefault(); const n = tabs[(k + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; show(n); n.focus(); } }); });
+    const m = $('#bizModal'), open = $('#biz3d');
+    const vis = v => { m.hidden = !v; document.documentElement.style.overflow = v ? 'hidden' : ''; (v ? m.querySelector('.biz__trailer') : open).focus(); };
+    open.addEventListener('click', () => vis(true));
+    $('#bizClose').addEventListener('click', () => vis(false));
+    m.addEventListener('click', e => { if (e.target === m) vis(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) vis(false); });
+  })();
+
+  /* ---------- scroll animations ---------- */
+  if (!window.gsap || reduce) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  // split headings into words that rise into place
+  $$('.split').forEach(el => {
+    const walk = node => {
+      [...node.childNodes].forEach(n => {
+        if (n.nodeType === 3){
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            const w = document.createElement('span'); w.className = 'w';
+            const inner = document.createElement('span'); inner.textContent = part; w.appendChild(inner); frag.appendChild(w);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1) walk(n);
+      });
+    };
+    walk(el);
+    const words = el.querySelectorAll('.w>span');
+    const inHero = el.closest('.hero');
+    gsap.from(words, { yPercent: 110, rotate: 4, duration: 0.9, ease: 'power3.out', stagger: 0.06,
+      scrollTrigger: inHero ? null : { trigger: el, start: 'top 85%' }, delay: inHero ? 0.15 : 0 });
+  });
+
+  // hero entrance
+  gsap.from('#sun', { scale: 0.6, duration: 1.2, ease: 'elastic.out(1, 0.6)' });
+  gsap.from('.fruits .fr img', { scale: 0, rotate: -60, opacity: 0, duration: 0.9, ease: 'back.out(2.2)', stagger: { each: 0.09, from: 'random' }, delay: 0.35 });
+  $('.hero__visual').addEventListener('pointerenter', () => gsap.fromTo('.fruits .fr img', { scale: 1 }, { scale: 1.12, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out', stagger: 0.03, overwrite: 'auto' }));
+  gsap.from('#stickerHero', { scale: 0, rotate: -90, duration: 0.9, delay: 0.5, ease: 'back.out(2)' });
+  gsap.to('#sun', { yPercent: 18, scale: 1.08, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+  // marquee: drifts on its own and speeds up with scroll direction
+  const mq = $('#marquee');
+  const loop = gsap.to(mq, { xPercent: -33.333, ease: 'none', duration: 46, repeat: -1 });
+  ScrollTrigger.create({ onUpdate: self => {
+    const v = self.getVelocity() / 300;
+    gsap.to(loop, { timeScale: (self.direction > 0 ? 1 : -1) * (1 + Math.min(1.2, Math.abs(v) * 0.4)), duration: 0.3, overwrite: true });
+  }});
+
+  // parallax photos
+  $$('.para').forEach(img => gsap.fromTo(img, { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
+
+  // gallery cards fan in
+
+  // feature tiles and party photos rise
+
+  // franchise arch opens, sticker spins with scroll
+    gsap.from('.bigmenu li', { yPercent: 60, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.07, scrollTrigger: { trigger: '.bigmenu', start: 'top 85%' } });
+  gsap.from('.biz__box > *', { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: '.biz__hero', start: 'top 70%' } });
+  gsap.from('.quote__step, .quote__sum', { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1, scrollTrigger: { trigger: '.quote', start: 'top 70%' } });
+  gsap.from('.club__box > *', { y: 24, opacity: 0, duration: .6, ease: 'power3.out', stagger: .07, scrollTrigger: { trigger: '.club', start: 'top 70%' } });
+
+  // footer slogan letters bounce up as it arrives
+  const sl = $('#slogan');
+  sl.innerHTML = sl.textContent.split(' ').map(w => `<span style="white-space:nowrap" aria-hidden="true">${[...w].map(c=>`<span>${c}</span>`).join('')}</span>`).join(' ');
+  gsap.from('#slogan span span', { yPercent: 100, rotate: () => gsap.utils.random(-12, 12), ease: 'back.out(2)', stagger: 0.025, duration: 0.7, scrollTrigger: { trigger: '#slogan', start: 'top 92%' } });
+})();
+</script>
