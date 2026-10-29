@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Paradice Island Experience</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,6 +80,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 /* marquee */
 .wave{display:block;width:100%;height:42px}
+.bandwrap{position:relative;z-index:5;margin-bottom:-72px}
 .band{background:var(--marine);color:var(--blanc);overflow:hidden}
 .marquee{display:flex;width:max-content;gap:48px;padding-block:14px 18px;font-weight:800;font-size:clamp(24px,3vw,40px);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;will-change:transform}
 .marquee span b{color:var(--cyan);font-weight:800;margin-left:48px}
@@ -338,6 +343,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   </div>
 </section>
 
+<div class="bandwrap">
 <div aria-hidden="true" style="background:var(--cyan-pale);line-height:0"><svg class="wave" viewBox="0 0 1440 42" preserveAspectRatio="none"><path d="M0 42C240 0 480 0 720 21S1200 42 1440 10V42Z" fill="#054664"/></svg></div>
 <div class="band" aria-label="Shave, pour, smile, repeat"><div class="marquee" id="marquee" aria-hidden="true">
   <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
@@ -345,6 +351,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
 </div></div>
 <div aria-hidden="true" style="line-height:0"><svg class="wave" viewBox="0 0 1440 42" preserveAspectRatio="none"><path d="M0 0H1440V20C1200 42 960 10 720 24S240 42 0 14Z" fill="#054664"/></svg></div>
+</div>
 
 <section class="flavors" id="flavors" aria-label="Our flavors">
   <div class="flavors__sticky" id="flavorStage">
@@ -548,6 +555,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   const CROP = { w: 900, h: 1428, foot: 0.980, cx: 0.5 };          // per-frame webp, already at display size
   const DPR = Math.min(2, devicePixelRatio || 1);
   let CW = CROP.w, CH = CROP.h; canvas.width = CW; canvas.height = CH;
+  const mk = document.createElement('canvas'); mk.width = CW; mk.height = CH; const mctx = mk.getContext('2d');
   const BASE_W = 400; canvas.style.width = BASE_W + 'px'; canvas.style.height = Math.round(BASE_W * CROP.h / CROP.w) + 'px';
   const frames = SEQ.map(() => new Array(NF)), ready = SEQ.map(() => new Uint8Array(NF));
   // frames are packed 2 per file (p00..p71): frame f lives in file f>>1 at x = (f&1)*CROP.w
@@ -579,7 +587,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 
   let dirty = true, last = '', turnsShown = 0, lastBg = '', lastGx = '', lastOnStage = null;
   function paint(siA, siB, mix, f){
-    const key = siA + '|' + siB + '|' + f + '|' + Math.round(mix * 40);
+    const key = siA + '|' + siB + '|' + f + '|' + Math.round(mix * 160);
     if (!dirty && key === last) return;
     const a = pick(siA, f); if (!a) return;
     last = key; dirty = false;
@@ -589,11 +597,14 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     blit(a);
     if (mix <= 0.001) return;
     const b = pick(siB, f); if (!b) return;
-    // the new syrup runs down from the top of the dome: B is drawn clipped to a wavy front
-    const front = lerp(-0.06, 0.62, mix) * CH;
-    ctx.save(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(CW, 0);
-    for (let i = 0; i <= 28; i++){ const px = CW * (1 - i/28); ctx.lineTo(px, front + (Math.sin(i * 1.9) * 0.018 + Math.sin(i * 0.7 + 1) * 0.014) * CH); }
-    ctx.closePath(); ctx.clip(); blit(b); ctx.restore();
+    // the new syrup soaks down from the top of the dome: B is faded in through a soft vertical gradient (no hard edge)
+    const front = lerp(-0.14, 0.78, mix) * CH, fe = 0.13 * CH;
+    mctx.globalCompositeOperation = 'source-over'; mctx.clearRect(0, 0, CW, CH);
+    mctx.drawImage(b.im, b.x, 0, CROP.w, CROP.h, 0, 0, CW, CH);
+    const g = mctx.createLinearGradient(0, front - fe, 0, front + fe);
+    g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(0.35, 'rgba(0,0,0,.85)'); g.addColorStop(0.7, 'rgba(0,0,0,.3)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    mctx.globalCompositeOperation = 'destination-in'; mctx.fillStyle = g; mctx.fillRect(0, 0, CW, CH);
+    ctx.drawImage(mk, 0, 0);
   }
 
   let t0 = performance.now();
