@@ -141,6 +141,16 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .selfserve__list i{width:16px;height:16px;border-radius:50%;background:var(--d);box-shadow:inset 0 0 0 1px rgba(5,70,100,.18)}
 @media (max-width:600px){.selfserve{padding-block:52px}.selfserve__list li{font-size:14px;padding:7px 14px 7px 10px}}
 
+.bigmenu li.long span{white-space:normal;max-width:44ch}
+.fund{margin-top:44px;background:var(--marine);color:var(--blanc);border-radius:28px;padding:36px clamp(22px,4vw,48px);display:flex;flex-wrap:wrap;align-items:center;gap:24px 40px}
+.fund__txt{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.fund__txt .eyebrow{color:var(--jaune)}
+.fund h3{font-size:clamp(28px,3.4vw,46px);line-height:1;text-wrap:balance}
+.fund p{max-width:52ch;opacity:.9}
+.fund__steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;font-weight:700}
+.fund__steps li{display:flex;align-items:center;gap:12px}
+.fund__steps b{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--cyan);color:var(--marine);font-size:15px}
+
 /* drag gallery */
 .gallery{padding-block:96px;background:var(--blanc)}
 .gallery__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px}
@@ -440,7 +450,16 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   <div class="wrap">
     <span class="eyebrow">More than shaved ice</span>
     <h2 id="offer-title" class="sr">What we offer</h2>
-    <ul class="bigmenu" aria-label="What we offer"><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>01</em><strong>Shaved ice</strong><span>Grenadine, passion fruit, mango, island blue. Plus a self-serve bar.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>02</em><strong>Ice cream</strong><span>Creamy scoops for the ones who want it rich.</span></li><li style="--c:#054664;--fc:#fff" tabindex="0"><em>03</em><strong>French coffee</strong><span>Proper French-style coffee for the grown-ups.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>04</em><strong>Island treats</strong><span>Doucelette, nougat péyi and more island sweets.</span></li><li style="--c:#00BADD;--fc:#032B3E" tabindex="0"><em>05</em><strong>Caribbean music</strong><span>The soundtrack comes with the trailer.</span></li><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>06</em><strong>20% cash back</strong><span>On every purchase. [À CONFIRMER : offre réelle ?]</span></li></ul>
+    <ul class="bigmenu" aria-label="What we offer"><li style="--c:#D7263D;--fc:#fff" tabindex="0" class="long"><em>01</em><strong>Shaved ice</strong><span>Caribbean syrups: grenadine, passion fruit, mango, island blue. Self-serve bar: watermelon, tiger’s blood, strawberry, piña colada, lemon, grape, cotton candy, cherry, blue raspberry, banana.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>02</em><strong>Ice cream</strong><span>Creamy scoops, plus pre-packaged ice cream to grab and go.</span></li><li style="--c:#054664;--fc:#fff" tabindex="0"><em>03</em><strong>French coffee</strong><span>Proper French-style coffee for the grown-ups.</span></li><li style="--c:#00BADD;--fc:#032B3E" tabindex="0"><em>04</em><strong>Caribbean music</strong><span>The soundtrack comes with the trailer.</span></li><li style="--c:#2C8C4B;--fc:#fff" tabindex="0"><em>05</em><strong>Fundraisers</strong><span>We donate 20% of sales to your school, daycare or team.</span></li></ul>
+    <div class="fund" id="fundraiser">
+      <div class="fund__txt">
+        <span class="eyebrow">Fundraiser program</span>
+        <h3>We give 20% back to your cause.</h3>
+        <p>Schools, daycares and sports teams raising money: book the trailer for your event and we donate 20% of the sales to your organization. Not a coupon, not cash back. A real donation.</p>
+      </div>
+      <ol class="fund__steps"><li><b>1</b>Pick a date</li><li><b>2</b>Spread the word</li><li><b>3</b>We pour, you raise</li></ol>
+      <a class="btn btn--sun" href="#events">Plan a fundraiser <span class="arr" aria-hidden="true">↗</span></a>
+    </div>
   </div>
 </section>
 
@@ -454,7 +473,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <fieldset class="quote__step"><legend>1 · What's the occasion?</legend><div class="qchips" id="qchips"><button type="button" aria-pressed="true" data-k="birthday">Birthday</button><button type="button" aria-pressed="false" data-k="school">School &amp; camp</button><button type="button" aria-pressed="false" data-k="corporate">Corporate</button><button type="button" aria-pressed="false" data-k="festival">Festival &amp; market</button><button type="button" aria-pressed="false" data-k="community">Church &amp; community</button><button type="button" aria-pressed="false" data-k="carnival">Carnival &amp; fundraiser</button></div></fieldset>
       <div class="quote__step"><label for="qg">2 · How many guests?</label><div class="qrow"><input type="range" id="qg" min="10" max="500" step="10" value="50"><output id="qgo" for="qg">50</output></div></div>
       <div class="quote__step"><label for="qd">3 · When?</label><div class="qrow"><input type="date" id="qd"></div></div>
-      <div class="quote__sum"><p id="qsum" aria-live="polite">Birthday · 50 guests · date to choose. No water, no power needed: we park and we pour.</p><button class="btn btn--sun" type="submit">Get my quote <span class="arr" aria-hidden="true">↗</span></button></div>
+      <div class="quote__sum"><p id="qsum" aria-live="polite">Birthday · 50 guests · date to choose. No water, no power needed: we park and we pour.</p><button class="btn btn--sun" type="submit">Book us now <span class="arr" aria-hidden="true">↗</span></button></div>
       <p class="quote__done" id="qdone" role="status" hidden>Thanks! Prototype only: requests will go to [À CONFIRMER : e-mail ou CRM].</p>
       <p class="quote__call">Prefer to talk? Call <strong>(702) 336-5208</strong></p>
     </form>
