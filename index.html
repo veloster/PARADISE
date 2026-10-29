@@ -130,6 +130,17 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .progress{bottom:12px}
 }
 
+/* self-serve bar (secondary flavours) */
+.selfserve{background:var(--cyan-pale);color:var(--marine);padding-block:72px}
+.selfserve__in{display:flex;flex-wrap:wrap;align-items:center;gap:32px 56px}
+.selfserve__head{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.selfserve__head h3{font-size:clamp(28px,3.2vw,44px);line-height:1;text-wrap:balance}
+.selfserve__head p{max-width:36ch;opacity:.85}
+.selfserve__list{flex:2 1 460px;min-width:0;list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.selfserve__list li{display:inline-flex;align-items:center;gap:10px;border:2px solid color-mix(in srgb,var(--marine) 22%,transparent);border-radius:var(--pill);padding:9px 18px 9px 12px;font-weight:700;font-size:16px;background:color-mix(in srgb,var(--blanc) 60%,transparent)}
+.selfserve__list i{width:16px;height:16px;border-radius:50%;background:var(--d);box-shadow:inset 0 0 0 1px rgba(5,70,100,.18)}
+@media (max-width:600px){.selfserve{padding-block:52px}.selfserve__list li{font-size:14px;padding:7px 14px 7px 10px}}
+
 /* drag gallery */
 .gallery{padding-block:96px;background:var(--blanc)}
 .gallery__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px}
@@ -354,10 +365,10 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         <span class="fr" data-depth="1.3" style="left:2%;top:8%;width:19%;z-index:31"><img src="assets/fruit-fraise.webp" alt="" style="--r:-14deg"></span>
         <span class="fr" data-depth="0.6" style="right:6%;top:44%;width:13%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:18deg"></span>
         <span class="fr" data-depth="1.6" style="right:-2%;top:60%;width:21%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-8deg"></span>
-        <span class="fr" data-depth="0.8" style="left:0%;top:52%;width:16%;z-index:29"><img src="assets/fruit-mangue.webp" alt="" style="--r:10deg"></span>
+        <span class="fr" data-depth="0.8" style="left:0%;top:48%;width:19%;z-index:29"><img src="assets/fruit-mango.webp" alt="" style="--r:10deg"></span>
         <span class="fr" data-depth="1.9" style="left:16%;bottom:-2%;width:17%;z-index:31"><img src="assets/fruit-cerises.webp" alt="" style="--r:-6deg"></span>
         <span class="fr" data-depth="0.5" style="right:20%;top:0%;width:12%;z-index:29"><img src="assets/fruit-coco.webp" alt="" style="--r:24deg"></span>
-        <span class="fr" data-depth="2.2" style="right:16%;bottom:2%;width:7%;z-index:31"><img src="assets/fruit-amande-2.webp?v=3" alt="" style="--r:30deg"></span>
+        <span class="fr" data-depth="2.2" style="right:12%;bottom:0%;width:14%;z-index:31"><img src="assets/fruit-grenade.webp" alt="" style="--r:30deg"></span>
       </div>
       <div class="anchor" id="anchorHero" aria-hidden="true"></div>
       <div class="sticker sticker--hero" id="stickerHero" aria-hidden="true">Island<br>syrups<br>only</div>
@@ -393,10 +404,10 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
           <div class="chips"><span>Golden</span><span>Tangy</span><span>Tropical</span></div>
         </article>
         <article class="flv" data-i="2" aria-hidden="true">
-          <span class="eyebrow">Flavor 03 · Creamy</span>
-          <h2>Orgeat.</h2>
-          <p>Smooth almond syrup, milky and mellow. A Caribbean favorite.</p>
-          <div class="chips"><span>Almond</span><span>Smooth</span><span>Island classic</span></div>
+          <span class="eyebrow">Flavor 03 · Tropical</span>
+          <h2>Mango.</h2>
+          <p>Ripe island mango, sweet and sunny. Tastes like back home.</p>
+          <div class="chips"><span>Juicy</span><span>Sweet</span><span>Island classic</span></div>
         </article>
         <article class="flv" data-i="3" aria-hidden="true">
           <span class="eyebrow">Flavor 04 · Ice-blue</span>
@@ -405,9 +416,19 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
           <div class="chips"><span>Blue</span><span>Cool</span><span>Sugar-free option</span></div>
         </article>
       </div>
-      <div class="flavors__visual"><div class="fsets" aria-hidden="true"><div class="fset on" data-set="0"><span class="fr" data-depth="1.4" style="left:4%;top:12%;width:20%;z-index:31"><img src="assets/fruit-fraise-coupe.webp" alt="" style="--r:-12deg;transition-delay:0ms"></span><span class="fr" data-depth="1.8" style="right:2%;top:58%;width:22%;z-index:31"><img src="assets/fruit-cerises.webp" alt="" style="--r:8deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:12%;top:2%;width:14%;z-index:29"><img src="assets/fruit-fraise.webp" alt="" style="--r:20deg;transition-delay:140ms"></span></div><div class="fset" data-set="1"><span class="fr" data-depth="1.6" style="left:2%;top:54%;width:24%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-10deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:4%;top:10%;width:18%;z-index:29"><img src="assets/fruit-mangue.webp" alt="" style="--r:14deg;transition-delay:70ms"></span><span class="fr" data-depth="1.3" style="right:0%;top:62%;width:17%;z-index:31"><img src="assets/fruit-citron.webp" alt="" style="--r:-20deg;transition-delay:140ms"></span></div><div class="fset" data-set="2"><span class="fr" data-depth="1.5" style="left:0%;top:50%;width:22%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:10%;top:14%;width:9%;z-index:29"><img src="assets/fruit-amande-1.webp?v=3" alt="" style="--r:30deg;transition-delay:70ms"></span><span class="fr" data-depth="1.9" style="right:4%;top:66%;width:10%;z-index:31"><img src="assets/fruit-amande-3.webp?v=3" alt="" style="--r:-24deg;transition-delay:140ms"></span><span class="fr" data-depth="0.8" style="left:12%;top:10%;width:8%;z-index:29"><img src="assets/fruit-amande-2.webp?v=3" alt="" style="--r:12deg;transition-delay:210ms"></span></div><div class="fset" data-set="3"><span class="fr" data-depth="1.4" style="left:2%;top:14%;width:20%;z-index:31"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:16deg;transition-delay:0ms"></span><span class="fr" data-depth="1.7" style="right:2%;top:56%;width:21%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-12deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:14%;top:4%;width:12%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:-30deg;transition-delay:140ms"></span></div></div><div class="anchor" id="anchorFlavor" aria-hidden="true" style="inset:0"></div></div>
+      <div class="flavors__visual"><div class="fsets" aria-hidden="true"><div class="fset on" data-set="0"><span class="fr" data-depth="1.4" style="left:0%;top:10%;width:26%;z-index:31"><img src="assets/fruit-grenade-open.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="1.8" style="right:0%;top:56%;width:22%;z-index:31"><img src="assets/fruit-grenade.webp" alt="" style="--r:10deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:12%;top:2%;width:13%;z-index:29"><img src="assets/fruit-fraise.webp" alt="" style="--r:20deg;transition-delay:140ms"></span></div><div class="fset" data-set="1"><span class="fr" data-depth="1.6" style="left:0%;top:54%;width:28%;z-index:31"><img src="assets/fruit-passion-half.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:4%;top:6%;width:18%;z-index:29"><img src="assets/fruit-passion-whole.webp" alt="" style="--r:14deg;transition-delay:70ms"></span><span class="fr" data-depth="1.3" style="right:0%;top:62%;width:17%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-16deg;transition-delay:140ms"></span></div><div class="fset" data-set="2"><span class="fr" data-depth="1.5" style="left:0%;top:44%;width:26%;z-index:31"><img src="assets/fruit-mango.webp" alt="" style="--r:-10deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:0%;top:6%;width:24%;z-index:29"><img src="assets/fruit-mango-cut.webp" alt="" style="--r:12deg;transition-delay:70ms"></span><span class="fr" data-depth="1.9" style="right:4%;top:64%;width:14%;z-index:31"><img src="assets/fruit-mangue.webp" alt="" style="--r:-18deg;transition-delay:140ms"></span></div><div class="fset" data-set="3"><span class="fr" data-depth="1.4" style="left:2%;top:14%;width:20%;z-index:31"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:16deg;transition-delay:0ms"></span><span class="fr" data-depth="1.7" style="right:2%;top:56%;width:21%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-12deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:14%;top:4%;width:12%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:-30deg;transition-delay:140ms"></span></div></div><div class="anchor" id="anchorFlavor" aria-hidden="true" style="inset:0"></div></div>
     </div>
     <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+  </div>
+</section>
+<section class="selfserve" id="self-serve" aria-labelledby="ssTitle">
+  <div class="wrap selfserve__in">
+    <div class="selfserve__head">
+      <span class="eyebrow">Self-serve bar</span>
+      <h3 id="ssTitle">Ten more to pour yourself.</h3>
+      <p>Pick your flavors at the trailer and top your cup the way you like it.</p>
+    </div>
+    <ul class="selfserve__list"><li><i style="--d:#E63946"></i>Watermelon</li><li><i style="--d:#B5121B"></i>Tiger’s Blood</li><li><i style="--d:#D62839"></i>Strawberry</li><li><i style="--d:#F3E2B3"></i>Piña Colada</li><li><i style="--d:#FFE135"></i>Lemon</li><li><i style="--d:#6A3FA0"></i>Grape</li><li><i style="--d:#8FD3F4"></i>Cotton Candy</li><li><i style="--d:#8E0E1C"></i>Cherry</li><li><i style="--d:#1E78E6"></i>Blue Raspberry</li><li><i style="--d:#FFD84D"></i>Banana</li></ul>
   </div>
 </section>
 
@@ -419,7 +440,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   <div class="wrap">
     <span class="eyebrow">More than shaved ice</span>
     <h2 id="offer-title" class="sr">What we offer</h2>
-    <ul class="bigmenu" aria-label="What we offer"><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>01</em><strong>Shaved ice</strong><span>Grenadine, mint, orgeat, passion, groseille.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>02</em><strong>Ice cream</strong><span>Creamy scoops for the ones who want it rich.</span></li><li style="--c:#054664;--fc:#fff" tabindex="0"><em>03</em><strong>French coffee</strong><span>Proper French-style coffee for the grown-ups.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>04</em><strong>Island treats</strong><span>Doucelette, nougat péyi and more island sweets.</span></li><li style="--c:#00BADD;--fc:#032B3E" tabindex="0"><em>05</em><strong>Caribbean music</strong><span>The soundtrack comes with the trailer.</span></li><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>06</em><strong>20% cash back</strong><span>On every purchase. [À CONFIRMER : offre réelle ?]</span></li></ul>
+    <ul class="bigmenu" aria-label="What we offer"><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>01</em><strong>Shaved ice</strong><span>Grenadine, passion fruit, mango, island blue. Plus a self-serve bar.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>02</em><strong>Ice cream</strong><span>Creamy scoops for the ones who want it rich.</span></li><li style="--c:#054664;--fc:#fff" tabindex="0"><em>03</em><strong>French coffee</strong><span>Proper French-style coffee for the grown-ups.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>04</em><strong>Island treats</strong><span>Doucelette, nougat péyi and more island sweets.</span></li><li style="--c:#00BADD;--fc:#032B3E" tabindex="0"><em>05</em><strong>Caribbean music</strong><span>The soundtrack comes with the trailer.</span></li><li style="--c:#D7263D;--fc:#fff" tabindex="0"><em>06</em><strong>20% cash back</strong><span>On every purchase. [À CONFIRMER : offre réelle ?]</span></li></ul>
   </div>
 </section>
 
@@ -541,7 +562,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   const FLAVORS = [
     { name:'Grenadine', bg:'#D7263D', fg:'#FFFFFF', syrup:'#D7263D' },
     { name:'Passion',   bg:'#FDC208', fg:'#054664', syrup:'#FDC208' },
-    { name:'Orgeat',    bg:'#FFF1BF', fg:'#054664', syrup:'#FBF4E6' },
+    { name:'Mango',     bg:'#2C8C4B', fg:'#FFFFFF', syrup:'#F7A11B' },
     { name:'Island blue', bg:'#00BADD', fg:'#054664', syrup:'#00BADD' }
   ];
   const stage = $('#flavorStage'), ghost = $('#ghost'), flvs = $$('.flv'), bars = $$('.progress i');
@@ -573,7 +594,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   // The canvas is only as big as one render; it is moved and scaled with a GPU transform and
   // redrawn only when the angle or the flavour actually changes.
   const canvas = $('#stage3d'), ctx = canvas.getContext('2d'), shadowEl = $('#cupShadow');
-  const SEQ = ['tri','grenadine','passion','orgeat','bleu'], NF = 144;
+  const SEQ = ['tri','grenadine','passion','mangue','bleu'], NF = 144;
   const CROP = { w: 900, h: 1428, foot: 0.980, cx: 0.5 };          // per-frame webp, already at display size
   const DPR = Math.min(2, devicePixelRatio || 1);
   let CW = CROP.w, CH = CROP.h; canvas.width = CW; canvas.height = CH;
