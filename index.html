@@ -371,7 +371,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .biz__sign small{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
 .biz__sign span{font-size:26px;line-height:1.05}
 .biz__box{max-width:640px;display:flex;flex-direction:column;gap:18px}
-.biz .biz__bg img,.biz .biz__bg video{object-position:82% 55%}
+.biz .biz__bg img,.biz .biz__bg video{object-position:60% 48%}
 .biz__3d{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;font:inherit;font-size:15px;font-weight:500;color:#fff;background:rgba(3,43,62,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:10px 18px;min-height:44px;cursor:pointer;transition:border-color .2s,background .2s}
 .biz__3d span{color:#FDC208;font-size:18px;line-height:1}
 .biz__3d:hover{border-color:#fff;background:rgba(3,43,62,.75)}
@@ -647,7 +647,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 
 <section class="biz" id="own" aria-labelledby="own-title">
   <div class="biz__hero">
-    <div class="biz__bg" aria-hidden="true"><video id="crowdVid" muted playsinline preload="auto" poster="assets/queue-start.jpg"><source src="assets/queue.mp4?v=2" type="video/mp4"></video></div>
+    <div class="biz__bg" aria-hidden="true"><img src="assets/biz-real.jpg?v=2" alt="" decoding="async"></div>
     <div class="biz__shade" aria-hidden="true"></div>
     <div class="wrap">
       <div class="biz__box">
@@ -814,29 +814,49 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   // The canvas is only as big as one render; it is moved and scaled with a GPU transform and
   // redrawn only when the angle or the flavour actually changes.
   const canvas = $('#stage3d'), ctx = canvas.getContext('2d'), shadowEl = $('#cupShadow');
-  const SEQ = ['tri','grenadine','passion','mangue','bleu'], NF = 144;
-  const CROP = { w: 900, h: 1428, foot: 0.980, cx: 0.5 };          // per-frame webp, already at display size
-  const DPR = Math.min(2, devicePixelRatio || 1);
+  const SEQ = ['tri','grenadine','passion','mangue','bleu'], NF = 72;
+  // two sizes: phones / low-memory devices get the light set
+  const LITE = Math.min(innerWidth, innerHeight) < 700 || (navigator.deviceMemory || 8) <= 4;
+  const TIER = LITE ? 'lo' : 'hi';
+  const CROP = LITE ? { w: 400, h: 635, foot: 0.980, cx: 0.5 } : { w: 600, h: 952, foot: 0.980, cx: 0.5 };
   let CW = CROP.w, CH = CROP.h; canvas.width = CW; canvas.height = CH;
   const mk = document.createElement('canvas'); mk.width = CW; mk.height = CH; const mctx = mk.getContext('2d');
   const BASE_W = 400; canvas.style.width = BASE_W + 'px'; canvas.style.height = Math.round(BASE_W * CROP.h / CROP.w) + 'px';
-  const frames = SEQ.map(() => new Array(NF)), ready = SEQ.map(() => new Uint8Array(NF));
-  // frames are packed 2 per file (p00..p71): frame f lives in file f>>1 at x = (f&1)*CROP.w
-  const pending = SEQ.map(() => new Map());
-  function load(si, f){ const pk = f >> 1; if (pending[si].has(pk)) return pending[si].get(pk);
-    const pr = new Promise(res => { const im = new Image();
-      im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).catch(() => {}).then(() => { for (let k = 0; k < 2; k++){ frames[si][pk * 2 + k] = { im, x: k * CROP.w }; ready[si][pk * 2 + k] = 1; } dirty = true; res(); }); };
-      im.onerror = res; im.src = `assets/seq7/${SEQ[si]}/p${String(pk).padStart(2,'0')}.webp?v=10`; });
-    pending[si].set(pk, pr); return pr; }
-  (async () => {
-    // coarse first (every 8th frame), then fill in, so the cup turns early and gets smoother as it loads
-    const order = []; for (let step of [8, 4, 2, 1]) for (let f = 0; f < NF; f += step) if (!order.includes(f)) order.push(f);
-    for (const f of order.slice(0, 8)) await load(0, f);
-    document.documentElement.classList.add('has-3d');
-    const pool = async (si, list) => { let i = 0; await Promise.all(Array.from({ length: 6 }, async () => { while (i < list.length) await load(si, list[i++]); })); };
-    await pool(0, order.slice(18));
-    for (let si = 1; si < SEQ.length; si++) await pool(si, order);
-  })();
+  // Memory budget: frames are kept compressed (Blob) and only the flavours on screen are decoded
+  // (ImageBitmap). The others are released, so the browser never runs out of memory and re-decodes.
+  const HAS_BMP = 'createImageBitmap' in window;
+  const blobs = SEQ.map(() => new Array(NF)), frames = SEQ.map(() => new Array(NF)), ready = SEQ.map(() => new Uint8Array(NF));
+  const url = (si, f) => `assets/cup/${TIER}/${SEQ[si]}/${String(f).padStart(2,'0')}.webp?v=1`;
+  const ORDER = []; for (const step of [8, 4, 2, 1]) for (let f = 0; f < NF; f += step) if (!ORDER.includes(f)) ORDER.push(f);
+  let focus = 0;                                   // flavour on screen (siA)
+  const KEEP = LITE ? 2 : 3;                       // decoded flavours: focus, next (+ one more on desktop)
+  const wanted = si => si >= focus && si < focus + KEEP;
+  function decode(si, f){
+    if (ready[si][f] || !blobs[si][f] || !wanted(si)) return Promise.resolve();
+    if (!HAS_BMP){ return new Promise(res => { const im = new Image(); im.onload = () => { frames[si][f] = im; ready[si][f] = 1; dirty = true; res(); }; im.onerror = res; im.src = URL.createObjectURL(blobs[si][f]); }); }
+    return createImageBitmap(blobs[si][f]).then(bm => { if (!wanted(si) || ready[si][f]) { bm.close(); return; } frames[si][f] = bm; ready[si][f] = 1; dirty = true; }).catch(() => {});
+  }
+  function release(si){ for (let f = 0; f < NF; f++) if (ready[si][f]) { const fr = frames[si][f]; if (fr && fr.close) fr.close(); frames[si][f] = null; ready[si][f] = 0; } }
+  function setFocus(si){
+    if (si === focus) return; focus = si;
+    for (let k = 0; k < SEQ.length; k++) if (!wanted(k)) release(k);
+    for (let k = focus; k < Math.min(SEQ.length, focus + KEEP); k++) ORDER.forEach(f => decode(k, f));
+    kick();
+  }
+  // download queue: the flavour on screen first (coarse to fine), then the next ones, then the rest
+  const done = SEQ.map(() => new Uint8Array(NF)), busy = SEQ.map(() => new Uint8Array(NF));
+  function nextTask(){
+    const byDist = SEQ.map((_, i) => i).sort((a, b) => ((a - focus + 5) % 5) - ((b - focus + 5) % 5));
+    for (const si of byDist) for (const f of ORDER) if (!done[si][f] && !busy[si][f]) return [si, f];
+    return null;
+  }
+  let workers = 0; const MAXW = 4;
+  function kick(){ while (workers < MAXW){ const t = nextTask(); if (!t) return; run(t); } }
+  function run([si, f]){ workers++; busy[si][f] = 1;
+    fetch(url(si, f)).then(r => r.ok ? r.blob() : null).then(b => { if (b) blobs[si][f] = b; done[si][f] = 1; return decode(si, f); })
+      .catch(() => { done[si][f] = 1; })
+      .finally(() => { busy[si][f] = 0; workers--; if (si === 0 && ready[0][0] && !document.documentElement.classList.contains('has-3d')) document.documentElement.classList.add('has-3d'); kick(); }); }
+  kick();
   function pick(si, f){ if (ready[si][f]) return frames[si][f];
     for (let d = 1; d < NF/2; d++){ const a = (f + d) % NF, b = (f - d + NF) % NF; if (ready[si][a]) return frames[si][a]; if (ready[si][b]) return frames[si][b]; } return null; }
 
@@ -855,7 +875,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     const a = pick(siA, f); if (!a) return;
     last = key; dirty = false;
     ctx.clearRect(0, 0, CW, CH);
-    const blit = fr => ctx.drawImage(fr.im, fr.x, 0, CROP.w, CROP.h, 0, 0, CW, CH);
+    const blit = fr => ctx.drawImage(fr, 0, 0, CW, CH);
     if (mix >= 0.999) { const b = pick(siB, f); blit(b || a); return; }
     blit(a);
     if (mix <= 0.001) return;
@@ -863,7 +883,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     // the new syrup soaks down from the top of the dome: B is faded in through a soft vertical gradient (no hard edge)
     const front = lerp(-0.14, 0.78, mix) * CH, fe = 0.13 * CH;
     mctx.globalCompositeOperation = 'source-over'; mctx.clearRect(0, 0, CW, CH);
-    mctx.drawImage(b.im, b.x, 0, CROP.w, CROP.h, 0, 0, CW, CH);
+    mctx.drawImage(b, 0, 0, CW, CH);
     const g = mctx.createLinearGradient(0, front - fe, 0, front + fe);
     g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(0.35, 'rgba(0,0,0,.85)'); g.addColorStop(0.7, 'rgba(0,0,0,.3)'); g.addColorStop(1, 'rgba(0,0,0,0)');
     mctx.globalCompositeOperation = 'destination-in'; mctx.fillStyle = g; mctx.fillRect(0, 0, CW, CH);
@@ -907,6 +927,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       target += mx * 0.2;
       turnsShown += (target - turnsShown) * 0.25;
       const fi = ((Math.round(turnsShown * NF) % NF) + NF) % NF;
+      setFocus(siA);
       paint(siA, siB, mix, fi);
     }
     requestAnimationFrame(frame);
@@ -1006,17 +1027,6 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       $('#fqName').textContent = data.first || 'friend'; f.hidden = true; $('#fqDone').hidden = false; $('#fqDone button').focus(); });
   })();
 
-  /* ---------- franchise background: crowd time-lapse plays each time the section comes into view ---------- */
-  (() => {
-    const v = $('#crowdVid'); if (!v) return;
-    if (reduce){ v.poster = 'assets/queue-end.jpg?v=2'; v.removeAttribute('autoplay'); return; }
-    let seen = false;
-    const io = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting && e.intersectionRatio > 0.35 && !seen){ seen = true; try { v.currentTime = 0; } catch(_){} const p = v.play(); if (p) p.catch(() => { v.poster = 'assets/queue-end.jpg?v=2'; }); }
-      else if (!e.isIntersecting){ seen = false; }
-    }), { threshold: [0, 0.35] });
-    io.observe(v.closest('.biz__hero') || v);
-  })();
   /* ---------- events quote builder ---------- */
   (function(){
     const form = $('#qform'); if (!form) return;
