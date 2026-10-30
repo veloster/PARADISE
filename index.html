@@ -603,7 +603,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 
 <section class="biz" id="own" aria-labelledby="own-title">
   <div class="biz__hero">
-    <div class="biz__bg" aria-hidden="true"><video id="crowdVid" muted playsinline preload="auto" poster="assets/crowd-start.jpg"><source src="assets/crowd.mp4" type="video/mp4"></video></div>
+    <div class="biz__bg" aria-hidden="true"><video id="crowdVid" muted playsinline preload="auto" poster="assets/queue-start.jpg"><source src="assets/queue.mp4" type="video/mp4"></video></div>
     <div class="biz__shade" aria-hidden="true"></div>
     <div class="wrap">
       <div class="biz__box">
@@ -965,10 +965,10 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   /* ---------- franchise background: crowd time-lapse plays each time the section comes into view ---------- */
   (() => {
     const v = $('#crowdVid'); if (!v) return;
-    if (reduce){ v.poster = 'assets/crowd-end.jpg'; v.removeAttribute('autoplay'); return; }
+    if (reduce){ v.poster = 'assets/queue-end.jpg'; v.removeAttribute('autoplay'); return; }
     let seen = false;
     const io = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting && e.intersectionRatio > 0.35 && !seen){ seen = true; try { v.currentTime = 0; } catch(_){} const p = v.play(); if (p) p.catch(() => { v.poster = 'assets/crowd-end.jpg'; }); }
+      if (e.isIntersecting && e.intersectionRatio > 0.35 && !seen){ seen = true; try { v.currentTime = 0; } catch(_){} const p = v.play(); if (p) p.catch(() => { v.poster = 'assets/queue-end.jpg'; }); }
       else if (!e.isIntersecting){ seen = false; }
     }), { threshold: [0, 0.35] });
     io.observe(v.closest('.biz__hero') || v);
