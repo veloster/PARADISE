@@ -449,6 +449,8 @@ button.btn{font-family:inherit;line-height:inherit;cursor:pointer;-webkit-appear
 .cstep{display:none;flex-direction:column;gap:12px}.cstep.on{display:flex}
 .club__in{display:flex;gap:6px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px;max-width:560px}
 .club__in:focus-within{border-color:#fff}
+.club__names{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:560px}.club__names .club__in input{padding-block:14px}
+@media (max-width:340px){.club__names{grid-template-columns:minmax(0,1fr)}}
 .club__in input{flex:1;min-width:0;font:inherit;font-size:17px;color:#fff;background:transparent;border:0;outline:none;padding:10px 18px}
 .club__in input::placeholder{color:#BFE6F2}
 .club__fine{font-size:13px;color:#9FD6E8}
@@ -740,6 +742,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <p class="club__lead">Join once. Every year we text you: your free cup is waiting at the trailer.</p>
       <form class="club__form" id="clubForm" novalidate>
         <div class="cstep on" data-s="1">
+          <div class="club__names"><label class="club__in"><input id="cFirst" aria-label="First name" placeholder="First name" autocomplete="given-name"></label><label class="club__in"><input id="cLast" aria-label="Last name" placeholder="Last name" autocomplete="family-name"></label></div>
           <label class="club__in"><input id="cPhone" aria-label="Mobile number" placeholder="Your mobile number" inputmode="tel" autocomplete="tel"><button class="btn btn--sun" type="button" data-next="2">Text me a code <span class="arr" aria-hidden="true">↗</span></button></label>
           <p class="club__fine">One account per phone number · we never spam · the free cup is redeemed at the trailer</p>
         </div>
@@ -749,7 +752,6 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         </div>
         <div class="cstep" data-s="3">
           <div class="club__grid">
-            <label><span>First name</span><input placeholder="Maya" autocomplete="given-name"></label>
             <label><span>Birthday · locked after sign-up</span><input placeholder="MM / DD" inputmode="numeric"></label>
             <label><span>ZIP code</span><input placeholder="89052" inputmode="numeric" autocomplete="postal-code"></label>
             <label><span>E-mail · optional</span><input placeholder="you@email.com" type="email" autocomplete="email"></label>
