@@ -7,6 +7,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#054664">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://formsubmit.co; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -453,7 +455,9 @@ button.btn{font-family:inherit;line-height:inherit;cursor:pointer;-webkit-appear
 @media (max-width:340px){.club__names{grid-template-columns:minmax(0,1fr)}}
 .club__in input{flex:1;min-width:0;font:inherit;font-size:17px;color:#fff;background:transparent;border:0;outline:none;padding:10px 18px}
 .club__in input::placeholder{color:#BFE6F2}
-.club__fine{font-size:13px;color:#9FD6E8}
+.club__fine{font-size:13px;color:#9FD6E8}.club__fine a,.quote__area a,.fq__ok a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.hp{position:absolute!important;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+.club__ok{display:flex;gap:10px;align-items:flex-start;max-width:560px;font-size:14px;line-height:1.45;color:#E3F4F9;cursor:pointer}.club__ok input{flex:none;width:20px;height:20px;margin-top:1px;accent-color:var(--jaune)}.club__ok.bad span{color:#FFB3B3}
 .club__sms{align-self:flex-start;background:#fff;color:var(--marine);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:14px;max-width:48ch}
 .club__sms small{display:block;font-size:11px;color:#6A8B9B}.club__sms em{color:#6A8B9B;font-style:normal}
 .club__grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:560px}
@@ -479,6 +483,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 .foot__cols{display:flex;flex-wrap:wrap;gap:56px}
 .foot__cols div{display:flex;flex-direction:column;gap:8px;font-size:15px}
 .foot__cols a{text-decoration:none}
+.legal a{color:inherit;text-underline-offset:2px}
 .legal{margin-top:48px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;border-top:1px solid var(--marine);padding-top:16px}
 .note{font-size:13px}
 @media (prefers-reduced-motion: reduce){ .flv,.card,.btn{transition:none} }
@@ -692,7 +697,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   <div class="quote__bg" id="qbg" aria-hidden="true"><img class="on" data-k="birthday" src="assets/enfants.jpg?v=7" alt="" loading="eager"><img data-k="school" src="assets/events-bg.jpg?v=4" alt="" loading="lazy"><img data-k="corporate" src="assets/merch.jpg?v=3" alt="" loading="lazy"><img data-k="festival" src="assets/remorque-guichet.jpg" alt="" loading="lazy"><img data-k="community" src="assets/remorque-arriere.jpg" alt="" loading="lazy"><img data-k="carnival" src="assets/offer-musique.webp" alt="" loading="lazy"></div>
   <div class="quote__shade" aria-hidden="true"></div>
   <div class="wrap">
-    <form class="quote__box" id="qform">
+    <form class="quote__box" id="qform"><div class="hp" aria-hidden="true"><label>Leave this field empty<input class="hp__in" type="text" tabindex="-1" autocomplete="off"></label></div>
       <span class="eyebrow" style="color:#FDC208">Events &amp; private parties</span>
       <h2 id="party-title" class="split">Every party needs a shaved ice.</h2>
       <fieldset class="quote__step"><legend>1 · What's the occasion?</legend><div class="qchips" id="qchips"><button type="button" aria-pressed="true" data-k="birthday">Birthday</button><button type="button" aria-pressed="false" data-k="school">School &amp; camp</button><button type="button" aria-pressed="false" data-k="corporate">Corporate</button><button type="button" aria-pressed="false" data-k="festival">Festival &amp; market</button><button type="button" aria-pressed="false" data-k="community">Church &amp; community</button><button type="button" aria-pressed="false" data-k="carnival">Carnival &amp; fundraiser</button></div></fieldset>
@@ -701,7 +706,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <fieldset class="quote__step"><legend>4 · How do we reach you?</legend><div class="qcontact"><input id="qn" name="name" placeholder="Your name" autocomplete="name" aria-label="Your name"><input id="qp" name="phone" type="tel" placeholder="Phone" autocomplete="tel" aria-label="Phone"><input id="qe" name="email" type="email" placeholder="E-mail" autocomplete="email" aria-label="E-mail"><input id="qc" name="city" placeholder="City" autocomplete="address-level2" aria-label="City"><input id="qz" name="zip" placeholder="ZIP code" inputmode="numeric" autocomplete="postal-code" maxlength="10" aria-label="ZIP code"><select id="qs" name="state" aria-label="State"><option value="">State</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div></fieldset>
       <div class="quote__sum"><p id="qsum" aria-live="polite">Birthday · 50 guests · date to choose. Fully self-contained: no water, no power needed. We park and we pour.</p><button class="btn btn--sun" type="submit">Book us now <span class="arr" aria-hidden="true">↗</span></button></div>
       <p class="quote__done" id="qdone" role="status" hidden></p>
-      <p class="quote__area">Festivals, concerts, schools, after-school programs, sporting events and private parties. We serve the <b>Las Vegas Valley</b> and <b>Southern California</b>, and travel to several states.</p>
+      <p class="quote__area">Festivals, concerts, schools, after-school programs, sporting events and private parties. We serve the <b>Las Vegas Valley</b> and <b>Southern California</b>, and travel to several states. <a href="privacy.html">Privacy&nbsp;Policy</a></p>
       <p class="quote__call">Prefer to talk? Call <strong>(702) 336-5208</strong></p>
     </form>
   </div>
@@ -748,7 +753,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   <div class="fq" id="franModal" role="dialog" aria-modal="true" aria-labelledby="fqTitle" hidden>
     <div class="fq__card">
       <button class="fq__x" type="button" id="fqClose" aria-label="Close">✕</button>
-      <form id="fqForm" novalidate>
+      <form id="fqForm" novalidate><div class="hp" aria-hidden="true"><label>Leave this field empty<input class="hp__in" type="text" tabindex="-1" autocomplete="off"></label></div>
         <div class="fq__head"><span class="eyebrow">Own a Paradice</span><h3 id="fqTitle">Let’s talk franchise.</h3><p class="fq__step" id="fqStep">Step 1 of 2 · About you</p><div class="fq__bar"><i id="fqBar"></i></div></div>
         <fieldset class="fq__s" data-s="1">
           <legend class="sr">About you</legend>
@@ -773,7 +778,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
             <label class="fq__f"><span>How did you hear about us?</span><select name="source"><option value="">Select</option><option>At the trailer</option><option>Instagram</option><option>Facebook</option><option>Google</option><option>Friend or family</option><option>Event</option><option>Other</option></select></label>
           </div>
           <label class="fq__f"><span>Anything you’d like us to know?</span><textarea name="msg" rows="3"></textarea></label>
-          <label class="fq__ok"><input type="checkbox" name="consent" required><span>I agree to be contacted by Paradice about franchising. Submitting this form does not grant a franchise.</span></label>
+          <label class="fq__ok"><input type="checkbox" name="consent" required><span>I agree to be contacted by Paradice about franchising. Submitting this form does not grant a franchise. <a href="privacy.html">Privacy&nbsp;Policy</a></span></label>
           <div class="fq__nav"><button class="btn btn--line fq__back" type="button" id="fqBack">← Back</button><button class="btn btn--sun" type="submit">Send my request <span class="arr" aria-hidden="true">↗</span></button></div>
         </fieldset>
         <p class="fq__err" id="fqErr" role="alert"></p>
@@ -799,11 +804,12 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <span class="eyebrow" style="color:var(--jaune)">Paradice Birthday Club</span>
       <h2 id="club-title">Every birthday deserves a <em>free cup.</em></h2>
       <p class="club__lead">Join once. Every year we e-mail you: your free cup is waiting at the trailer.</p>
-      <form class="club__form" id="clubForm" novalidate>
+      <form class="club__form" id="clubForm" novalidate><div class="hp" aria-hidden="true"><label>Leave this field empty<input class="hp__in" type="text" tabindex="-1" autocomplete="off"></label></div>
         <div class="cstep on" data-s="1">
           <div class="club__names"><label class="club__in"><input id="cFirst" aria-label="First name" placeholder="First name" autocomplete="given-name"></label><label class="club__in"><input id="cLast" aria-label="Last name" placeholder="Last name" autocomplete="family-name"></label></div>
           <label class="club__in"><input id="cEmail" type="email" aria-label="E-mail address" placeholder="Your e-mail address" inputmode="email" autocomplete="email"><button class="btn btn--sun" type="button" id="cNext">Continue <span class="arr" aria-hidden="true">↗</span></button></label>
-          <p class="club__fine">One account per e-mail address · we never spam · the free cup is redeemed at the trailer</p>
+          <label class="club__ok"><input type="checkbox" id="cOk"><span>I am 18 or older (a parent or guardian signing up for a child) and I agree to receive Paradice e-mails. Unsubscribe anytime.</span></label>
+          <p class="club__fine">One account per e-mail address · we never spam · the free cup is redeemed at the trailer · <a href="privacy.html">Privacy&nbsp;Policy</a></p>
         </div>
         <div class="cstep" data-s="3">
           <div class="club__grid">
@@ -852,12 +858,12 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         <div><span class="eyebrow">Say hello</span><span>(702) 336-5208</span><a href="mailto:info@paradicelv.com">info@paradicelv.com</a><a href="https://www.instagram.com/paradicelv/">Instagram ↗</a><a href="https://www.facebook.com/profile.php?id=61558134029100">Facebook ↗</a></div>
       </div>
     </div>
-    <div class="legal"><span>© 2026 Paradice Caribbean Shaved Ice · Las Vegas, Nevada</span><span>Prototype · images marked for replacement</span></div>
+    <div class="legal"><span>© 2026 Paradice Caribbean Shaved Ice · Las Vegas, Nevada</span><span><a href="privacy.html">Privacy&nbsp;Policy</a> · Prototype · images marked for replacement</span></div>
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 (function(){
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -873,9 +879,10 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     f.addEventListener('input', e => { const l = e.target.closest('.bad'); if (l) l.classList.remove('bad'); err.textContent = ''; });
     $('#cNext').addEventListener('click', () => {
       const fi = $('#cFirst'), la = $('#cLast'), em = $('#cEmail');
-      const ok1 = !!fi.value.trim(), ok2 = !!la.value.trim(), ok3 = !!em.value.trim() && em.checkValidity();
-      bad(fi, !ok1); bad(la, !ok2); bad(em, !ok3);
+      const okc = $('#cOk'), ok1 = !!fi.value.trim(), ok2 = !!la.value.trim(), ok3 = !!em.value.trim() && em.checkValidity(), ok4 = okc.checked;
+      bad(fi, !ok1); bad(la, !ok2); bad(em, !ok3); okc.closest('label').classList.toggle('bad', !ok4);
       if (!(ok1 && ok2 && ok3)){ err.textContent = !ok3 && ok1 && ok2 ? 'Please enter a valid e-mail address.' : 'Please fill in your first name, last name and e-mail.'; return; }
+      if (!ok4){ err.textContent = 'Please confirm you are 18 or older and agree to receive our e-mails.'; return; }
       go(3); });
     f.addEventListener('submit', async e => { e.preventDefault();
       const bd = $('#cBday'), zp = $('#cZip');
@@ -885,7 +892,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       if (!okB || !okZ){ err.textContent = !okB ? 'Enter your birthday as MM / DD.' : 'Enter a 5-digit ZIP code.'; return; }
       const sb = f.querySelector('[type=submit]'); sb.disabled = true; err.textContent = 'Sending…';
       const first = $('#cFirst').value.trim(), last = $('#cLast').value.trim(), email = $('#cEmail').value.trim();
-      const ok = await sendForm(MAIL_CLUB, { _subject: 'Paradice · Birthday Club · ' + first + ' ' + last, 'First name': first, 'Last name': last, 'E-mail': email, Birthday: String(mmdd[1]).padStart(2, '0') + '/' + String(mmdd[2]).padStart(2, '0'), 'ZIP code': zp.value.trim(), _replyto: email });
+      const ok = await sendForm(MAIL_CLUB, { _subject: 'Paradice · Birthday Club · ' + first + ' ' + last, 'First name': first, 'Last name': last, 'E-mail': email, Birthday: String(mmdd[1]).padStart(2, '0') + '/' + String(mmdd[2]).padStart(2, '0'), 'ZIP code': zp.value.trim(), 'Consent (18+, e-mails)': 'Yes', _replyto: email });
       sb.disabled = false;
       if (!ok){ err.textContent = 'Sorry, that didn\'t go through. Please try again.'; return; }
       go(4); });
@@ -1219,7 +1226,8 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   /* ---------- form delivery (FormSubmit → e-mail) ---------- */
   const MAIL_FRANCHISE = 'info@paradicelv.com', MAIL_EVENTS = 'sam@paradicelv.com', MAIL_CLUB = 'info@paradicelv.com';
   async function sendForm(to, fields){
-    try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', ...fields, 'Received (Las Vegas / Los Angeles time)': new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' PT' }) });
+    if ([...document.querySelectorAll('.hp__in')].some(i => i.value)) return true; /* honeypot filled: bot, drop silently */
+    try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', _honey: '', ...fields, 'Received (Las Vegas / Los Angeles time)': new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' PT' }) });
       return r.ok; } catch (_) { return false; } }
 
   /* ---------- franchise inquiry form ---------- */
