@@ -507,6 +507,53 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 .lb__p{left:16px;top:50%;transform:translateY(-50%)}
 .lb__n{right:16px;top:50%;transform:translateY(-50%)}
 @media (max-width:600px){.lb__p,.lb__n{top:auto;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:none}}
+
+/* locations map */
+.where{background:var(--cyan-pale);color:var(--marine);padding-block:96px 104px;overflow:hidden}
+.where__in{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.5fr);gap:48px;align-items:start}
+.where__side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.where__side h2{font-size:clamp(40px,4.6vw,72px);line-height:.95;letter-spacing:-.04em;text-wrap:balance}
+.where__lead{font-size:18px;opacity:.85;max-width:38ch}
+.where__stats{display:flex;gap:28px}
+.where__stats b{display:block;font-size:44px;line-height:1;font-weight:800;letter-spacing:-.03em}
+.where__stats span{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.where__chips{display:flex;flex-wrap:wrap;gap:8px}
+.where__chips button{font:inherit;font-size:14px;font-weight:700;color:var(--marine);background:var(--blanc);border:2px solid color-mix(in srgb,var(--marine) 18%,transparent);border-radius:999px;padding:8px 14px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.where__chips button:hover{border-color:var(--marine)}
+.where__chips button[aria-pressed="true"]{background:var(--marine);border-color:var(--marine);color:#fff}
+.where__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:2px solid var(--marine)}
+.where__list li{border-bottom:1px solid color-mix(in srgb,var(--marine) 18%,transparent)}
+.where__list button{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:11px 4px;cursor:pointer;font-weight:700;font-size:16px}
+.where__list button i{width:12px;height:12px;border-radius:50%;background:var(--grenadine);box-shadow:0 0 0 3px #fff,0 0 0 4px color-mix(in srgb,var(--marine) 25%,transparent);flex:0 0 auto}
+.where__list button small{margin-left:auto;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.where__list button:hover,.where__list button:focus-visible,.where__list button.on{color:var(--grenadine)}
+.where__list li.dim{opacity:.35}
+.where__map{position:sticky;top:96px;aspect-ratio:1.35;min-width:0;border-radius:28px;background:var(--blanc);box-shadow:0 30px 60px -40px rgba(5,70,100,.6);overflow:hidden;touch-action:pan-y}
+.where__map canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.where__pins{position:absolute;inset:0}
+.wpin{position:absolute;left:0;top:0;transform:translate(-50%,-50%);border:0;background:none;padding:0;cursor:pointer;font:inherit;color:var(--marine);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.wpin .d{position:relative;width:16px;height:16px;border-radius:50%;background:var(--grenadine);box-shadow:0 0 0 3px #fff,0 6px 14px -4px rgba(5,70,100,.6);flex:0 0 auto}
+.wpin .d::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--grenadine);animation:wpulse 2.4s ease-out infinite}
+.wpin .l{font-weight:800;font-size:14px;background:#fff;border-radius:999px;padding:4px 10px;box-shadow:0 6px 16px -8px rgba(5,70,100,.5);transition:transform .2s}
+.wpin.left{flex-direction:row-reverse}.wpin.below{flex-direction:column;gap:6px}.wpin.above{flex-direction:column-reverse;gap:6px}
+.wpin .ls{display:none}.where__map.small .wpin .lf{display:none}.where__map.small .wpin .ls{display:inline}.where__map.small .where__st{display:none}.where__map.small .wpin .l{font-size:12px;padding:3px 8px}.where__map.small .wpin.cl .d{width:28px;height:28px;font-size:13px}
+.wpin:hover .l,.wpin:focus-visible .l,.wpin.on .l{background:var(--marine);color:#fff}
+.wpin:focus-visible{outline:none}.wpin:focus-visible .d{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--cyan)}
+.wpin.cl .d{width:34px;height:34px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;background:var(--marine)}
+.wpin.cl .d::after{background:var(--marine)}
+.wpin[hidden]{display:none}
+@keyframes wpulse{0%{transform:scale(1);opacity:.45}100%{transform:scale(2.8);opacity:0}}
+@media (prefers-reduced-motion:reduce){.wpin .d::after{animation:none;opacity:0}}
+.where__st{position:absolute;font-weight:800;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:color-mix(in srgb,var(--marine) 38%,transparent);pointer-events:none;transform:translate(-50%,-50%);white-space:nowrap;transition:opacity .3s}
+.where__back{position:absolute;left:14px;top:14px;z-index:3;font:inherit;font-size:14px;font-weight:700;color:var(--marine);background:#fff;border:2px solid color-mix(in srgb,var(--marine) 18%,transparent);border-radius:999px;padding:7px 14px;cursor:pointer}
+.where__back:hover{border-color:var(--marine)}
+.where__card{position:absolute;right:14px;bottom:14px;z-index:3;background:var(--marine);color:#fff;border-radius:18px;padding:14px 18px;display:flex;flex-direction:column;gap:2px;max-width:min(280px,calc(100% - 28px));box-shadow:0 20px 40px -20px rgba(2,28,41,.7)}
+.where__card small{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--jaune)}
+.where__card b{font-size:22px;line-height:1.1}
+.where__card span{font-size:14px;color:#BFE6F2}
+.where__hint{position:absolute;left:14px;bottom:14px;font-size:13px;font-weight:700;opacity:.6;pointer-events:none}
+.where__card[hidden],.where__back[hidden],.where__hint[hidden]{display:none}
+@media (max-width:900px){.where__in{grid-template-columns:minmax(0,1fr);gap:18px}.where__side{display:contents}.where__side>*{order:1}.where__map{position:relative;top:auto;aspect-ratio:1;order:2}.where__chips{order:3}.where__list{order:4}.where__side>.btn{order:5}.where{padding-block:64px 72px}.where__card{left:12px;right:12px;bottom:12px;max-width:none;padding:10px 14px}.where__card b{font-size:18px}.where__card span{font-size:13px}}
 </style>
 
 <div id="cupShadow" aria-hidden="true"></div>
@@ -516,7 +563,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   <div class="wrap">
     <a href="#top" aria-label="Paradice home" class="nav__logo"><img src="assets/wordmark-paradice-480.webp" srcset="assets/wordmark-paradice-480.webp 480w, assets/wordmark-paradice-960.webp 960w" sizes="220px" width="480" height="103" alt="Paradice"></a>
     <nav class="nav__links" aria-label="Main">
-      <a href="#flavors">Our flavors</a><a href="#offer">What we offer</a><a href="#events">Events</a><a href="#own">Franchise</a><a href="#club">Birthday Club</a>
+      <a href="#flavors">Our flavors</a><a href="#offer">What we offer</a><a href="#events">Events</a><a href="#own">Franchise</a><a href="#club">Birthday Club</a><a href="#locations">Locations</a>
     </nav>
     <a class="btn btn--solid" href="#own" style="padding:10px 18px;font-size:14px;min-height:40px">Own a Paradice <span class="arr" aria-hidden="true">↗</span></a>
   </div>
@@ -766,12 +813,33 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 </section>
 </main>
 
+<section class="where" id="locations" aria-labelledby="where-title">
+  <div class="wrap where__in">
+    <div class="where__side">
+      <span class="eyebrow">Find Paradice</span>
+      <h2 id="where-title">Paradice across the Southwest.</h2>
+      <p class="where__lead">Las Vegas Valley, Southern California, Phoenix and Dallas. Tap a city to zoom in.</p>
+      <div class="where__stats"><div><b id="wCount">8</b><span>Trailers</span></div><div><b>4</b><span>States</span></div></div>
+      <div class="where__chips" role="group" aria-label="Filter by state"><button type="button" data-r="all" aria-pressed="true">All</button><button type="button" data-r="NV" aria-pressed="false">Nevada</button><button type="button" data-r="CA" aria-pressed="false">California</button><button type="button" data-r="AZ" aria-pressed="false">Arizona</button><button type="button" data-r="TX" aria-pressed="false">Texas</button></div>
+      <ul class="where__list" id="wList"></ul>
+      <button class="btn btn--solid" type="button" data-fran style="align-self:flex-start">Your city next? Own a Paradice <span class="arr" aria-hidden="true">↗</span></button>
+    </div>
+    <div class="where__map" id="wMap" role="region" aria-label="Map of Paradice locations">
+      <canvas id="wCanvas" aria-hidden="true"></canvas>
+      <div class="where__pins" id="wPins"></div>
+      <button type="button" class="where__back" id="wBack" hidden>← All locations</button>
+      <div class="where__card" id="wCard" hidden aria-live="polite"></div>
+      <p class="where__hint" id="wHint">Tap a pin to zoom in</p>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="foot">
       <div style="display:flex;align-items:center;gap:18px"><img src="assets/logo-paradice-320.webp" width="320" height="308" alt="Paradice Caribbean Shaved Ice"><span style="font-size:15px;line-height:1.4">A little cup of island.<br>Whenever you need one.</span></div>
       <div class="foot__cols">
-        <div><span class="eyebrow">Explore</span><a href="#flavors">(Shave) Our flavors</a><a href="#events">(Pour) Events</a><a href="#own">(Own) Franchise</a><a href="#club">(Smile) Birthday Club</a></div>
+        <div><span class="eyebrow">Explore</span><a href="#flavors">(Shave) Our flavors</a><a href="#events">(Pour) Events</a><a href="#own">(Own) Franchise</a><a href="#club">(Smile) Birthday Club</a><a href="#locations">(Find) Locations</a></div>
         <div><span class="eyebrow">Say hello</span><span>(702) 336-5208</span><a href="mailto:info@paradicelv.com">info@paradicelv.com</a><a href="https://www.instagram.com/paradicelv/">Instagram ↗</a><a href="https://www.facebook.com/profile.php?id=61558134029100">Facebook ↗</a></div>
       </div>
     </div>
@@ -812,6 +880,104 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       sb.disabled = false;
       if (!ok){ err.textContent = 'Sorry, that didn\'t go through. Please try again.'; return; }
       go(4); });
+  })();
+
+
+  /* ---------- locations map: dot map, clusters that zoom ---------- */
+  (() => {
+    const map = $('#wMap'); if (!map) return;
+    const cv = $('#wCanvas'), ctx = cv.getContext('2d'), pinsEl = $('#wPins'), back = $('#wBack'), card = $('#wCard'), hint = $('#wHint'), list = $('#wList');
+    const US = [[-124.7,48.4],[-124.1,46.3],[-124.4,43],[-124.2,40.4],[-123.8,39.4],[-122.5,37.8],[-122.4,37.2],[-121.9,36.6],[-121.3,35.6],[-120.6,34.5],[-119.2,34.15],[-118.8,34.02],[-118.5,34.03],[-118.42,33.75],[-118.2,33.74],[-117.9,33.6],[-117.7,33.46],[-117.38,33.2],[-117.28,32.85],[-117.24,32.68],[-117.12,32.53],[-114.7,32.7],[-111,31.3],[-108.2,31.3],[-106.5,31.8],[-104.9,30.6],[-103.1,29],[-101.4,29.8],[-99.5,27.5],[-97.4,25.9],[-97.2,27.8],[-96.5,28.6],[-94,29.7],[-91.5,29.4],[-89.8,29.1],[-89.2,30.3],[-87.5,30.3],[-85.3,29.7],[-84,30],[-82.9,29.1],[-82.7,27.5],[-81.9,26.4],[-81.1,25.2],[-80.4,25.2],[-80.1,26.9],[-80.6,28.4],[-81.3,30],[-81.4,31.3],[-80,32.5],[-78.7,33.8],[-77.8,34.5],[-75.8,35.5],[-75.9,36.9],[-75.1,38.4],[-74,40.5],[-72,41.1],[-70,41.6],[-70.7,42.7],[-70.2,43.6],[-68.5,44.4],[-67,44.8],[-67.8,47.1],[-69.2,47.4],[-71.5,45],[-74.8,45],[-76.8,43.6],[-79.1,43.3],[-79,42.6],[-81.5,41.7],[-82.9,42.1],[-82.5,43.5],[-83.4,45.8],[-84.8,45.9],[-86.5,46.5],[-88.4,48.3],[-90,48],[-92,46.7],[-95.1,49],[-104,49],[-116,49],[-123.3,49]];
+    const BORDERS = [[[-120,42],[-120,39],[-114.63,35.0]],[[-114.05,42],[-114.05,37]],[[-114.05,37],[-109.05,37]],[[-114.63,35.0],[-114.6,34.3],[-114.4,34.1],[-114.7,32.7]],[[-109.05,37],[-109.05,31.33]],[[-103.06,37],[-103.06,32],[-106.6,32]],[[-103,36.5],[-100,36.5],[-100,34.56],[-95.5,33.9],[-94.04,33.55],[-94.04,31],[-93.6,29.8]]];
+    const STATES = [{t:'Nevada',lon:-116.8,lat:39.2},{t:'California',lon:-119.6,lat:35.7},{t:'Arizona',lon:-110.9,lat:34.55},{t:'Texas',lon:-99.6,lat:31.3},{t:'Utah',lon:-111.6,lat:39.4},{t:'New Mexico',lon:-106.1,lat:34.4}];
+    const LOC = [
+      { id:'lv', city:'Las Vegas', st:'NV', area:'Las Vegas Valley', lon:-115.14, lat:36.17 },
+      { id:'hd', city:'Henderson', st:'NV', area:'Las Vegas Valley', lon:-114.98, lat:36.03, side:'left' },
+      { id:'la', city:'Los Angeles', st:'CA', area:'Southern California', lon:-118.24, lat:34.05, side:'left' },
+      { id:'pa', city:'Pasadena', st:'CA', area:'Southern California', lon:-118.14, lat:34.15 },
+      { id:'rv', city:'Riverside', st:'CA', area:'Southern California', lon:-117.4, lat:33.95 },
+      { id:'sd', city:'San Diego', st:'CA', area:'Southern California', lon:-117.16, lat:32.72 },
+      { id:'px', city:'Phoenix', st:'AZ', area:'Arizona', lon:-112.07, lat:33.45 },
+      { id:'dl', city:'Dallas', st:'TX', area:'Texas', lon:-96.8, lat:32.78 }
+    ];
+    const CL = [
+      { id:'NV', name:'Las Vegas Valley', short:'Las Vegas', ids:['lv','hd'], view:{ lon:-115.06, lat:36.1, span:1.0 }, mside:'above' },
+      { id:'CA', name:'Southern California', ids:['la','pa','rv','sd'], short:'SoCal', view:{ lon:-117.65, lat:33.45, span:3.6 }, side:'below', mside:'below' },
+      { id:'AZ', name:'Phoenix', short:'Phoenix', ids:['px'], view:{ lon:-112.07, lat:33.45, span:3.2 }, mside:'below' },
+      { id:'TX', name:'Dallas', short:'Dallas', ids:['dl'], view:{ lon:-96.8, lat:32.78, span:3.2 }, side:'left', mside:'below' }
+    ];
+    const ALL = { lon:-107.8, lat:34.4, span:27.5 };
+    const K = Math.cos(34 * Math.PI / 180);
+    let W = 0, H = 0, dpr = 1, view = { ...ALL }, region = 'all', sel = null, anim = 0;
+    const proj = (lon, lat, v = view) => { const s = W / (v.span * K); return [(lon - v.lon) * K * s + W / 2, (v.lat - lat) * s + H / 2]; };
+    const unproj = (x, y, v = view) => { const s = W / (v.span * K); return [(x - W / 2) / (K * s) + v.lon, v.lat - (y - H / 2) / s]; };
+    const inside = (lon, lat) => { let c = false; for (let i = 0, j = US.length - 1; i < US.length; j = i++){ const [xi, yi] = US[i], [xj, yj] = US[j]; if (((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi)) c = !c; } return c; };
+    const css = getComputedStyle(document.documentElement);
+    const MARINE = (css.getPropertyValue('--marine') || '#054664').trim();
+
+    // pins (HTML buttons, so they are keyboard- and screen-reader-friendly)
+    const pinEls = {};
+    LOC.forEach(l => { const b = document.createElement('button'); b.type = 'button'; b.className = 'wpin' + (l.side === 'left' ? ' left' : ''); b.innerHTML = `<span class="d" aria-hidden="true"></span><span class="l">${l.city}</span>`; b.setAttribute('aria-label', `${l.city}, ${l.st}: Paradice trailer`); b.addEventListener('click', () => pick(l.id)); pinsEl.appendChild(b); pinEls[l.id] = b; });
+    const clEls = {};
+    CL.forEach(c => { const b = document.createElement('button'); b.type = 'button'; b.className = 'wpin cl'; b.innerHTML = `<span class="d" aria-hidden="true">${c.ids.length}</span><span class="l"><span class="lf">${c.name}</span><span class="ls">${c.short}</span></span>`; b.setAttribute('aria-label', `${c.name}: ${c.ids.length} trailer${c.ids.length > 1 ? 's' : ''}. Zoom in`); b.addEventListener('click', () => zoomTo(c.id)); pinsEl.appendChild(b); clEls[c.id] = b; });
+    const stEls = STATES.map(s0 => { const e = document.createElement('span'); e.className = 'where__st'; e.textContent = s0.t; pinsEl.appendChild(e); return e; });
+
+    // side list
+    list.innerHTML = LOC.map(l => `<li data-st="${l.st}"><button type="button" data-id="${l.id}"><i aria-hidden="true"></i>${l.city}<small>${l.st}</small></button></li>`).join('');
+    list.querySelectorAll('button').forEach(b => b.addEventListener('click', () => pick(b.dataset.id)));
+    const chips = $$('.where__chips button');
+    chips.forEach(b => b.addEventListener('click', () => zoomTo(b.dataset.r)));
+
+    function size(){ const r = map.getBoundingClientRect(); W = r.width; H = r.height; dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); draw(); }
+    function draw(){
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      // dot grid in screen space, so dots keep the same size at every zoom
+      const step = W < 520 ? 10 : 13, r = step * 0.22;
+      ctx.fillStyle = MARINE; ctx.globalAlpha = .2; ctx.beginPath();
+      for (let y = step / 2; y < H; y += step) for (let x = step / 2; x < W; x += step){ const [lo, la] = unproj(x, y); if (inside(lo, la)){ ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832); } }
+      ctx.fill();
+      // state borders
+      ctx.globalAlpha = .28; ctx.strokeStyle = MARINE; ctx.lineWidth = 1.2; ctx.setLineDash([4, 5]);
+      BORDERS.forEach(line => { ctx.beginPath(); line.forEach(([lo, la], i) => { const [x, y] = proj(lo, la); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); });
+      ctx.setLineDash([]); ctx.globalAlpha = 1;
+      // HTML layer
+      const zoomed = view.span < 12;
+      LOC.forEach(l => { const e = pinEls[l.id], [x, y] = proj(l.lon, l.lat); e.style.transform = `translate(${x}px,${y}px) translate(${l.side === 'left' ? 'calc(-100% + 8px)' : '-8px'},-50%)`; e.hidden = !zoomed || x < -40 || x > W + 40 || y < -20 || y > H + 20; e.classList.toggle('on', sel === l.id); });
+      const small = W < 560; map.classList.toggle('small', small);
+      CL.forEach(c => { const e = clEls[c.id], v = c.view, [x, y] = proj(v.lon, v.lat), sd = (small ? c.mside : c.side) || 'right'; e.classList.remove('left', 'below', 'above'); if (sd !== 'right') e.classList.add(sd); e.style.transform = `translate(${x}px,${y}px) ` + (sd === 'below' ? 'translate(-50%,-17px)' : sd === 'above' ? 'translate(-50%,calc(-100% + 17px))' : `translate(${sd === 'left' ? 'calc(-100% + 17px)' : '-17px'},-50%)`); e.hidden = zoomed; });
+      STATES.forEach((s0, i) => { const [x, y] = proj(s0.lon, s0.lat); const e = stEls[i]; e.style.left = x + 'px'; e.style.top = y + 'px'; e.style.opacity = zoomed ? 0 : 1; });
+    }
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function fly(to){
+      cancelAnimationFrame(anim); const from = { ...view };
+      if (reduce){ view = { ...to }; draw(); return; }
+      const t0 = performance.now(), d = 900, lf = Math.log(from.span), lt = Math.log(to.span);
+      const step = now => { const k = Math.min(1, (now - t0) / d), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        view = { lon: from.lon + (to.lon - from.lon) * e, lat: from.lat + (to.lat - from.lat) * e, span: Math.exp(lf + (lt - lf) * e) }; draw();
+        if (k < 1) anim = requestAnimationFrame(step); };
+      anim = requestAnimationFrame(step);
+    }
+    function fitSpan(v){ return W && H && W / H < 1.1 ? v.span * 1.15 : v.span; }
+    function showCard(l){ if (!l){ card.hidden = true; return; } card.hidden = false; card.innerHTML = `<small>${l.area}</small><b>${l.city}, ${l.st}</b><span>Paradice trailer · follow @paradicelv for today's spot</span>`; }
+    function zoomTo(r, withCard){
+      region = r; sel = null; showCard(null);
+      chips.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.r === r)));
+      list.querySelectorAll('li').forEach(li => li.classList.toggle('dim', r !== 'all' && li.dataset.st !== r));
+      list.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+      back.hidden = r === 'all'; hint.hidden = r !== 'all';
+      if (r === 'all'){ fly({ ...ALL, span: fitSpan(ALL) }); return; }
+      const c = CL.find(x => x.id === r), sp = fitSpan(c.view); fly({ ...c.view, span: sp, lat: c.view.lat - (withCard && W < 560 ? sp * K * (H / W) * 0.14 : 0) });
+    }
+    function pick(id){
+      const l = LOC.find(x => x.id === id), c = CL.find(x => x.ids.includes(id));
+      if (region !== c.id || W < 560) zoomTo(c.id, true);
+      sel = id; showCard(l); draw();
+      list.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.id === id));
+    }
+    back.addEventListener('click', () => zoomTo('all'));
+    map.addEventListener('keydown', e => { if (e.key === 'Escape' && region !== 'all') zoomTo('all'); });
+    new ResizeObserver(() => { size(); if (!anim || region === 'all') view = region === 'all' ? { ...ALL, span: fitSpan(ALL) } : view; draw(); }).observe(map);
+    size(); view = { ...ALL, span: fitSpan(ALL) }; draw();
   })();
 
   /* ---------- flavour data ---------- */
