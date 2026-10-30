@@ -822,40 +822,51 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   let CW = CROP.w, CH = CROP.h; canvas.width = CW; canvas.height = CH;
   const mk = document.createElement('canvas'); mk.width = CW; mk.height = CH; const mctx = mk.getContext('2d');
   const BASE_W = 400; canvas.style.width = BASE_W + 'px'; canvas.style.height = Math.round(BASE_W * CROP.h / CROP.w) + 'px';
-  // Memory budget: frames are kept compressed (Blob) and only the flavours on screen are decoded
-  // (ImageBitmap). The others are released, so the browser never runs out of memory and re-decodes.
-  const HAS_BMP = 'createImageBitmap' in window;
-  const blobs = SEQ.map(() => new Array(NF)), frames = SEQ.map(() => new Array(NF)), ready = SEQ.map(() => new Uint8Array(NF));
-  const url = (si, f) => `assets/cup/${TIER}/${SEQ[si]}/${String(f).padStart(2,'0')}.webp?v=1`;
-  const ORDER = []; for (const step of [8, 4, 2, 1]) for (let f = 0; f < NF; f += step) if (!ORDER.includes(f)) ORDER.push(f);
-  let focus = 0;                                   // flavour on screen (siA)
-  const KEEP = LITE ? 2 : 3;                       // decoded flavours: focus, next (+ one more on desktop)
+  // Frames come in sheets of 6 (one file = 6 angles side by side). Sheets are kept compressed (Blob);
+  // only the flavours on screen are decoded (ImageBitmap) and the others are released, so the
+  // browser never runs out of memory and never has to re-decode while the cup turns.
+  const SH = 6, NS = NF / SH, HAS_BMP = 'createImageBitmap' in window;
+  const blobs = SEQ.map(() => new Array(NS)), sheets = SEQ.map(() => new Array(NS));
+  const frames = SEQ.map(() => new Array(NF)), ready = SEQ.map(() => new Uint8Array(NF));
+  const url = (si, k) => `assets/cup/${TIER}/${SEQ[si]}/s${String(k).padStart(2,'0')}.webp?v=1`;
+  const ORDER = []; for (const f of [0, 36, 18, 54, 9, 45, 27, 63]) { const k = Math.floor(f / SH); if (!ORDER.includes(k)) ORDER.push(k); }
+  for (let k = 0; k < NS; k++) if (!ORDER.includes(k)) ORDER.push(k);
+  let focus = 0;
+  const KEEP = LITE ? 2 : 3;
   const wanted = si => si >= focus && si < focus + KEEP;
-  function decode(si, f){
-    if (ready[si][f] || !blobs[si][f] || !wanted(si)) return Promise.resolve();
-    if (!HAS_BMP){ return new Promise(res => { const im = new Image(); im.onload = () => { frames[si][f] = im; ready[si][f] = 1; dirty = true; res(); }; im.onerror = res; im.src = URL.createObjectURL(blobs[si][f]); }); }
-    return createImageBitmap(blobs[si][f]).then(bm => { if (!wanted(si) || ready[si][f]) { bm.close(); return; } frames[si][f] = bm; ready[si][f] = 1; dirty = true; }).catch(() => {});
+  function publish(si, k, img){ sheets[si][k] = img; for (let j = 0; j < SH; j++){ frames[si][k * SH + j] = { im: img, x: j * CROP.w }; ready[si][k * SH + j] = 1; } dirty = true; }
+  // decodes run one at a time, so a burst never blocks the frames of the cup that is turning
+  let dq = Promise.resolve();
+  const idle = () => new Promise(r => (window.requestIdleCallback ? requestIdleCallback(() => r(), { timeout: 120 }) : setTimeout(r, 16)));
+  function decode(si, k){ dq = dq.then(() => (sheets[si][k] || !blobs[si][k] || !wanted(si)) ? null : idle().then(() => decodeNow(si, k))); return dq; }
+  function decodeNow(si, k){
+    if (sheets[si][k] || !blobs[si][k] || !wanted(si)) return Promise.resolve();
+    if (!HAS_BMP) return new Promise(res => { const im = new Image(); im.onload = () => { if (wanted(si)) publish(si, k, im); res(); }; im.onerror = res; im.src = URL.createObjectURL(blobs[si][k]); });
+    // decode the sheet once, cut it into 6 small bitmaps (fast to draw), then drop the big one
+    return createImageBitmap(blobs[si][k]).then(bm => Promise.all(Array.from({ length: SH }, (_, j) => createImageBitmap(bm, j * CROP.w, 0, CROP.w, CROP.h))).then(parts => { bm.close();
+      if (!wanted(si) || sheets[si][k]) { parts.forEach(p => p.close()); return; }
+      sheets[si][k] = parts; parts.forEach((pb, j) => { frames[si][k * SH + j] = { im: pb, x: 0 }; ready[si][k * SH + j] = 1; }); dirty = true; })).catch(() => {});
   }
-  function release(si){ for (let f = 0; f < NF; f++) if (ready[si][f]) { const fr = frames[si][f]; if (fr && fr.close) fr.close(); frames[si][f] = null; ready[si][f] = 0; } }
+  function release(si){ for (let k = 0; k < NS; k++) if (sheets[si][k]) { const im = sheets[si][k]; (Array.isArray(im) ? im : [im]).forEach(x => x.close && x.close()); sheets[si][k] = null; for (let j = 0; j < SH; j++){ frames[si][k * SH + j] = null; ready[si][k * SH + j] = 0; } } }
   function setFocus(si){
     if (si === focus) return; focus = si;
-    for (let k = 0; k < SEQ.length; k++) if (!wanted(k)) release(k);
-    for (let k = focus; k < Math.min(SEQ.length, focus + KEEP); k++) ORDER.forEach(f => decode(k, f));
+    for (let i = 0; i < SEQ.length; i++) if (!wanted(i)) release(i);
+    for (let i = focus; i < Math.min(SEQ.length, focus + KEEP); i++) ORDER.forEach(k => decode(i, k));
     kick();
   }
-  // download queue: the flavour on screen first (coarse to fine), then the next ones, then the rest
-  const done = SEQ.map(() => new Uint8Array(NF)), busy = SEQ.map(() => new Uint8Array(NF));
+  // download queue: the flavour on screen first, then the next ones, then the rest
+  const done = SEQ.map(() => new Uint8Array(NS)), busy = SEQ.map(() => new Uint8Array(NS));
   function nextTask(){
     const byDist = SEQ.map((_, i) => i).sort((a, b) => ((a - focus + 5) % 5) - ((b - focus + 5) % 5));
-    for (const si of byDist) for (const f of ORDER) if (!done[si][f] && !busy[si][f]) return [si, f];
+    for (const si of byDist) for (const k of ORDER) if (!done[si][k] && !busy[si][k]) return [si, k];
     return null;
   }
-  let workers = 0; const MAXW = 4;
+  let workers = 0; const MAXW = 3;
   function kick(){ while (workers < MAXW){ const t = nextTask(); if (!t) return; run(t); } }
-  function run([si, f]){ workers++; busy[si][f] = 1;
-    fetch(url(si, f)).then(r => r.ok ? r.blob() : null).then(b => { if (b) blobs[si][f] = b; done[si][f] = 1; return decode(si, f); })
-      .catch(() => { done[si][f] = 1; })
-      .finally(() => { busy[si][f] = 0; workers--; if (si === 0 && ready[0][0] && !document.documentElement.classList.contains('has-3d')) document.documentElement.classList.add('has-3d'); kick(); }); }
+  function run([si, k]){ workers++; busy[si][k] = 1;
+    fetch(url(si, k)).then(r => r.ok ? r.blob() : null).then(b => { if (b) blobs[si][k] = b; done[si][k] = 1; decode(si, k); })
+      .catch(() => { done[si][k] = 1; })
+      .finally(() => { busy[si][k] = 0; workers--; if (ready[0][0] && !document.documentElement.classList.contains('has-3d')) document.documentElement.classList.add('has-3d'); kick(); }); }
   kick();
   function pick(si, f){ if (ready[si][f]) return frames[si][f];
     for (let d = 1; d < NF/2; d++){ const a = (f + d) % NF, b = (f - d + NF) % NF; if (ready[si][a]) return frames[si][a]; if (ready[si][b]) return frames[si][b]; } return null; }
@@ -875,7 +886,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     const a = pick(siA, f); if (!a) return;
     last = key; dirty = false;
     ctx.clearRect(0, 0, CW, CH);
-    const blit = fr => ctx.drawImage(fr, 0, 0, CW, CH);
+    const blit = fr => ctx.drawImage(fr.im, fr.x, 0, CROP.w, CROP.h, 0, 0, CW, CH);
     if (mix >= 0.999) { const b = pick(siB, f); blit(b || a); return; }
     blit(a);
     if (mix <= 0.001) return;
@@ -883,7 +894,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     // the new syrup soaks down from the top of the dome: B is faded in through a soft vertical gradient (no hard edge)
     const front = lerp(-0.14, 0.78, mix) * CH, fe = 0.13 * CH;
     mctx.globalCompositeOperation = 'source-over'; mctx.clearRect(0, 0, CW, CH);
-    mctx.drawImage(b, 0, 0, CW, CH);
+    mctx.drawImage(b.im, b.x, 0, CROP.w, CROP.h, 0, 0, CW, CH);
     const g = mctx.createLinearGradient(0, front - fe, 0, front + fe);
     g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(0.35, 'rgba(0,0,0,.85)'); g.addColorStop(0.7, 'rgba(0,0,0,.3)'); g.addColorStop(1, 'rgba(0,0,0,0)');
     mctx.globalCompositeOperation = 'destination-in'; mctx.fillStyle = g; mctx.fillRect(0, 0, CW, CH);
