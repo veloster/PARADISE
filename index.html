@@ -94,6 +94,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* flavour stage */
 .flavors{position:relative;height:440vh}
 .flavors__sticky{position:sticky;top:0;height:100vh;overflow:hidden;will-change:background-color;contain:paint;background:var(--stage-bg,var(--blanc));color:var(--stage-fg,var(--marine));transition:color .4s}
+.flavors__ghostWrap{position:absolute;inset:0;overflow:hidden;pointer-events:none;-webkit-mask-image:radial-gradient(var(--grx,0px) var(--gry,0px) at var(--gcx,-999px) var(--gcy,-999px),transparent 62%,#000 100%);mask-image:radial-gradient(var(--grx,0px) var(--gry,0px) at var(--gcx,-999px) var(--gcy,-999px),transparent 62%,#000 100%)}
 .flavors__ghost{position:absolute;left:-2vw;bottom:-4vh;font-weight:800;font-size:clamp(120px,22vw,340px);line-height:.8;letter-spacing:-.05em;text-transform:uppercase;opacity:.14;white-space:nowrap;pointer-events:none;will-change:transform}
 .flavors .wrap{height:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:72px 24px}
 .flavors__text{flex:1 1 380px;min-width:0;position:relative;min-height:340px}
@@ -148,6 +149,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (max-width:600px){.selfserve{padding-block:52px}.selfserve__list li{font-size:14px;padding:7px 14px 7px 10px}}
 
 .bigmenu li.long span{white-space:normal;max-width:44ch}
+.bigmenu strong{white-space:nowrap;flex-shrink:0}.bigmenu span{min-width:0}
 .fund{margin-top:44px;background:var(--marine);color:var(--blanc);border-radius:28px;padding:36px clamp(22px,4vw,48px);display:flex;flex-wrap:wrap;align-items:center;gap:24px 40px}
 .fund__txt{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:10px}
 .fund__txt .eyebrow{color:var(--jaune)}
@@ -558,7 +560,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 
 <section class="flavors" id="flavors" aria-label="Our flavors">
   <div class="flavors__sticky" id="flavorStage">
-    <div class="flavors__ghost" id="ghost" aria-hidden="true">Grenadine</div>
+    <div class="flavors__ghostWrap" id="ghostWrap" aria-hidden="true"><div class="flavors__ghost" id="ghost">Grenadine</div></div>
     <div class="wrap">
       <div class="flavors__text">
         <article class="flv" data-i="0" aria-hidden="false">
@@ -582,8 +584,8 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         <article class="flv" data-i="3" aria-hidden="true">
           <span class="eyebrow">Flavor 04 · Ice-blue</span>
           <h2>Island blue.</h2>
-          <p>Cool, bright and very blue. [À CONFIRMER : nom exact du sirop.]</p>
-          <div class="chips"><span>Blue</span><span>Cool</span><span>Refreshing</span></div>
+          <p>Cool, bright and very blue.</p>
+          <div class="chips"><span>Blue</span><span>Cool</span><span>Refreshing</span><span>Sugar-free</span></div>
         </article>
       </div>
       <div class="flavors__visual"><div class="fsets" aria-hidden="true"><div class="fset on" data-set="0"><span class="fr" data-depth="1.4" style="left:0%;top:10%;width:26%;z-index:31"><img src="assets/fruit-grenade-open.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="1.8" style="right:0%;top:56%;width:22%;z-index:31"><img src="assets/fruit-grenade.webp" alt="" style="--r:10deg;transition-delay:70ms"></span><span class="fr" data-depth="0.6" style="right:12%;top:2%;width:13%;z-index:29"><img src="assets/fruit-fraise.webp" alt="" style="--r:20deg;transition-delay:140ms"></span></div><div class="fset" data-set="1"><span class="fr" data-depth="1.6" style="left:0%;top:54%;width:28%;z-index:31"><img src="assets/fruit-passion-half.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:4%;top:6%;width:18%;z-index:29"><img src="assets/fruit-passion-whole.webp" alt="" style="--r:14deg;transition-delay:70ms"></span><span class="fr" data-depth="1.3" style="right:0%;top:62%;width:17%;z-index:31"><img src="assets/fruit-passion.webp" alt="" style="--r:-16deg;transition-delay:140ms"></span></div><div class="fset" data-set="2"><span class="fr" data-depth="1.5" style="left:0%;top:44%;width:26%;z-index:31"><img src="assets/fruit-mango.webp" alt="" style="--r:-10deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:0%;top:6%;width:24%;z-index:29"><img src="assets/fruit-mango-cut.webp" alt="" style="--r:12deg;transition-delay:70ms"></span><span class="fr" data-depth="1.9" style="right:4%;top:64%;width:14%;z-index:31"><img src="assets/fruit-mangue.webp" alt="" style="--r:-18deg;transition-delay:140ms"></span></div><div class="fset" data-set="3"><span class="fr" data-depth="1.5" style="left:0%;top:46%;width:28%;z-index:31"><img src="assets/fruit-coco-open.webp" alt="" style="--r:-8deg;transition-delay:0ms"></span><span class="fr" data-depth="0.7" style="right:2%;top:4%;width:20%;z-index:29"><img src="assets/fruit-coco-green.webp" alt="" style="--r:10deg;transition-delay:70ms"></span><span class="fr" data-depth="1.8" style="right:2%;top:62%;width:16%;z-index:31"><img src="assets/fruit-coco.webp" alt="" style="--r:-14deg;transition-delay:140ms"></span><span class="fr" data-depth="0.6" style="left:14%;top:8%;width:10%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:16deg;transition-delay:210ms"></span></div></div><div class="anchor" id="anchorFlavor" aria-hidden="true" style="inset:0"></div></div>
@@ -622,7 +624,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   <div class="wrap">
     <span class="eyebrow">More than shaved ice</span>
     <h2 id="offer-title" class="sr">What we offer</h2>
-    <ul class="bigmenu" aria-label="What we offer"><li style="--c:#D7263D;--fc:#fff" tabindex="0" class="long"><em>01</em><strong>Shaved ice</strong><span>Caribbean syrups: grenadine, passion fruit, mango, island blue. Self-serve bar: watermelon, tiger’s blood, strawberry, piña colada, lemon, grape, cotton candy, cherry, blue raspberry, banana.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0"><em>02</em><strong>Ice cream</strong><span>Creamy scoops, plus pre-packaged ice cream from Rich’s and Blue Bunny. Our Rich’s range is approved for schools.</span></li><li style="--c:#054664;--fc:#fff" tabindex="0"><em>03</em><strong>French coffee</strong><span>Proper French-style coffee for the grown-ups.</span></li><li style="--c:#00BADD;--fc:#032B3E" tabindex="0"><em>04</em><strong>Caribbean music</strong><span>Want a soundtrack? Caribbean music on request.</span></li><li style="--c:#2C8C4B;--fc:#fff" tabindex="0"><em>05</em><strong>Fundraisers</strong><span>We donate 20% of sales to your school, daycare or team.</span></li></ul>
+    <ul class="bigmenu" aria-label="What we offer"><li style="--c:#D7263D;--fc:#fff" tabindex="0" class="long"><em>01</em><strong>Shaved ice</strong><span>Caribbean syrups: grenadine, passion fruit, mango, island blue. Self-serve bar: watermelon, tiger’s blood, strawberry, piña colada, lemon, grape, cotton candy, cherry, blue raspberry, banana.</span></li><li style="--c:#FDC208;--fc:#032B3E" tabindex="0" class="long"><em>02</em><strong>Ice cream</strong><span>Creamy scoops, plus pre-packaged ice cream from Rich’s and Blue Bunny. Our Rich’s range is approved for schools.</span></li><li style="--c:#054664;--fc:#fff" tabindex="0"><em>03</em><strong>French coffee</strong><span>Proper French-style coffee for the grown-ups.</span></li><li style="--c:#00BADD;--fc:#032B3E" tabindex="0"><em>04</em><strong>Caribbean music</strong><span>Want a soundtrack? Caribbean music on request.</span></li><li style="--c:#2C8C4B;--fc:#fff" tabindex="0"><em>05</em><strong>Fundraisers</strong><span>We donate 20% of sales to your school, daycare or team.</span></li></ul>
     <div class="fund" id="fundraiser">
       <div class="fund__txt">
         <span class="eyebrow">Fundraiser program</span>
@@ -812,7 +814,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     { name:'Mango',     bg:'#2C8C4B', fg:'#FFFFFF', syrup:'#F7A11B' },
     { name:'Island blue', bg:'#00BADD', fg:'#054664', syrup:'#00BADD' }
   ];
-  const stage = $('#flavorStage'), ghost = $('#ghost'), flvs = $$('.flv'), bars = $$('.progress i');
+  const stage = $('#flavorStage'), ghost = $('#ghost'), ghostWrap = $('#ghostWrap'), flvs = $$('.flv'), bars = $$('.progress i');
   let flavorIdx = 0;
   function setFlavor(i){
     if (i === flavorIdx) return;
@@ -906,7 +908,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   const lerp = (a,b,t) => a + (b-a)*t;
   
 
-  let dirty = true, last = '', turnsShown = 0, lastBg = '', lastGx = '', lastOnStage = null, lastFixed = null;
+  let dirty = true, last = '', turnsShown = 0, lastBg = '', lastGx = '', lastGk = '', lastOnStage = null, lastFixed = null;
   function paint(siA, siB, mix, f){
     const key = siA + '|' + siB + '|' + f + '|' + Math.round(mix * 160);
     if (!dirty && key === last) return;
@@ -957,6 +959,8 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       const oy = fixedMode ? 0 : scrollY;
       canvas.style.transform = `translate3d(${x + mx * 14 * tiltOn}px,${y + oy + my * 8 * tiltOn}px,0) scale(${w / BASE_W}) translate(${BASE_W/2}px,${CROP.h/5}px) rotate(${mx * -2.2 * tiltOn}deg) translate(${-BASE_W/2}px,${-CROP.h/5}px)`;
       shadowEl.style.transform = `translate3d(${x + w * CROP.cx - w * 0.36}px,${y + oy + hh * CROP.foot - w * 0.05}px,0)`;
+      { const sr = stage.getBoundingClientRect(), gv = [x + w / 2 - sr.left, y + hh * 0.56 - sr.top, w * 0.62, hh * 0.62].map(v => Math.round(v));
+        const gk = gv.join(); if (gk !== lastGk){ lastGk = gk; const gs = ghostWrap.style; gs.setProperty('--gcx', gv[0] + 'px'); gs.setProperty('--gcy', gv[1] + 'px'); gs.setProperty('--grx', gv[2] + 'px'); gs.setProperty('--gry', gv[3] + 'px'); } }
       shadowEl.style.width = (w * 0.72) + 'px'; shadowEl.style.height = (w * 0.1) + 'px';
       // rotation follows the scroll continuously: one turn on the way down, one turn per flavour
       let target, siA, siB, mix;
