@@ -828,8 +828,8 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     <div class="where__side">
       <span class="eyebrow">Find Paradice</span>
       <h2 id="where-title">Paradice across the Southwest.</h2>
-      <p class="where__lead">Serving the Las Vegas Valley and Southern California today. Phoenix and Dallas are next.</p>
-      <div class="where__stats"><div class="open"><b>7</b><span>Open now</span></div><div><b>2</b><span>Coming soon</span></div></div>
+      <p class="where__lead">Serving the Las Vegas Valley today. Southern California, Phoenix and Dallas are next.</p>
+      <div class="where__stats"><div class="open"><b>2</b><span>Open now</span></div><div><b>7</b><span>Coming soon</span></div></div>
       <div class="where__chips" role="group" aria-label="Filter by state"><button type="button" data-r="all" aria-pressed="true">All</button><button type="button" data-r="NV" aria-pressed="false">Nevada</button><button type="button" data-r="CA" aria-pressed="false">California</button><button type="button" data-r="AZ" aria-pressed="false">Arizona</button><button type="button" data-r="TX" aria-pressed="false">Texas</button></div>
       <ul class="where__list" id="wList"></ul>
       <button class="btn btn--solid" type="button" data-fran>Bring Paradice to your city <span class="arr" aria-hidden="true">↗</span></button>
@@ -902,11 +902,11 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     const LOC = [
       { id:'lv', city:'Las Vegas', st:'NV', area:'Las Vegas Valley', lon:-115.14, lat:36.17, open:true },
       { id:'hd', city:'Henderson', st:'NV', area:'Las Vegas Valley', lon:-114.98, lat:36.03, side:'left', open:true },
-      { id:'la', city:'Los Angeles', st:'CA', area:'Southern California', lon:-118.24, lat:34.05, side:'left', open:true },
-      { id:'pa', city:'Pasadena', st:'CA', area:'Southern California', lon:-118.14, lat:34.15, side:'above', open:true },
-      { id:'sb', city:'San Bernardino', st:'CA', area:'Southern California', lon:-117.29, lat:34.11, open:true },
-      { id:'rv', city:'Riverside', st:'CA', area:'Southern California', lon:-117.4, lat:33.95, side:'below', open:true },
-      { id:'sd', city:'San Diego', st:'CA', area:'Southern California', lon:-117.16, lat:32.72, open:true },
+      { id:'la', city:'Los Angeles', st:'CA', area:'Southern California', lon:-118.24, lat:34.05, side:'left' },
+      { id:'pa', city:'Pasadena', st:'CA', area:'Southern California', lon:-118.14, lat:34.15, side:'above' },
+      { id:'sb', city:'San Bernardino', st:'CA', area:'Southern California', lon:-117.29, lat:34.11 },
+      { id:'rv', city:'Riverside', st:'CA', area:'Southern California', lon:-117.4, lat:33.95, side:'below' },
+      { id:'sd', city:'San Diego', st:'CA', area:'Southern California', lon:-117.16, lat:32.72 },
       { id:'px', city:'Phoenix', st:'AZ', area:'Arizona', lon:-112.07, lat:33.45 },
       { id:'dl', city:'Dallas', st:'TX', area:'Texas', lon:-96.8, lat:32.78 }
     ];
