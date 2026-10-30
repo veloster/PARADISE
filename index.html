@@ -509,22 +509,22 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 @media (max-width:600px){.lb__p,.lb__n{top:auto;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:none}}
 
 /* locations map */
-.where{background:var(--marine);color:#fff;padding-block:104px 112px;overflow:hidden}
-.where__head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px 48px;margin-bottom:28px}
-.where__head>div:first-child{display:flex;flex-direction:column;gap:14px;max-width:640px;min-width:0}
+.where{background:var(--marine);color:#fff;padding-block:64px 72px;overflow:hidden}
+.where__head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 40px;margin-bottom:18px}
+.where__head>div:first-child{display:flex;flex-direction:column;gap:8px;max-width:640px;min-width:0}
 .where .eyebrow{color:var(--jaune)}
-.where h2{font-size:clamp(44px,6vw,96px);line-height:.92;letter-spacing:-.045em;text-wrap:balance}
-.where__lead{font-size:18px;color:#BFE6F2;max-width:46ch}
-.where__stats{display:flex;gap:16px}
-.where__stats div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:16px 22px;min-width:150px}
-.where__stats b{display:block;font-size:52px;line-height:1;font-weight:800;letter-spacing:-.03em}
+.where h2{font-size:clamp(32px,3.6vw,52px);line-height:1;letter-spacing:-.045em;text-wrap:balance}
+.where__lead{font-size:16px;color:#BFE6F2;max-width:52ch}
+.where__stats{display:flex;gap:10px}
+.where__stats div{display:flex;align-items:baseline;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 16px}
+.where__stats b{font-size:24px;line-height:1;font-weight:800}
 .where__stats .open b{color:var(--jaune)}
 .where__stats span{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#BFE6F2}
-.where__chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.where__chips button{font:inherit;font-size:14px;font-weight:700;color:#fff;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.3);border-radius:999px;padding:9px 16px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.where__chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.where__chips button{font:inherit;font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 13px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .where__chips button:hover{border-color:#fff}
 .where__chips button[aria-pressed="true"]{background:var(--jaune);border-color:var(--jaune);color:var(--marine-deep)}
-.where__map{position:relative;height:clamp(440px,66vh,700px);border-radius:32px;background:radial-gradient(120% 90% at 30% 30%,#06557A 0%,#043A54 55%,#032B3E 100%);border:1px solid rgba(255,255,255,.14);overflow:hidden;touch-action:pan-y}
+.where__map{position:relative;height:clamp(320px,48vh,440px);border-radius:24px;background:radial-gradient(120% 90% at 30% 30%,#06557A 0%,#043A54 55%,#032B3E 100%);border:1px solid rgba(255,255,255,.14);overflow:hidden;touch-action:pan-y}
 .where__map canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .where__pins{position:absolute;inset:0}
 .wpin{position:absolute;left:0;top:0;border:0;background:none;padding:0;cursor:pointer;font:inherit;color:var(--marine-deep);display:flex;align-items:center;gap:8px;white-space:nowrap}
@@ -560,16 +560,16 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 .where__legend i{width:12px;height:12px;border-radius:50%;background:var(--jaune)}
 .where__legend i.s{background:transparent;box-shadow:inset 0 0 0 2.5px #fff}
 .where__card[hidden],.where__back[hidden],.where__legend[hidden]{display:none}
-.where__list{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.where__list button{all:unset;box-sizing:border-box;width:100%;display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);cursor:pointer;transition:background .2s,border-color .2s}
-.where__list button b{font-size:17px}
-.where__list button small{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9FD6E8}
+.where__list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.where__list button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);cursor:pointer;transition:background .2s,border-color .2s}
+.where__list button b{font-size:14px}.where__list button::before{content:"";width:9px;height:9px;border-radius:50%;box-shadow:inset 0 0 0 2px #fff}.where__list li.open button::before{background:var(--jaune);box-shadow:none}
+.where__list button small{display:none}
 .where__list li.open button small{color:var(--jaune)}
 .where__list button:hover,.where__list button:focus-visible,.where__list button.on{background:rgba(255,255,255,.14);border-color:#fff;outline:none}
 .where__list li.dim{opacity:.35}
-.where__cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:28px}
-.where__cta p{color:#BFE6F2;font-size:16px}
-@media (max-width:900px){.where{padding-block:72px 80px}.where__map{height:auto;aspect-ratio:1}.where__list{grid-template-columns:repeat(2,minmax(0,1fr))}.where__stats div{min-width:0;padding:12px 16px}.where__stats b{font-size:40px}.where__card{left:12px;right:12px;bottom:12px;top:auto;max-width:none;padding:12px 16px}.where__card b{font-size:19px}.where__legend{top:12px;bottom:auto;left:auto;right:12px;font-size:11px;padding:6px 10px;gap:10px}}
+.where__cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:18px}
+.where__cta p{color:#BFE6F2;font-size:15px}
+@media (max-width:900px){.where{padding-block:52px 56px}.where__map{height:auto;aspect-ratio:1.15}.where__stats div{padding:6px 12px}.where__stats b{font-size:20px}.where__card{left:12px;right:12px;bottom:12px;top:auto;max-width:none;padding:12px 16px}.where__card b{font-size:19px}.where__legend{top:12px;bottom:auto;left:auto;right:12px;font-size:11px;padding:6px 10px;gap:10px}}
 </style>
 
 <div id="cupShadow" aria-hidden="true"></div>
@@ -835,7 +835,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <div>
         <span class="eyebrow">Find Paradice</span>
         <h2 id="where-title">Paradice across the Southwest.</h2>
-        <p class="where__lead">Two trailers serving the Las Vegas Valley today. Southern California, Phoenix and Dallas are next. Tap a city to zoom in.</p>
+        <p class="where__lead">Serving the Las Vegas Valley today. Southern California, Phoenix and Dallas are next.</p>
       </div>
       <div class="where__stats"><div class="open"><b>2</b><span>Open now</span></div><div><b>6</b><span>Coming soon</span></div></div>
     </div>
@@ -920,7 +920,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     ];
     const CL = [
       { id:'NV', name:'Las Vegas Valley', short:'Las Vegas', ids:['lv','hd'], view:{ lon:-115.06, lat:36.1, span:1.3 }, mside:'above' },
-      { id:'CA', name:'Southern California', ids:['la','pa','rv','sd'], short:'SoCal', view:{ lon:-117.55, lat:33.45, span:5.2 }, side:'below', mside:'left' },
+      { id:'CA', name:'Southern California', ids:['la','pa','rv','sd'], short:'SoCal', view:{ lon:-117.55, lat:33.45, span:5.2 }, side:'below', mside:'below' },
       { id:'AZ', name:'Phoenix', short:'Phoenix', ids:['px'], view:{ lon:-112.07, lat:33.45, span:3.2 }, mside:'below' },
       { id:'TX', name:'Dallas', short:'Dallas', ids:['dl'], view:{ lon:-96.8, lat:32.78, span:3.2 }, side:'left', mside:'below' }
     ];
