@@ -960,7 +960,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   (function(){
     const cv = $('#trailerCanvas'); if (!cv) return;
     const cx = cv.getContext('2d'), N = 72, imgs = new Array(N), ok = new Uint8Array(N);
-    const TW = 1400, TH = 875; cv.width = TW; cv.height = TH;
+    const TW = 1600, TH = 1000; cv.width = TW; cv.height = TH;
     let started = false, last = -1, shown = 0, angT = 0, velT = 0, dragT = false, lxT = 0;
     const box = cv.parentElement;
     box.addEventListener('pointerdown', e => { dragT = true; lxT = e.clientX; velT = 0; box.classList.add('dragging'); box.setPointerCapture(e.pointerId); });
@@ -970,10 +970,14 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     box.tabIndex = 0;
     box.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { velT = 0.02; e.preventDefault(); } if (e.key === 'ArrowRight') { velT = -0.02; e.preventDefault(); } });
     const sec = $('#own');
+    // loads only when the viewer is opened: coarse angles first, then the rest, 6 at a time
     function start(){ if (started) return; started = true;
-      for (let f = 0; f < N; f++){ const im = new Image(); im.onload = () => (im.decode ? im.decode() : Promise.resolve()).catch(()=>{}).then(() => { imgs[f] = im; ok[f] = 1; last = -1; });
-        im.src = `assets/trailer/${String(f).padStart(3,'0')}.webp?v=4`; } }
-    new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) start(); }), { rootMargin: '800px 0px' }).observe(sec);
+      const order = []; for (const st of [12, 6, 3, 1]) for (let f = 0; f < N; f += st) if (!order.includes(f)) order.push(f);
+      let i = 0; const next = () => { if (i >= order.length) return; const f = order[i++]; const im = new Image();
+        im.onload = () => (im.decode ? im.decode() : Promise.resolve()).catch(()=>{}).then(() => { imgs[f] = im; ok[f] = 1; last = -1; next(); });
+        im.onerror = next; im.src = `assets/trailer/${String(f).padStart(3,'0')}.webp?v=5`; };
+      for (let k = 0; k < 6; k++) next(); }
+    window.__trailerStart = start;
     function pick(f){ if (ok[f]) return imgs[f]; for (let d = 1; d < N/2; d++){ if (ok[(f+d)%N]) return imgs[(f+d)%N]; if (ok[(f-d+N)%N]) return imgs[(f-d+N)%N]; } return null; }
     function tick(){
       const r = cv.getBoundingClientRect();
@@ -1075,8 +1079,9 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     tabs.forEach((t, k) => { t.addEventListener('click', () => show(t));
       t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){ e.preventDefault(); const n = tabs[(k + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; show(n); n.focus(); } }); });
     const m = $('#bizModal'), open = $('#biz3d');
-    const vis = v => { m.hidden = !v; document.documentElement.style.overflow = v ? 'hidden' : ''; (v ? m.querySelector('.biz__trailer') : open).focus(); };
+    const vis = v => { if (v && window.__trailerStart) window.__trailerStart(); m.hidden = !v; document.documentElement.style.overflow = v ? 'hidden' : ''; (v ? m.querySelector('.biz__trailer') : open).focus(); };
     open.addEventListener('click', () => vis(true));
+    ['pointerenter','focus','touchstart'].forEach(ev => open.addEventListener(ev, () => window.__trailerStart && window.__trailerStart(), { once: true, passive: true }));
     $('#bizClose').addEventListener('click', () => vis(false));
     m.addEventListener('click', e => { if (e.target === m) vis(false); });
     addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) vis(false); });
