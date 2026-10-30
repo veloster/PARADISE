@@ -408,7 +408,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .biz__right{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:20px}
 .biz__trailer{cursor:grab;touch-action:pan-y;user-select:none;position:relative;width:100%;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center}
 .biz__trailer.dragging{cursor:grabbing}
-.biz__trailer:focus{outline:none}.biz__trailer:focus-visible{outline:2px solid rgba(255,255,255,.55);outline-offset:4px;border-radius:20px}
+.biz__trailer:focus,.biz__trailer:focus-visible{outline:none}
 .biz__trailer canvas{pointer-events:none;position:relative;z-index:1;width:100%;height:100%;object-fit:contain}
 .biz__trailer::after{content:"";position:absolute;left:18%;right:18%;bottom:13%;height:9%;border-radius:50%;background:radial-gradient(closest-side,rgba(1,20,30,.55),rgba(1,20,30,0));z-index:0}
 .biz__hint{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FD6E8}
@@ -991,7 +991,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       const order = []; for (const st of [12, 6, 3, 1]) for (let f = 0; f < N; f += st) if (!order.includes(f)) order.push(f);
       let i = 0; const next = () => { if (i >= order.length) return; const f = order[i++]; const im = new Image();
         im.onload = () => (im.decode ? im.decode() : Promise.resolve()).catch(()=>{}).then(() => { imgs[f] = im; ok[f] = 1; last = -1; next(); });
-        im.onerror = next; im.src = `assets/trailer/${String(f).padStart(3,'0')}.webp?v=5`; };
+        im.onerror = next; im.src = `assets/trailer/${String(f).padStart(3,'0')}.webp?v=6`; };
       for (let k = 0; k < 6; k++) next(); }
     window.__trailerStart = start;
     function pick(f){ if (ok[f]) return imgs[f]; for (let d = 1; d < N/2; d++){ if (ok[(f+d)%N]) return imgs[(f+d)%N]; if (ok[(f-d+N)%N]) return imgs[(f-d+N)%N]; } return null; }
@@ -1042,7 +1042,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   /* ---------- form delivery (FormSubmit → e-mail) ---------- */
   const MAIL_FRANCHISE = 'info@paradicelv.com', MAIL_EVENTS = 'sam@paradicelv.com';
   async function sendForm(to, fields){
-    try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', ...fields }) });
+    try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', ...fields, 'Received (Las Vegas / Los Angeles time)': new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' PT' }) });
       return r.ok; } catch (_) { return false; } }
 
   /* ---------- franchise inquiry form ---------- */
