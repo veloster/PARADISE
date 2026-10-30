@@ -558,20 +558,12 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 .where__st{position:absolute;font-weight:800;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:color-mix(in srgb,var(--marine) 38%,transparent);pointer-events:none;transform:translate(-50%,-50%);white-space:nowrap;transition:opacity .3s}
 .where__back{position:absolute;left:14px;top:14px;z-index:3;font:inherit;font-size:13px;font-weight:700;color:var(--marine);background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid color-mix(in srgb,var(--marine) 20%,transparent);border-radius:999px;padding:7px 14px;cursor:pointer}
 .where__back:hover{border-color:var(--marine)}
-.where__card{position:absolute;right:14px;top:14px;z-index:3;background:var(--marine);color:#fff;border-radius:18px;padding:14px 18px;display:flex;flex-direction:column;gap:3px;max-width:min(300px,calc(100% - 28px));box-shadow:0 24px 50px -24px rgba(2,28,41,.7)}
-.where__card small{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8FE3B5}
-.where__card.soon small{color:var(--jaune)}
-.where__card b{font-size:22px;line-height:1.1}
-.where__card span{font-size:14px;color:#BFE6F2}
-.where__card button{align-self:flex-start;margin-top:6px}
-.where__card .btn--solid{background:var(--jaune);color:var(--marine-deep)}
 .where__legend{position:absolute;left:14px;bottom:14px;z-index:2;display:flex;gap:14px;font-size:12px;font-weight:700;background:rgba(255,255,255,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid color-mix(in srgb,var(--marine) 12%,transparent);border-radius:999px;padding:6px 12px}
 .where__legend span{display:flex;align-items:center;gap:6px}
 .where__legend i{width:11px;height:11px;border-radius:50%;background:var(--jaune);box-shadow:0 0 0 2px var(--marine)}
 .where__legend i.s{background:#fff;box-shadow:inset 0 0 0 2.5px var(--marine)}
-.where__card[hidden],.where__back[hidden],.where__legend[hidden]{display:none}
 .where__side .btn{align-self:flex-start;margin-top:4px}
-@media (max-width:900px){.where{padding-block:52px 56px}.where__in{grid-template-columns:minmax(0,1fr);gap:14px}.where__side{display:contents}.where__side>*{order:1}.where__map{order:2;min-height:0;height:auto;aspect-ratio:1.1}.where__list{order:3}.where__list button{padding:7px 14px 7px 10px}.where__list button b{font-size:14px}.where__side>.btn{order:4}.where__card{left:12px;right:12px;bottom:12px;top:auto;max-width:none;padding:12px 16px}.where__card b{font-size:19px}.where__legend{top:12px;bottom:auto;left:auto;right:12px;font-size:11px;padding:5px 10px;gap:10px}}
+@media (max-width:900px){.where{padding-block:52px 56px}.where__in{grid-template-columns:minmax(0,1fr);gap:14px}.where__side{display:contents}.where__side>*{order:1}.where__map{order:2;min-height:0;height:auto;aspect-ratio:1.1}.where__list{order:3}.where__list button{padding:7px 14px 7px 10px}.where__list button b{font-size:14px}.where__side>.btn{order:4}.where__legend{top:12px;bottom:auto;left:auto;right:12px;font-size:11px;padding:5px 10px;gap:10px}}
 </style>
 
 <div id="cupShadow" aria-hidden="true"></div>
@@ -847,7 +839,6 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <div class="where__pins" id="wPins"></div>
       <button type="button" class="where__back" id="wBack" hidden>← All locations</button>
       <div class="where__legend" id="wLegend" aria-hidden="true"><span><i></i>Open now</span><span><i class="s"></i>Coming soon</span></div>
-      <div class="where__card" id="wCard" hidden aria-live="polite"></div>
     </div>
   </div>
 </section>
@@ -904,7 +895,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   /* ---------- locations map: dot map, clusters that zoom ---------- */
   (() => {
     const map = $('#wMap'); if (!map) return;
-    const cv = $('#wCanvas'), ctx = cv.getContext('2d'), pinsEl = $('#wPins'), back = $('#wBack'), card = $('#wCard'), legend = $('#wLegend'), list = $('#wList');
+    const cv = $('#wCanvas'), ctx = cv.getContext('2d'), pinsEl = $('#wPins'), back = $('#wBack'), legend = $('#wLegend'), list = $('#wList');
     const US = [[-124.7,48.4],[-124.1,46.3],[-124.4,43],[-124.2,40.4],[-123.8,39.4],[-122.5,37.8],[-122.4,37.2],[-121.9,36.6],[-121.3,35.6],[-120.6,34.5],[-119.2,34.15],[-118.8,34.02],[-118.5,34.03],[-118.42,33.75],[-118.2,33.74],[-117.9,33.6],[-117.7,33.46],[-117.38,33.2],[-117.28,32.85],[-117.24,32.68],[-117.12,32.53],[-114.7,32.7],[-111,31.3],[-108.2,31.3],[-106.5,31.8],[-104.9,30.6],[-103.1,29],[-101.4,29.8],[-99.5,27.5],[-97.4,25.9],[-97.2,27.8],[-96.5,28.6],[-94,29.7],[-91.5,29.4],[-89.8,29.1],[-89.2,30.3],[-87.5,30.3],[-85.3,29.7],[-84,30],[-82.9,29.1],[-82.7,27.5],[-81.9,26.4],[-81.1,25.2],[-80.4,25.2],[-80.1,26.9],[-80.6,28.4],[-81.3,30],[-81.4,31.3],[-80,32.5],[-78.7,33.8],[-77.8,34.5],[-75.8,35.5],[-75.9,36.9],[-75.1,38.4],[-74,40.5],[-72,41.1],[-70,41.6],[-70.7,42.7],[-70.2,43.6],[-68.5,44.4],[-67,44.8],[-67.8,47.1],[-69.2,47.4],[-71.5,45],[-74.8,45],[-76.8,43.6],[-79.1,43.3],[-79,42.6],[-81.5,41.7],[-82.9,42.1],[-82.5,43.5],[-83.4,45.8],[-84.8,45.9],[-86.5,46.5],[-88.4,48.3],[-90,48],[-92,46.7],[-95.1,49],[-104,49],[-116,49],[-123.3,49]];
     const BORDERS = [[[-120,42],[-120,39],[-114.63,35.0]],[[-114.05,42],[-114.05,37]],[[-114.05,37],[-109.05,37]],[[-114.63,35.0],[-114.6,34.3],[-114.4,34.1],[-114.7,32.7]],[[-109.05,37],[-109.05,31.33]],[[-103.06,37],[-103.06,32],[-106.6,32]],[[-103,36.5],[-100,36.5],[-100,34.56],[-95.5,33.9],[-94.04,33.55],[-94.04,31],[-93.6,29.8]]];
     const STATES = [{t:'Nevada',lon:-116.8,lat:39.2},{t:'California',lon:-119.6,lat:35.7},{t:'Arizona',lon:-110.9,lat:34.55},{t:'Texas',lon:-99.6,lat:31.3},{t:'Utah',lon:-111.6,lat:39.4},{t:'New Mexico',lon:-106.1,lat:34.4}];
@@ -977,7 +968,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       anim = requestAnimationFrame(step);
     }
     function fitSpan(v){ return W && H && W / H < 1.1 ? v.span * 1.15 : v.span; }
-    function showCard(l){ if (!l){ card.hidden = true; return; } card.hidden = false; card.classList.toggle('soon', !l.open); card.innerHTML = l.open ? `<small>Open now · ${l.area}</small><b>${l.city}, ${l.st}</b><span>Follow @paradicelv for today's spot.</span>` : `<small>Coming soon · ${l.area}</small><b>${l.city}, ${l.st}</b><span>Want to run Paradice here? Talk to our franchise team.</span><button type="button" class="btn btn--solid">Talk to our team <span class="arr" aria-hidden="true">↗</span></button>`; const cb = card.querySelector('button'); if (cb) cb.addEventListener('click', () => { const f = document.querySelector('[data-fran]'); if (f) f.click(); }); }
+    function showCard(){}
     function zoomTo(r, withCard){
       region = r; sel = null; showCard(null);
       chips.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.r === r)));
@@ -985,12 +976,12 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       list.querySelectorAll('button').forEach(b => b.classList.remove('on'));
       back.hidden = r === 'all';
       if (r === 'all'){ fly({ ...ALL, span: fitSpan(ALL) }); return; }
-      const c = CL.find(x => x.id === r), sp = fitSpan(c.view); fly({ ...c.view, span: sp, lat: c.view.lat - (withCard && W < 560 ? sp * K * (H / W) * 0.14 : 0) });
+      const c = CL.find(x => x.id === r), sp = fitSpan(c.view); fly({ ...c.view, span: sp, lat: c.view.lat });
     }
     function pick(id){
       const l = LOC.find(x => x.id === id), c = CL.find(x => x.ids.includes(id));
       if (region !== c.id) zoomTo(c.id, true);
-      if (W < 560){ const sp = Math.min(fitSpan(c.view), 2.2); fly({ lon: l.lon, lat: l.lat - sp * K * (H / W) * 0.2, span: sp }); }
+      if (W < 560){ const sp = Math.min(fitSpan(c.view), 2.2); fly({ lon: l.lon, lat: l.lat, span: sp }); }
       sel = id; showCard(l); draw();
       list.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.id === id));
     }
