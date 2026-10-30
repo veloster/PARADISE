@@ -52,7 +52,8 @@ p{margin:0}
 .no-blur .nav{backdrop-filter:none;background:color-mix(in srgb, var(--cyan-pale) 96%, transparent)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--cyan-pale)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
-.nav img{height:72px;width:auto;margin-block:-10px;filter:drop-shadow(0 2px 6px rgba(5,70,100,.18))}
+.nav img{height:46px;width:auto;display:block;filter:drop-shadow(0 2px 4px rgba(5,70,100,.16))}
+@media (max-width:600px){.nav img{height:34px}.nav .wrap{flex-wrap:nowrap}}
 .nav__links{display:flex;gap:26px;flex-wrap:wrap}
 .nav__links a{text-decoration:none;font-weight:500;font-size:16px}
 @media (max-width:720px){.nav__links{display:none}}
@@ -113,7 +114,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (orientation:landscape) and (max-height:500px){
   .nav__links{display:none}
   .nav .wrap{padding-block:8px;flex-wrap:nowrap}
-  .nav img{height:48px;margin-block:-4px}
+  .nav img{height:34px}
   .hero .wrap{flex-wrap:nowrap;padding-block:8px 24px;gap:16px}
   .hero__text{flex:1 1 0;gap:12px}
   .hero__text h1{font-size:clamp(32px,5.6vw,48px)}
@@ -457,7 +458,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 
 <header class="nav">
   <div class="wrap">
-    <a href="#top" aria-label="Paradice home" class="nav__logo"><img src="assets/logo-paradice-160.webp" srcset="assets/logo-paradice-160.webp 160w, assets/logo-paradice-320.webp 320w" sizes="64px" width="160" height="154" alt="Paradice Caribbean Shaved Ice"></a>
+    <a href="#top" aria-label="Paradice home" class="nav__logo"><img src="assets/wordmark-paradice-480.webp" srcset="assets/wordmark-paradice-480.webp 480w, assets/wordmark-paradice-960.webp 960w" sizes="220px" width="480" height="103" alt="Paradice"></a>
     <nav class="nav__links" aria-label="Main">
       <a href="#flavors">Our flavors</a><a href="#offer">What we offer</a><a href="#events">Events</a><a href="#own">Franchise</a><a href="#club">Birthday Club</a>
     </nav>
@@ -480,7 +481,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     </div>
     <div class="hero__visual">
       <div class="sun" id="sun" aria-hidden="true"></div>
-      <img class="fallback-cup" src="assets/seq/tri/000.webp?v=3" alt="" aria-hidden="true">
+      <img class="fallback-cup" src="assets/seq/tri/000.webp?v=4" alt="" aria-hidden="true">
       <div class="fruits" aria-hidden="true">
         <span class="fr" data-depth="1.3" style="left:2%;top:8%;width:19%;z-index:31"><img src="assets/fruit-fraise.webp" alt="" style="--r:-14deg"></span>
         <span class="fr" data-depth="0.6" style="right:6%;top:44%;width:13%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:18deg"></span>
@@ -585,7 +586,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 </section>
 
 <section class="quote" id="events" aria-labelledby="party-title">
-  <div class="quote__bg" id="qbg" aria-hidden="true"><img class="on" data-k="birthday" src="assets/enfants.jpg?v=4" alt="" loading="eager"><img data-k="school" src="assets/events-bg.jpg?v=3" alt="" loading="lazy"><img data-k="corporate" src="assets/merch.jpg?v=3" alt="" loading="lazy"><img data-k="festival" src="assets/remorque-guichet.jpg" alt="" loading="lazy"><img data-k="community" src="assets/remorque-arriere.jpg" alt="" loading="lazy"><img data-k="carnival" src="assets/offer-musique.webp" alt="" loading="lazy"></div>
+  <div class="quote__bg" id="qbg" aria-hidden="true"><img class="on" data-k="birthday" src="assets/enfants.jpg?v=5" alt="" loading="eager"><img data-k="school" src="assets/events-bg.jpg?v=4" alt="" loading="lazy"><img data-k="corporate" src="assets/merch.jpg?v=3" alt="" loading="lazy"><img data-k="festival" src="assets/remorque-guichet.jpg" alt="" loading="lazy"><img data-k="community" src="assets/remorque-arriere.jpg" alt="" loading="lazy"><img data-k="carnival" src="assets/offer-musique.webp" alt="" loading="lazy"></div>
   <div class="quote__shade" aria-hidden="true"></div>
   <div class="wrap">
     <form class="quote__box" id="qform">
@@ -668,7 +669,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 </section>
 
 <section class="club" id="club" aria-labelledby="club-title">
-  <div class="club__bg" aria-hidden="true"><img class="para" src="assets/club-bg.jpg?v=9" alt=""></div>
+  <div class="club__bg" aria-hidden="true"><img class="para" src="assets/club-bg.jpg?v=10" alt=""></div>
   <div class="club__shade" aria-hidden="true"></div>
   <div class="wrap club__wrap">
     <div class="club__box">
@@ -782,7 +783,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   function load(si, f){ const pk = f >> 1; if (pending[si].has(pk)) return pending[si].get(pk);
     const pr = new Promise(res => { const im = new Image();
       im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).catch(() => {}).then(() => { for (let k = 0; k < 2; k++){ frames[si][pk * 2 + k] = { im, x: k * CROP.w }; ready[si][pk * 2 + k] = 1; } dirty = true; res(); }); };
-      im.onerror = res; im.src = `assets/seq7/${SEQ[si]}/p${String(pk).padStart(2,'0')}.webp?v=9`; });
+      im.onerror = res; im.src = `assets/seq7/${SEQ[si]}/p${String(pk).padStart(2,'0')}.webp?v=10`; });
     pending[si].set(pk, pr); return pr; }
   (async () => {
     // coarse first (every 8th frame), then fill in, so the cup turns early and gets smoother as it loads
