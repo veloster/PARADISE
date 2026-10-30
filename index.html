@@ -739,30 +739,29 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     <div class="club__box">
       <span class="eyebrow" style="color:var(--jaune)">Paradice Birthday Club</span>
       <h2 id="club-title">Every birthday deserves a <em>free cup.</em></h2>
-      <p class="club__lead">Join once. Every year we text you: your free cup is waiting at the trailer.</p>
+      <p class="club__lead">Join once. Every year we e-mail you: your free cup is waiting at the trailer.</p>
       <form class="club__form" id="clubForm" novalidate>
         <div class="cstep on" data-s="1">
           <div class="club__names"><label class="club__in"><input id="cFirst" aria-label="First name" placeholder="First name" autocomplete="given-name"></label><label class="club__in"><input id="cLast" aria-label="Last name" placeholder="Last name" autocomplete="family-name"></label></div>
-          <label class="club__in"><input id="cPhone" aria-label="Mobile number" placeholder="Your mobile number" inputmode="tel" autocomplete="tel"><button class="btn btn--sun" type="button" data-next="2">Text me a code <span class="arr" aria-hidden="true">↗</span></button></label>
-          <p class="club__fine">One account per phone number · we never spam · the free cup is redeemed at the trailer</p>
+          <label class="club__in"><input id="cEmail" type="email" aria-label="E-mail address" placeholder="Your e-mail address" inputmode="email" autocomplete="email"><button class="btn btn--sun" type="button" data-next="2">E-mail me a code <span class="arr" aria-hidden="true">↗</span></button></label>
+          <p class="club__fine">One account per e-mail address · we never spam · the free cup is redeemed at the trailer</p>
         </div>
         <div class="cstep" data-s="2">
-          <div class="club__sms"><small>SMS · Paradice</small>Your Paradice code is <b>482 913</b> · expires in 10 min <em>(prototype)</em></div>
+          <div class="club__sms"><small>E-mail · Paradice</small>Your Paradice code is <b>482 913</b> · expires in 10 min <em>(prototype)</em></div>
           <label class="club__in"><input aria-label="6-digit code" placeholder="6-digit code" inputmode="numeric" maxlength="7"><button class="btn btn--sun" type="button" data-next="3">Verify <span class="arr" aria-hidden="true">↗</span></button></label>
         </div>
         <div class="cstep" data-s="3">
           <div class="club__grid">
             <label><span>Birthday · locked after sign-up</span><input placeholder="MM / DD" inputmode="numeric"></label>
             <label><span>ZIP code</span><input placeholder="89052" inputmode="numeric" autocomplete="postal-code"></label>
-            <label><span>E-mail · optional</span><input placeholder="you@email.com" type="email" autocomplete="email"></label>
           </div>
           <button class="btn btn--sun" type="submit">Join the club <span class="arr" aria-hidden="true">↗</span></button>
         </div>
         <div class="cstep" data-s="4">
-          <div class="club__done" role="status"><span class="eyebrow" style="color:var(--jaune)">You're in</span><b>See you on your birthday.</b><span>We'll text your one-time code a few days before. Show it at the counter, we hand you the cup.</span><small>Prototype: sign-ups will go to [À CONFIRMER : base Supabase / LOYTI + SMS Twilio]</small></div>
+          <div class="club__done" role="status"><span class="eyebrow" style="color:var(--jaune)">You're in</span><b>See you on your birthday.</b><span>We'll e-mail your one-time code a few days before. Show it at the counter, we hand you the cup.</span><small>Prototype: sign-ups will go to [À CONFIRMER : base Supabase / LOYTI + e-mails]</small></div>
         </div>
       </form>
-      <ol class="club__steps" aria-label="How it works"><li><i>1</i>Your phone</li><li><i>2</i>Code by text</li><li><i>3</i>Your birthday</li><li><i>🎂</i>Free cup, every year</li></ol>
+      <ol class="club__steps" aria-label="How it works"><li><i>1</i>Your e-mail</li><li><i>2</i>Code by e-mail</li><li><i>3</i>Your birthday</li><li><i>🎂</i>Free cup, every year</li></ol>
     </div>
   </div>
 </section>
