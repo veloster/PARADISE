@@ -10,7 +10,7 @@
 <style>
 /* Layout: one fixed WebGL cup that travels between DOM anchors; colour bands stacked like Mercely's; a sticky flavour stage drives syrup colour. */
 :root{
-  --marine:#054664; --marine-deep:#032B3E; --jaune:#FDC208; --cyan:#00BADD; --grenadine:#D7263D;
+  --marine:#054664; --marine-deep:#032B3E; --rose:#E8508F; --rose-ink:#C2346E; --jaune:#FDC208; --cyan:#00BADD; --grenadine:#D7263D;
   --cyan-pale:#D9F4FA; --jaune-pale:#FFF1BF; --blanc:#FFFFFF;
   --font:"Bricolage Grotesque", ui-rounded, "Avenir Next", system-ui, sans-serif;
   --gutter-l:max(16px, env(safe-area-inset-left, 0px)); --gutter-r:max(16px, env(safe-area-inset-right, 0px));
@@ -24,7 +24,8 @@ img{max-width:100%;display:block}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--marine);outline-offset:3px;border-radius:6px}
 .wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
-.eyebrow{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-ink)}
+.flv .eyebrow{color:inherit}
 h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.03em;text-wrap:balance}
 h1{font-size:clamp(52px,7.4vw,108px);line-height:.92}
 h2{font-size:clamp(40px,5vw,72px);line-height:.96}
@@ -66,7 +67,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .sun{position:absolute;width:min(500px,92%);aspect-ratio:1;border-radius:50%;background:var(--jaune);will-change:transform}
 .anchor{position:absolute;inset:2% 18% 4%;}
 .sticker{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:50%;font-weight:800;text-transform:uppercase;line-height:1;z-index:31;pointer-events:none}
-.sticker--hero{top:4%;right:2%;width:128px;height:128px;background:var(--marine);color:var(--blanc);font-size:18px;transform:rotate(12deg)}
+.sticker--hero{top:4%;right:2%;width:128px;height:128px;background:var(--rose);color:var(--blanc);font-size:16px;box-shadow:0 0 0 5px #fff,0 10px 24px -8px rgba(194,52,110,.55);transform:rotate(12deg)}
 .fruits,.fsets,.fset{position:absolute;inset:0;pointer-events:none}
 .fr{position:absolute;display:block;will-change:transform}
 .fr img{width:100%;display:block;transform:rotate(var(--r,0deg));filter:drop-shadow(0 14px 18px rgba(3,43,62,.22))}
@@ -83,7 +84,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .bandwrap{position:relative;z-index:5;margin-bottom:-72px}
 .band{background:var(--marine);color:var(--blanc);overflow:hidden}
 .marquee{display:flex;width:max-content;gap:48px;padding-block:14px 18px;font-weight:800;font-size:clamp(24px,3vw,40px);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;will-change:transform}
-.marquee span b{color:var(--cyan);font-weight:800;margin-left:48px}
+.marquee span b{color:var(--rose);font-weight:800;margin-left:48px}
 
 /* flavour stage */
 .flavors{position:relative;height:440vh}
@@ -479,7 +480,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     </div>
     <div class="hero__visual">
       <div class="sun" id="sun" aria-hidden="true"></div>
-      <img class="fallback-cup" src="assets/seq/tri/000.webp?v=2" alt="" aria-hidden="true">
+      <img class="fallback-cup" src="assets/seq/tri/000.webp?v=3" alt="" aria-hidden="true">
       <div class="fruits" aria-hidden="true">
         <span class="fr" data-depth="1.3" style="left:2%;top:8%;width:19%;z-index:31"><img src="assets/fruit-fraise.webp" alt="" style="--r:-14deg"></span>
         <span class="fr" data-depth="0.6" style="right:6%;top:44%;width:13%;z-index:29"><img src="assets/fruit-citron-vert.webp" alt="" style="--r:18deg"></span>
@@ -490,7 +491,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         <span class="fr" data-depth="2.2" style="right:12%;bottom:0%;width:14%;z-index:31"><img src="assets/fruit-grenade.webp" alt="" style="--r:30deg"></span>
       </div>
       <div class="anchor" id="anchorHero" aria-hidden="true"></div>
-      <div class="sticker sticker--hero" id="stickerHero" aria-hidden="true">Island<br>syrups<br>only</div>
+      <div class="sticker sticker--hero" id="stickerHero" aria-hidden="true">Caribbean<br>shaved<br>ice</div>
     </div>
   </div>
 </section>
@@ -584,7 +585,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 </section>
 
 <section class="quote" id="events" aria-labelledby="party-title">
-  <div class="quote__bg" id="qbg" aria-hidden="true"><img class="on" data-k="birthday" src="assets/enfants.jpg?v=2" alt="" loading="eager"><img data-k="school" src="assets/events-bg.jpg?v=2" alt="" loading="lazy"><img data-k="corporate" src="assets/merch.jpg?v=2" alt="" loading="lazy"><img data-k="festival" src="assets/remorque-guichet.jpg" alt="" loading="lazy"><img data-k="community" src="assets/remorque-arriere.jpg" alt="" loading="lazy"><img data-k="carnival" src="assets/offer-musique.webp" alt="" loading="lazy"></div>
+  <div class="quote__bg" id="qbg" aria-hidden="true"><img class="on" data-k="birthday" src="assets/enfants.jpg?v=3" alt="" loading="eager"><img data-k="school" src="assets/events-bg.jpg?v=3" alt="" loading="lazy"><img data-k="corporate" src="assets/merch.jpg?v=3" alt="" loading="lazy"><img data-k="festival" src="assets/remorque-guichet.jpg" alt="" loading="lazy"><img data-k="community" src="assets/remorque-arriere.jpg" alt="" loading="lazy"><img data-k="carnival" src="assets/offer-musique.webp" alt="" loading="lazy"></div>
   <div class="quote__shade" aria-hidden="true"></div>
   <div class="wrap">
     <form class="quote__box" id="qform">
@@ -667,7 +668,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 </section>
 
 <section class="club" id="club" aria-labelledby="club-title">
-  <div class="club__bg" aria-hidden="true"><img class="para" src="assets/club-bg.jpg?v=8" alt=""></div>
+  <div class="club__bg" aria-hidden="true"><img class="para" src="assets/club-bg.jpg?v=9" alt=""></div>
   <div class="club__shade" aria-hidden="true"></div>
   <div class="wrap club__wrap">
     <div class="club__box">
@@ -781,7 +782,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   function load(si, f){ const pk = f >> 1; if (pending[si].has(pk)) return pending[si].get(pk);
     const pr = new Promise(res => { const im = new Image();
       im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).catch(() => {}).then(() => { for (let k = 0; k < 2; k++){ frames[si][pk * 2 + k] = { im, x: k * CROP.w }; ready[si][pk * 2 + k] = 1; } dirty = true; res(); }); };
-      im.onerror = res; im.src = `assets/seq7/${SEQ[si]}/p${String(pk).padStart(2,'0')}.webp?v=8`; });
+      im.onerror = res; im.src = `assets/seq7/${SEQ[si]}/p${String(pk).padStart(2,'0')}.webp?v=9`; });
     pending[si].set(pk, pr); return pr; }
   (async () => {
     // coarse first (every 8th frame), then fill in, so the cup turns early and gets smoother as it loads
