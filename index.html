@@ -461,6 +461,8 @@ button.btn{font-family:inherit;line-height:inherit;cursor:pointer;-webkit-appear
 .club__grid input{font:inherit;font-size:16px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:12px 14px;outline:none;min-width:0;width:100%}
 .club__grid input:focus{border-color:#fff}.club__grid input::placeholder{color:#8FC6DB}
 .club__form .btn{align-self:flex-start}
+.club__err{margin:0;min-height:1.2em;font-size:14px;font-weight:700;color:#FFB3B3}
+.club__in.bad{border-color:#FF8A8A;box-shadow:0 0 0 3px rgba(255,138,138,.25)}.club__grid label.bad input{border-color:#FF8A8A}
 .club__done{background:#fff;color:var(--marine);border-radius:22px;padding:22px 24px;display:flex;flex-direction:column;gap:6px;max-width:560px;animation:cpop .5s cubic-bezier(.2,.8,.2,1) both}
 .club__done b{font-size:28px;line-height:1.05;letter-spacing:-.02em}.club__done small{color:#6A8B9B;font-size:12px;margin-top:6px}
 @keyframes cpop{from{opacity:0;transform:translateY(12px)}}
@@ -743,25 +745,22 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <form class="club__form" id="clubForm" novalidate>
         <div class="cstep on" data-s="1">
           <div class="club__names"><label class="club__in"><input id="cFirst" aria-label="First name" placeholder="First name" autocomplete="given-name"></label><label class="club__in"><input id="cLast" aria-label="Last name" placeholder="Last name" autocomplete="family-name"></label></div>
-          <label class="club__in"><input id="cEmail" type="email" aria-label="E-mail address" placeholder="Your e-mail address" inputmode="email" autocomplete="email"><button class="btn btn--sun" type="button" data-next="2">E-mail me a code <span class="arr" aria-hidden="true">↗</span></button></label>
+          <label class="club__in"><input id="cEmail" type="email" aria-label="E-mail address" placeholder="Your e-mail address" inputmode="email" autocomplete="email"><button class="btn btn--sun" type="button" id="cNext">Continue <span class="arr" aria-hidden="true">↗</span></button></label>
           <p class="club__fine">One account per e-mail address · we never spam · the free cup is redeemed at the trailer</p>
-        </div>
-        <div class="cstep" data-s="2">
-          <div class="club__sms"><small>E-mail · Paradice</small>Your Paradice code is <b>482 913</b> · expires in 10 min <em>(prototype)</em></div>
-          <label class="club__in"><input aria-label="6-digit code" placeholder="6-digit code" inputmode="numeric" maxlength="7"><button class="btn btn--sun" type="button" data-next="3">Verify <span class="arr" aria-hidden="true">↗</span></button></label>
         </div>
         <div class="cstep" data-s="3">
           <div class="club__grid">
-            <label><span>Birthday · locked after sign-up</span><input placeholder="MM / DD" inputmode="numeric"></label>
-            <label><span>ZIP code</span><input placeholder="89052" inputmode="numeric" autocomplete="postal-code"></label>
+            <label><span>Birthday · locked after sign-up</span><input id="cBday" placeholder="MM / DD" inputmode="numeric" maxlength="7"></label>
+            <label><span>ZIP code</span><input id="cZip" placeholder="89052" inputmode="numeric" autocomplete="postal-code" maxlength="10"></label>
           </div>
           <button class="btn btn--sun" type="submit">Join the club <span class="arr" aria-hidden="true">↗</span></button>
         </div>
+        <p class="club__err" id="cErr" role="alert"></p>
         <div class="cstep" data-s="4">
-          <div class="club__done" role="status"><span class="eyebrow" style="color:var(--jaune)">You're in</span><b>See you on your birthday.</b><span>We'll e-mail your one-time code a few days before. Show it at the counter, we hand you the cup.</span><small>Prototype: sign-ups will go to [À CONFIRMER : base Supabase / LOYTI + e-mails]</small></div>
+          <div class="club__done" role="status"><span class="eyebrow" style="color:var(--jaune)">You're in</span><b>See you on your birthday.</b><span>We'll e-mail you a few days before your birthday. Show it at the trailer, we hand you the cup.</span></div>
         </div>
       </form>
-      <ol class="club__steps" aria-label="How it works"><li><i>1</i>Your e-mail</li><li><i>2</i>Code by e-mail</li><li><i>3</i>Your birthday</li><li><i>🎂</i>Free cup, every year</li></ol>
+      <ol class="club__steps" aria-label="How it works"><li><i>1</i>Your name &amp; e-mail</li><li><i>2</i>Your birthday</li><li><i>🎂</i>Free cup, every year</li></ol>
     </div>
   </div>
 </section>
@@ -791,10 +790,28 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 
   /* ---------- birthday club: inline steps ---------- */
   (function(){
-    const steps = $$('.cstep');
-    const go = n => { steps.forEach(x => x.classList.toggle('on', x.dataset.s === String(n))); const inp = $(`.cstep[data-s="${n}"] input`); if (inp) inp.focus({ preventScroll: true }); };
-    $$('#clubForm [data-next]').forEach(b => b.addEventListener('click', () => go(+b.dataset.next)));
-    $('#clubForm').addEventListener('submit', e => { e.preventDefault(); go(4); });
+    const steps = $$('.cstep'), err = $('#cErr'), f = $('#clubForm'); if (!f) return;
+    const go = n => { steps.forEach(x => x.classList.toggle('on', x.dataset.s === String(n))); err.textContent = ''; const inp = $(`.cstep[data-s="${n}"] input`); if (inp && n !== 4) inp.focus({ preventScroll: true }); };
+    const bad = (el, on) => el.closest('.club__in, label').classList.toggle('bad', on);
+    f.addEventListener('input', e => { const l = e.target.closest('.bad'); if (l) l.classList.remove('bad'); err.textContent = ''; });
+    $('#cNext').addEventListener('click', () => {
+      const fi = $('#cFirst'), la = $('#cLast'), em = $('#cEmail');
+      const ok1 = !!fi.value.trim(), ok2 = !!la.value.trim(), ok3 = !!em.value.trim() && em.checkValidity();
+      bad(fi, !ok1); bad(la, !ok2); bad(em, !ok3);
+      if (!(ok1 && ok2 && ok3)){ err.textContent = !ok3 && ok1 && ok2 ? 'Please enter a valid e-mail address.' : 'Please fill in your first name, last name and e-mail.'; return; }
+      go(3); });
+    f.addEventListener('submit', async e => { e.preventDefault();
+      const bd = $('#cBday'), zp = $('#cZip');
+      const mmdd = bd.value.replace(/\s/g, '').match(/^(\d{1,2})[\/\-.]?(\d{1,2})$/);
+      const okB = !!mmdd && +mmdd[1] >= 1 && +mmdd[1] <= 12 && +mmdd[2] >= 1 && +mmdd[2] <= 31, okZ = /^\d{5}(-\d{4})?$/.test(zp.value.trim());
+      bad(bd, !okB); bad(zp, !okZ);
+      if (!okB || !okZ){ err.textContent = !okB ? 'Enter your birthday as MM / DD.' : 'Enter a 5-digit ZIP code.'; return; }
+      const sb = f.querySelector('[type=submit]'); sb.disabled = true; err.textContent = 'Sending…';
+      const first = $('#cFirst').value.trim(), last = $('#cLast').value.trim(), email = $('#cEmail').value.trim();
+      const ok = await sendForm(MAIL_CLUB, { _subject: 'Paradice · Birthday Club · ' + first + ' ' + last, 'First name': first, 'Last name': last, 'E-mail': email, Birthday: String(mmdd[1]).padStart(2, '0') + '/' + String(mmdd[2]).padStart(2, '0'), 'ZIP code': zp.value.trim(), _replyto: email });
+      sb.disabled = false;
+      if (!ok){ err.textContent = 'Sorry, that didn\'t go through. Please try again.'; return; }
+      go(4); });
   })();
 
   /* ---------- flavour data ---------- */
@@ -1022,7 +1039,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   })();
 
   /* ---------- form delivery (FormSubmit → e-mail) ---------- */
-  const MAIL_FRANCHISE = 'info@paradicelv.com', MAIL_EVENTS = 'sam@paradicelv.com';
+  const MAIL_FRANCHISE = 'info@paradicelv.com', MAIL_EVENTS = 'sam@paradicelv.com', MAIL_CLUB = 'info@paradicelv.com';
   async function sendForm(to, fields){
     try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', ...fields, 'Received (Las Vegas / Los Angeles time)': new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' PT' }) });
       return r.ok; } catch (_) { return false; } }
