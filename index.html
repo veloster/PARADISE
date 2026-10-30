@@ -350,9 +350,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .quote__sum{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .quote__sum p{flex:1 1 260px;font-size:15px;color:#E3F4F9}
 .qcontact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.qcontact input{font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.1);color:#fff;min-width:0;width:100%}
+.qcontact input,.qcontact select{font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.1);color:#fff;min-width:0;width:100%}
 .qcontact input::placeholder{color:rgba(255,255,255,.7)}
-.qcontact input.bad{border-color:#FF8A8A;box-shadow:0 0 0 3px rgba(255,138,138,.25)}
+.qcontact select{appearance:none;-webkit-appearance:none;color-scheme:dark;cursor:pointer;padding-right:36px;background-image:linear-gradient(45deg,transparent 50%,#fff 50%),linear-gradient(135deg,#fff 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px;background-repeat:no-repeat}
+.qcontact select.empty{color:rgba(255,255,255,.7)}
+.qcontact select option{color:#032B3E;background:#fff}
+.qcontact .bad{border-color:#FF8A8A;box-shadow:0 0 0 3px rgba(255,138,138,.25)}
 @media (max-width:560px){.qcontact{grid-template-columns:minmax(0,1fr)}}
 .quote__done{font-weight:800;color:#FDC208}
 .quote__done.err{color:#FFB3B3}
@@ -636,7 +639,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
       <fieldset class="quote__step"><legend>1 · What's the occasion?</legend><div class="qchips" id="qchips"><button type="button" aria-pressed="true" data-k="birthday">Birthday</button><button type="button" aria-pressed="false" data-k="school">School &amp; camp</button><button type="button" aria-pressed="false" data-k="corporate">Corporate</button><button type="button" aria-pressed="false" data-k="festival">Festival &amp; market</button><button type="button" aria-pressed="false" data-k="community">Church &amp; community</button><button type="button" aria-pressed="false" data-k="carnival">Carnival &amp; fundraiser</button></div></fieldset>
       <div class="quote__step"><label for="qg">2 · How many guests?</label><div class="qrow"><div class="qslide"><input type="range" id="qg" min="0" max="19" step="1" value="4" aria-valuetext="50 guests"><div class="qscale" aria-hidden="true"><span style="left:0">10</span><span style="left:36.8%">100</span><span style="left:73.7%">500</span><span style="right:0">1,000</span></div></div><output id="qgo" for="qg">50</output></div></div>
       <div class="quote__step"><label for="qd">3 · When?</label><div class="qrow"><input type="date" id="qd"></div></div>
-      <fieldset class="quote__step"><legend>4 · How do we reach you?</legend><div class="qcontact"><input id="qn" name="name" placeholder="Your name" autocomplete="name" aria-label="Your name"><input id="qp" name="phone" type="tel" placeholder="Phone" autocomplete="tel" aria-label="Phone"><input id="qe" name="email" type="email" placeholder="E-mail" autocomplete="email" aria-label="E-mail"></div></fieldset>
+      <fieldset class="quote__step"><legend>4 · How do we reach you?</legend><div class="qcontact"><input id="qn" name="name" placeholder="Your name" autocomplete="name" aria-label="Your name"><input id="qp" name="phone" type="tel" placeholder="Phone" autocomplete="tel" aria-label="Phone"><input id="qe" name="email" type="email" placeholder="E-mail" autocomplete="email" aria-label="E-mail"><input id="qc" name="city" placeholder="City" autocomplete="address-level2" aria-label="City"><input id="qz" name="zip" placeholder="ZIP code" inputmode="numeric" autocomplete="postal-code" maxlength="10" aria-label="ZIP code"><select id="qs" name="state" aria-label="State"><option value="">State</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div></fieldset>
       <div class="quote__sum"><p id="qsum" aria-live="polite">Birthday · 50 guests · date to choose. Fully self-contained: no water, no power needed. We park and we pour.</p><button class="btn btn--sun" type="submit">Book us now <span class="arr" aria-hidden="true">↗</span></button></div>
       <p class="quote__done" id="qdone" role="status" hidden></p>
       <p class="quote__area">Festivals, concerts, schools, after-school programs, sporting events and private parties. We serve the <b>Las Vegas Valley</b> and <b>Southern California</b>, and travel to several states.</p>
@@ -1074,18 +1077,23 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     chips.forEach(c => c.addEventListener('click', () => { kind = c.dataset.k; chips.forEach(o => o.setAttribute('aria-pressed', String(o === c)));
       bgs.forEach(b => b.classList.toggle('on', b.dataset.k === kind)); write(); }));
     g.addEventListener('input', () => { gpaint(); write(); }); d.addEventListener('change', write);
-    const qn = $('#qn'), qp = $('#qp'), qe = $('#qe'), done = $('#qdone'), btn = form.querySelector('[type=submit]');
+    const qn = $('#qn'), qp = $('#qp'), qe = $('#qe'), qc = $('#qc'), qz = $('#qz'), qs = $('#qs'), done = $('#qdone'), btn = form.querySelector('[type=submit]');
     [qn, qp, qe].forEach(i => i.addEventListener('input', () => [qn, qp, qe].forEach(x => x.classList.remove('bad'))));
+    [qc, qz, qs].forEach(i => ['input','change'].forEach(ev => i.addEventListener(ev, () => i.classList.remove('bad'))));
+    const paintSel = () => qs.classList.toggle('empty', !qs.value); qs.addEventListener('change', paintSel); paintSel();
     const say = (t, bad) => { done.textContent = t; done.classList.toggle('err', !!bad); done.hidden = false; };
     form.addEventListener('submit', async e => { e.preventDefault();
       const name = qn.value.trim(), phone = qp.value.trim(), email = qe.value.trim();
       const emailOk = !email || qe.checkValidity();
-      if (!name || (!phone && !email) || !emailOk){ qn.classList.toggle('bad', !name); if (!phone && !email){ qp.classList.add('bad'); qe.classList.add('bad'); } if (!emailOk) qe.classList.add('bad');
-        say('Add your name and a phone number or e-mail so we can get back to you.', true); return; }
+      const city = qc.value.trim(), zip = qz.value.trim(), state = qs.value, zipOk = /^[0-9]{5}(-[0-9]{4})?$/.test(zip);
+      const who = !name || (!phone && !email) || !emailOk;
+      if (who || !city || !zipOk || !state){ qn.classList.toggle('bad', !name); if (!phone && !email){ qp.classList.add('bad'); qe.classList.add('bad'); } if (!emailOk) qe.classList.add('bad');
+        qc.classList.toggle('bad', !city); qz.classList.toggle('bad', !zipOk); qs.classList.toggle('bad', !state);
+        say(who ? 'Add your name and a phone number or e-mail so we can get back to you.' : 'Tell us where the event is: city, ZIP code and state.', true); return; }
       btn.disabled = true; say('Sending…');
-      const ok = await sendForm(MAIL_EVENTS, { _subject: 'Paradice · Event request · ' + name, Occasion: chips.find(c => c.dataset.k === kind).textContent, Guests: gtxt(), Date: d.value || 'to choose', Name: name, Phone: phone || '-', Email: email || '-', ...(email ? { _replyto: email } : {}) });
+      const ok = await sendForm(MAIL_EVENTS, { _subject: 'Paradice · Event request · ' + name, Occasion: chips.find(c => c.dataset.k === kind).textContent, Guests: gtxt(), Date: d.value || 'to choose', Name: name, Phone: phone || '-', Email: email || '-', City: city, ZIP: zip, State: state, ...(email ? { _replyto: email } : {}) });
       btn.disabled = false;
-      if (ok){ say('Thanks ' + name + '! We got your request and will get back to you shortly.'); form.querySelectorAll('.qcontact input').forEach(i => i.value = ''); }
+      if (ok){ say('Thanks ' + name + '! We got your request and will get back to you shortly.'); form.querySelectorAll('.qcontact input').forEach(i => i.value = ''); qs.value = ''; paintSel(); }
       else say('Sorry, that didn\'t go through. Please call us at (702) 336-5208.', true); });
   })();
 
