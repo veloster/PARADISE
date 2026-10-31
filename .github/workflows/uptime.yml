@@ -22,14 +22,27 @@ jobs:
       - name: Key pages and redirects
         run: |
           set -e
-          for p in privacy.html terms.html birthday-club-rules.html assets/js/site.js?v=2; do
+          for p in privacy.html terms.html birthday-club-rules.html assets/js/site.js?v=3; do
             c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://paradicelv.com/$p"); echo "$p $c"; [ "$c" = "200" ]
           done
           r=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 20 http://paradicelv.com/); echo "http -> $r"
           case "$r" in 301*https://paradicelv.com/*) ;; *) echo "::error::HTTP is not redirected to HTTPS"; exit 1;; esac
-      - name: Certificate expires in more than 14 days
+      - name: Certificates expire in more than 14 days (Cloudflare edge + GitHub origin)
         run: |
-          end=$(echo | openssl s_client -connect paradicelv.com:443 -servername paradicelv.com 2>/dev/null | openssl x509 -noout -enddate | cut -d= -f2)
-          echo "Certificate valid until: $end"
-          left=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))
-          echo "Days left: $left"; [ "$left" -gt 14 ] || { echo "::error::TLS certificate expires in $left days"; exit 1; }
+          check() {
+            end=$(echo | openssl s_client -connect "$1:443" -servername paradicelv.com 2>/dev/null | openssl x509 -noout -enddate | cut -d= -f2)
+            [ -n "$end" ] || { echo "::error::No certificate from $2"; return 1; }
+            left=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))
+            echo "$2 certificate valid until $end ($left days)"
+            [ "$left" -gt 14 ] || { echo "::error::$2 certificate expires in $left days"; return 1; }
+          }
+          check paradicelv.com "Cloudflare edge"
+          # Origin = GitHub Pages. Behind the Cloudflare proxy its renewal is not guaranteed:
+          # if this fails, set @ and www to DNS only in Cloudflare so GitHub can renew (plan R2).
+          check 185.199.108.153 "GitHub origin"
+      - name: Security headers are served
+        run: |
+          h=$(curl -sI --max-time 20 https://paradicelv.com/)
+          for x in strict-transport-security x-frame-options x-content-type-options content-security-policy; do
+            echo "$h" | grep -qi "^$x:" && echo "$x OK" || { echo "::error::Missing header $x"; exit 1; }
+          done
