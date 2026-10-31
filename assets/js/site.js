@@ -43,17 +43,11 @@ document.addEventListener('DOMContentLoaded', function(){
     const LOC = [
       { id:'lv', city:'Las Vegas', st:'NV', area:'Las Vegas Valley', lon:-115.14, lat:36.17, open:true },
       { id:'hd', city:'Henderson', st:'NV', area:'Las Vegas Valley', lon:-114.98, lat:36.03, side:'left', open:true },
-      { id:'la', city:'Los Angeles', st:'CA', area:'Southern California', lon:-118.24, lat:34.05, side:'left' },
-      { id:'pa', city:'Pasadena', st:'CA', area:'Southern California', lon:-118.14, lat:34.15, side:'above' },
-      { id:'sb', city:'San Bernardino', st:'CA', area:'Southern California', lon:-117.29, lat:34.11 },
-      { id:'rv', city:'Riverside', st:'CA', area:'Southern California', lon:-117.4, lat:33.95, side:'below' },
-      { id:'sd', city:'San Diego', st:'CA', area:'Southern California', lon:-117.16, lat:32.72 },
       { id:'px', city:'Phoenix', st:'AZ', area:'Arizona', lon:-112.07, lat:33.45 },
       { id:'dl', city:'Dallas', st:'TX', area:'Texas', lon:-96.8, lat:32.78 }
     ];
     const CL = [
       { id:'NV', name:'Las Vegas Valley', short:'Las Vegas', ids:['lv','hd'], view:{ lon:-115.06, lat:36.1, span:1.3 }, mside:'above' },
-      { id:'CA', name:'Southern California', ids:['la','pa','sb','rv','sd'], short:'SoCal', view:{ lon:-117.6, lat:33.5, span:4.2 }, side:'below', mside:'below' },
       { id:'AZ', name:'Phoenix', short:'Phoenix', ids:['px'], view:{ lon:-112.07, lat:33.45, span:3.2 }, mside:'below' },
       { id:'TX', name:'Dallas', short:'Dallas', ids:['dl'], view:{ lon:-96.8, lat:32.78, span:3.2 }, side:'left', mside:'below' }
     ];
