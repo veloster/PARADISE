@@ -515,6 +515,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .biz__panel li{display:grid;grid-template-columns:30px 1fr;gap:10px;font-size:16px;color:#E3F4F9}
 .biz__panel li b{color:#FDC208;font-size:13px;letter-spacing:.1em;padding-top:2px}
 .biz__ctas{display:flex;flex-wrap:wrap;gap:12px}
+.biz__legal{margin:18px 0 0;max-width:62ch;font-size:13px;line-height:1.5;color:#D9EEF5}
 .btn--line{border-color:rgba(255,255,255,.45);color:#fff;background:transparent}
 button.btn{font-family:inherit;line-height:inherit;cursor:pointer;-webkit-appearance:none;appearance:none}
 .btn--line:hover{border-color:#fff;background:rgba(255,255,255,.08)}
@@ -832,6 +833,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
         <div class="biz__panel" role="tabpanel" id="bp3" aria-labelledby="bt3" hidden><h3>Four steps to your trailer.</h3><ul><li><b>01</b>Inquire: tell us about you and your city.</li><li><b>02</b>Discovery call with the founders.</li><li><b>03</b>Review &amp; agreement.</li><li><b>04</b>Train &amp; launch your first season.</li></ul></div>
         <div class="biz__ctas"><button class="btn btn--sun" type="button" id="bizKit" data-fran>Request the franchise kit <span class="arr" aria-hidden="true">↗</span></button><button class="btn btn--line" type="button" data-fran>Talk to our team <span class="arr" aria-hidden="true">↗</span></button></div>
         <button type="button" class="biz__3d" id="biz3d"><span aria-hidden="true">⟳</span> View the trailer in 3D</button>
+        <p class="biz__legal">This information is not an offer to sell a franchise. We will not offer or sell a franchise in any state that requires registration until we have complied with that state’s requirements.</p>
       </div>
     </div>
   </div>
@@ -863,7 +865,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
             <label class="fq__f"><span>How did you hear about us?</span><select name="source"><option value="">Select</option><option>At the trailer</option><option>Instagram</option><option>Facebook</option><option>Google</option><option>Friend or family</option><option>Event</option><option>Other</option></select></label>
           </div>
           <label class="fq__f"><span>Anything you’d like us to know?</span><textarea name="msg" rows="3"></textarea></label>
-          <label class="fq__ok"><input type="checkbox" name="consent" required><span>I agree to be contacted by Paradice about franchising. Submitting this form does not grant a franchise. <a href="privacy.html">Privacy&nbsp;Policy</a></span></label>
+          <label class="fq__ok"><input type="checkbox" name="consent" required><span>I agree to be contacted by Paradice about franchising. Submitting this form does not grant a franchise and is not an offer to sell one. <a href="privacy.html">Privacy&nbsp;Policy</a></span></label>
           <div class="fq__nav"><button class="btn btn--line fq__back" type="button" id="fqBack">← Back</button><button class="btn btn--sun" type="submit">Send my request <span class="arr" aria-hidden="true">↗</span></button></div>
         </fieldset>
         <p class="fq__err" id="fqErr" role="alert"></p>
