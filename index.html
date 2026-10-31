@@ -29,6 +29,10 @@ body{margin:0;background:var(--blanc);color:var(--marine);font-family:var(--font
 img{max-width:100%;display:block}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--marine);outline-offset:3px;border-radius:6px}
+.biz :focus-visible,.club :focus-visible,.quote :focus-visible,.biz__modal :focus-visible,.fund :focus-visible{outline-color:var(--jaune)}
+.club__in:focus-within{border-color:#fff;box-shadow:0 0 0 3px var(--jaune)}.club__grid input:focus-visible{outline:3px solid var(--jaune);outline-offset:2px}
+.qcontact input:focus-visible,.qcontact select:focus-visible,.qrow input[type=date]:focus-visible{outline:3px solid var(--jaune);outline-offset:2px}
+.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
 .eyebrow{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-ink)}
 .flv .eyebrow{color:inherit}
@@ -159,7 +163,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .fund p{max-width:52ch;opacity:.9}
 .fund__steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;font-weight:700}
 .fund__steps li{display:flex;align-items:center;gap:12px}
-.fund__steps b{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--cyan);color:var(--marine);font-size:15px}
+.fund__steps b{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--cyan);color:var(--marine-deep);font-size:15px}
 
 /* smart syrup: nutrition side by side */
 .smart{background:var(--blanc);color:var(--marine);padding-block:88px}
@@ -546,7 +550,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 .wpin .d{position:relative;width:16px;height:16px;border-radius:50%;background:var(--jaune);box-shadow:0 0 0 3px var(--marine),0 8px 16px -6px rgba(5,70,100,.6);flex:0 0 auto}
 .wpin .d::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--jaune);animation:wpulse 2.4s ease-out infinite}
 .wpin .l{display:flex;flex-direction:column;line-height:1.15;font-weight:800;font-size:14px;background:rgba(255,255,255,.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:12px;padding:5px 10px;box-shadow:0 8px 20px -10px rgba(5,70,100,.55);border:1px solid color-mix(in srgb,var(--marine) 12%,transparent)}
-.wpin .l em{font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#2C8C4B}
+.wpin .l em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#2C8C4B}
 .wpin.soon .d{background:#fff;box-shadow:inset 0 0 0 3px var(--marine)}
 .wpin.soon .d::after{display:none}
 .wpin.soon .l{background:rgba(255,255,255,.5)}
@@ -560,7 +564,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 .wpin .ls{display:none}.where__map.small .wpin .lf{display:none}.where__map.small .wpin .ls{display:inline}.where__map.small .where__st{display:none}.where__map.small .wpin .l{font-size:12px;padding:4px 8px}.where__map.small .wpin.cl .d{width:30px;height:30px;font-size:13px}.where__map.small .wpin.cl .l em{display:none}
 @keyframes wpulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(3);opacity:0}}
 @media (prefers-reduced-motion:reduce){.wpin .d::after{animation:none;opacity:0}}
-.where__st{position:absolute;font-weight:800;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:color-mix(in srgb,var(--marine) 38%,transparent);pointer-events:none;transform:translate(-50%,-50%);white-space:nowrap;transition:opacity .3s}
+.where__st{position:absolute;font-weight:800;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:color-mix(in srgb,var(--marine) 75%,transparent);pointer-events:none;transform:translate(-50%,-50%);white-space:nowrap;transition:opacity .3s}
 .where__back{position:absolute;left:14px;top:14px;z-index:3;font:inherit;font-size:13px;font-weight:700;color:var(--marine);background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid color-mix(in srgb,var(--marine) 20%,transparent);border-radius:999px;padding:7px 14px;cursor:pointer}
 .where__back:hover{border-color:var(--marine)}
 .where__legend{position:absolute;left:14px;bottom:14px;z-index:2;display:flex;gap:14px;font-size:12px;font-weight:700;background:rgba(255,255,255,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid color-mix(in srgb,var(--marine) 12%,transparent);border-radius:999px;padding:6px 12px}
@@ -617,7 +621,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
 
 <div class="bandwrap">
 <div aria-hidden="true" style="background:var(--cyan-pale);line-height:0"><svg class="wave" viewBox="0 0 1440 42" preserveAspectRatio="none"><path d="M0 42C240 0 480 0 720 21S1200 42 1440 10V42Z" fill="#054664"/></svg></div>
-<div class="band" aria-label="Shave, pour, smile, repeat"><div class="marquee" id="marquee" aria-hidden="true">
+<div class="band"><span class="sr">Shave, pour, smile, repeat</span><div class="marquee" id="marquee" aria-hidden="true">
   <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
   <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
   <span>Shave<b>✦</b></span><span>Pour<b>✦</b></span><span>Smile<b>✦</b></span><span>Repeat<b>✦</b></span>
@@ -875,7 +879,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   (function(){
     const steps = $$('.cstep'), err = $('#cErr'), f = $('#clubForm'); if (!f) return;
     const go = n => { steps.forEach(x => x.classList.toggle('on', x.dataset.s === String(n))); err.textContent = ''; const inp = $(`.cstep[data-s="${n}"] input`); if (inp && n !== 4) inp.focus({ preventScroll: true }); };
-    const bad = (el, on) => el.closest('.club__in, label').classList.toggle('bad', on);
+    const bad = (el, on) => { el.closest('.club__in, label').classList.toggle('bad', on); el.setAttribute('aria-invalid', String(on)); };
     f.addEventListener('input', e => { const l = e.target.closest('.bad'); if (l) l.classList.remove('bad'); err.textContent = ''; });
     $('#cNext').addEventListener('click', () => {
       const fi = $('#cFirst'), la = $('#cLast'), em = $('#cEmail');
@@ -1226,9 +1230,19 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
   /* ---------- form delivery (FormSubmit → e-mail) ---------- */
   const MAIL_FRANCHISE = 'info@paradicelv.com', MAIL_EVENTS = 'sam@paradicelv.com', MAIL_CLUB = 'info@paradicelv.com';
   async function sendForm(to, fields){
-    if ([...document.querySelectorAll('.hp__in')].some(i => i.value)) return true; /* honeypot filled: bot, drop silently */
-    try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', _honey: '', ...fields, 'Received (Las Vegas / Los Angeles time)': new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' PT' }) });
+    const honey = [...document.querySelectorAll('.hp__in')].map(i => i.value).join(''); if (honey) return true; /* honeypot filled: bot, drop silently */
+    try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', ...fields, _honey: honey, 'Received (Las Vegas / Los Angeles time)': new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' PT' }) });
       return r.ok; } catch (_) { return false; } }
+
+  /* ---------- keyboard focus trap for modal dialogs ---------- */
+  function trapFocus(root, e){
+    if (e.key !== 'Tab' || root.hidden) return;
+    const f = [...root.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not(.hp__in),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(el => el.offsetParent !== null || el === document.activeElement);
+    if (!f.length) return;
+    const a = f[0], z = f[f.length - 1], cur = document.activeElement;
+    if (!root.contains(cur)){ e.preventDefault(); a.focus(); return; }
+    if (e.shiftKey && cur === a){ e.preventDefault(); z.focus(); }
+    else if (!e.shiftKey && cur === z){ e.preventDefault(); a.focus(); } }
 
   /* ---------- franchise inquiry form ---------- */
   (() => {
@@ -1236,22 +1250,24 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     const f = $('#fqForm'), s1 = f.querySelector('[data-s="1"]'), s2 = f.querySelector('[data-s="2"]'), err = $('#fqErr');
     let last = null;
     const open = v => { m.hidden = !v; document.documentElement.style.overflow = v ? 'hidden' : '';
-      if (v){ m.querySelector('input,select').focus(); } else if (last) last.focus(); };
+      if (v){ m.querySelector('input:not(.hp__in),select').focus(); } else if (last) last.focus(); };
     $$('[data-fran]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); last = b; open(true); }));
     $('#fqClose').addEventListener('click', () => open(false));
     $('#fqDoneClose').addEventListener('click', () => open(false));
     m.addEventListener('click', e => { if (e.target === m) open(false); });
-    addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) open(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) open(false); else trapFocus(m, e); });
     const check = box => { let ok = true; err.textContent = '';
       box.querySelectorAll('input[required]:not([type=radio]):not([type=checkbox]),select[required]').forEach(el => { const good = el.checkValidity() && el.value.trim() !== ''; el.classList.toggle('bad', !good); if (!good) ok = false; });
       box.querySelectorAll('.fq__pills').forEach(g => { if (!g.querySelector('[required]')) return; const good = !!g.querySelector('input:checked'); g.classList.toggle('bad', !good); if (!good) ok = false; });
       const c = box.querySelector('[name=consent]'); if (c && !c.checked){ ok = false; err.textContent = 'Please accept to be contacted.'; }
       if (!ok && !err.textContent) err.textContent = 'Please fill in the highlighted fields.';
+      box.querySelectorAll('input,select,textarea').forEach(el => el.setAttribute('aria-invalid', String(el.classList.contains('bad') || !!el.closest('.fq__pills.bad'))));
+      if (!ok){ const first = box.querySelector('.bad input, input.bad, select.bad'); if (first) first.focus(); }
       return ok; };
-    const step = n => { s1.hidden = n !== 1; s2.hidden = n !== 2; $('#fqStep').textContent = n === 1 ? 'Step 1 of 2 · About you' : 'Step 2 of 2 · Your plans'; $('#fqBar').style.width = n === 1 ? '50%' : '100%'; err.textContent = ''; (n === 1 ? s1 : s2).querySelector('input,select').focus(); };
+    const step = n => { s1.hidden = n !== 1; s2.hidden = n !== 2; $('#fqStep').textContent = n === 1 ? 'Step 1 of 2 · About you' : 'Step 2 of 2 · Your plans'; $('#fqBar').style.width = n === 1 ? '50%' : '100%'; err.textContent = ''; (n === 1 ? s1 : s2).querySelector('input:not(.hp__in),select').focus(); };
     $('#fqNext').addEventListener('click', () => { if (check(s1)) step(2); });
     $('#fqBack').addEventListener('click', () => step(1));
-    f.addEventListener('input', e => e.target.classList.remove('bad'));
+    f.addEventListener('input', e => { e.target.classList.remove('bad'); e.target.removeAttribute('aria-invalid'); });
     f.addEventListener('change', e => { const g = e.target.closest('.fq__pills'); if (g) g.classList.remove('bad'); });
     f.addEventListener('submit', async e => { e.preventDefault(); if (!check(s2)) return;
       const data = Object.fromEntries(new FormData(f).entries());
@@ -1311,7 +1327,7 @@ footer{background:var(--blanc);padding-block:56px 24px;overflow:hidden}
     ['pointerenter','focus','touchstart'].forEach(ev => open.addEventListener(ev, () => window.__trailerStart && window.__trailerStart(), { once: true, passive: true }));
     $('#bizClose').addEventListener('click', () => vis(false));
     m.addEventListener('click', e => { if (e.target === m) vis(false); });
-    addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) vis(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) vis(false); else trapFocus(m, e); });
   })();
 
   /* ---------- scroll animations ---------- */
