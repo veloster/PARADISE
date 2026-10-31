@@ -1,0 +1,35 @@
+name: Uptime paradicelv.com
+# Checks the live site every 15 minutes. A failed run = GitHub e-mails the repo owner.
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Home page answers 200 with the site content
+        run: |
+          for i in 1 2 3; do
+            code=$(curl -s -o page.html -w '%{http_code}' --max-time 20 "https://paradicelv.com/?uptime=$(date +%s)") || code=000
+            if [ "$code" = "200" ] && grep -q "Floop LLC" page.html; then echo "OK ($code)"; exit 0; fi
+            echo "Attempt $i failed: HTTP $code"; sleep 20
+          done
+          echo "::error::paradicelv.com is down or not serving the site"; exit 1
+      - name: Key pages and redirects
+        run: |
+          set -e
+          for p in privacy.html terms.html birthday-club-rules.html assets/js/site.js?v=1; do
+            c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://paradicelv.com/$p"); echo "$p $c"; [ "$c" = "200" ]
+          done
+          r=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 20 http://paradicelv.com/); echo "http -> $r"
+          case "$r" in 301*https://paradicelv.com/*) ;; *) echo "::error::HTTP is not redirected to HTTPS"; exit 1;; esac
+      - name: Certificate expires in more than 14 days
+        run: |
+          end=$(echo | openssl s_client -connect paradicelv.com:443 -servername paradicelv.com 2>/dev/null | openssl x509 -noout -enddate | cut -d= -f2)
+          echo "Certificate valid until: $end"
+          left=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))
+          echo "Days left: $left"; [ "$left" -gt 14 ] || { echo "::error::TLS certificate expires in $left days"; exit 1; }
