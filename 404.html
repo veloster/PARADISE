@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page not found · Paradice</title>
+<meta name="description" content="This page could not be found. Head back to Paradice Caribbean Shaved Ice.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#054664">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,800&display=swap">
+<style>
+:root{--marine:#054664;--marine-deep:#032B3E;--jaune:#FDC208;--blanc:#FFFFFF;
+  --font:"Bricolage Grotesque", ui-rounded, "Avenir Next", system-ui, sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;background:var(--marine);color:var(--blanc);font-family:var(--font);font-size:17px;line-height:1.5}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--jaune);outline-offset:3px;border-radius:6px}
+main{flex:1;display:flex;align-items:center;padding-block:48px}
+.wrap{width:100%;max-width:760px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));text-align:center}
+.badge{position:relative;width:min(240px,62vw);aspect-ratio:1;margin:0 auto 28px;display:flex;align-items:center;justify-content:center}
+.badge::before{content:"";position:absolute;inset:4%;border-radius:50%;background:var(--jaune)}
+.badge img{position:relative;width:88%;height:auto;display:block;filter:drop-shadow(0 8px 18px rgba(3,43,62,.35))}
+.eyebrow{display:block;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--jaune)}
+h1{font-size:clamp(44px,9vw,84px);line-height:.95;font-weight:800;letter-spacing:-.03em;margin:12px 0 16px;text-wrap:balance}
+p{margin:0 auto;max-width:42ch;font-size:19px}
+.ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:32px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:15px;text-decoration:none;border-radius:999px;padding:12px 20px;min-height:44px;border:1.5px solid transparent;transition:background-color .3s ease,border-color .3s ease}
+.btn--sun{background:var(--jaune);color:var(--marine);font-weight:800}
+.btn--sun:hover{background:#FFD23F}
+.btn--ghost{border-color:rgba(255,255,255,.55);color:var(--blanc)}
+.btn--ghost:hover{border-color:var(--blanc);background:rgba(255,255,255,.08)}
+footer{background:var(--marine-deep);color:#D9F4FA;padding-block:24px;font-size:14px}
+footer .wrap{max-width:1280px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;text-align:left}
+</style>
+
+<main>
+  <div class="wrap">
+    <div class="badge"><img src="/assets/logo-paradice-320.webp" width="320" height="308" alt="Paradice Caribbean Shaved Ice"></div>
+    <span class="eyebrow">Error 404</span>
+    <h1>This page melted.</h1>
+    <p>The page you were looking for has gone the way of a shaved ice in the Las Vegas sun. Let’s get you back to the island.</p>
+    <div class="ctas">
+      <a class="btn btn--sun" href="/">Back to Paradice <span aria-hidden="true">↗</span></a>
+      <a class="btn btn--ghost" href="/#events">Book the trailer</a>
+      <a class="btn btn--ghost" href="/#own">Own a Paradice</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap"><span>© 2026 Floop LLC, dba Paradice Caribbean Shaved Ice · Las Vegas, Nevada</span><a href="/privacy.html">Privacy Policy</a></div>
+</footer>
+</html>
