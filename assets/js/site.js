@@ -384,8 +384,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
   /* ---------- form delivery (FormSubmit → e-mail) ---------- */
   const MAIL_FRANCHISE = 'info@paradicelv.com', MAIL_EVENTS = 'sam@paradicelv.com', MAIL_CLUB = 'info@paradicelv.com';
+  /* anti-spam: honeypot + minimum human time + per-browser rate limit */
+  const T0 = Date.now(); let firstTouch = 0;
+  document.addEventListener('focusin', e => { if (!firstTouch && e.target.closest('form')) firstTouch = Date.now(); });
+  const RL_KEY = 'pdx_sends', RL_MAX = 5, RL_WINDOW = 60 * 60 * 1000;
+  function rateOk(){ try { const now = Date.now(); const list = JSON.parse(localStorage.getItem(RL_KEY) || '[]').filter(t => now - t < RL_WINDOW); if (list.length >= RL_MAX) return false; list.push(now); localStorage.setItem(RL_KEY, JSON.stringify(list)); return true; } catch (_) { return true; } }
   async function sendForm(to, fields){
     const honey = [...document.querySelectorAll('.hp__in')].map(i => i.value).join(''); if (honey) return true; /* honeypot filled: bot, drop silently */
+    const filledIn = Date.now() - (firstTouch || T0); if (filledIn < 3000) return true; /* filled faster than a human can: drop silently */
+    if (!rateOk()) return false; /* more than 5 sends in an hour from this browser */
     try { const r = await fetch('https://formsubmit.co/ajax/' + to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _template: 'table', _captcha: 'false', ...fields, _honey: honey, 'Received (Las Vegas / Los Angeles time)': new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' PT' }) });
       return r.ok; } catch (_) { return false; } }
 

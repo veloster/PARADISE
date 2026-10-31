@@ -22,7 +22,7 @@ jobs:
       - name: Key pages and redirects
         run: |
           set -e
-          for p in privacy.html terms.html birthday-club-rules.html assets/js/site.js?v=1; do
+          for p in privacy.html terms.html birthday-club-rules.html assets/js/site.js?v=2; do
             c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://paradicelv.com/$p"); echo "$p $c"; [ "$c" = "200" ]
           done
           r=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 20 http://paradicelv.com/); echo "http -> $r"
