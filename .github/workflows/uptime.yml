@@ -46,3 +46,7 @@ jobs:
           for x in strict-transport-security x-frame-options x-content-type-options content-security-policy; do
             echo "$h" | grep -qi "^$x:" && echo "$x OK" || { echo "::error::Missing header $x"; exit 1; }
           done
+      - name: DNSSEC validates (AD flag from a validating resolver)
+        run: |
+          ad=$(curl -s --max-time 20 "https://dns.google/resolve?name=paradicelv.com&type=A" | python3 -c "import json,sys;print(json.load(sys.stdin).get('AD'))")
+          echo "DNSSEC AD=$ad"; [ "$ad" = "True" ] || { echo "::error::DNSSEC does not validate for paradicelv.com"; exit 1; }
